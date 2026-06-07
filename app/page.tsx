@@ -1,39 +1,8 @@
 import Link from "next/link";
-
-const projects = [
-  {
-    slug: "helia",
-    number: "01",
-    title: "Helia: Giving Your Plants a Voice",
-    tags: ["AI", "Mobile", "UX Research"],
-    year: "2024",
-    description: "An AI-powered plant care app that turns care into conversation.",
-  },
-  {
-    slug: "project-02",
-    number: "02",
-    title: "Nombre del proyecto",
-    tags: ["Product Design", "Web"],
-    year: "2023",
-    description: "Breve descripción del proyecto y su impacto.",
-  },
-  {
-    slug: "project-03",
-    number: "03",
-    title: "Nombre del proyecto",
-    tags: ["Design System", "Mobile"],
-    year: "2023",
-    description: "Breve descripción del proyecto y su impacto.",
-  },
-  {
-    slug: "project-04",
-    number: "04",
-    title: "Nombre del proyecto",
-    tags: ["UX Research", "Web"],
-    year: "2022",
-    description: "Breve descripción del proyecto y su impacto.",
-  },
-];
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { projects } from "@/lib/projects";
 
 const navLinks = [
   { label: "Work", href: "/" },
@@ -51,36 +20,21 @@ export default function Home() {
             <p className="text-sm font-semibold leading-snug">Carla Vivani</p>
             <p className="text-sm mt-0.5" style={{ color: "var(--muted-foreground)" }}>Product Designer</p>
           </div>
-          <nav className="flex flex-col gap-2">
+          <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-sm transition-colors"
-                style={{ color: "var(--muted-foreground)" }}
-              >
+              <Button key={link.label} variant="ghost" size="sm" render={<Link href={link.href} />} nativeButton={false} className="justify-start px-2">
                 {link.label}
-              </Link>
+              </Button>
             ))}
           </nav>
         </div>
-        <div className="flex flex-col gap-2">
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs transition-colors"
-            style={{ color: "var(--muted-foreground)" }}
-          >
+        <div className="flex flex-col gap-1">
+          <Button variant="ghost" size="xs" render={<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" />} nativeButton={false} className="justify-start px-2">
             LinkedIn ↗
-          </a>
-          <a
-            href="mailto:carlavivani@gmail.com"
-            className="text-xs transition-colors"
-            style={{ color: "var(--muted-foreground)" }}
-          >
+          </Button>
+          <Button variant="ghost" size="xs" render={<a href="mailto:carlavivani@gmail.com" />} nativeButton={false} className="justify-start px-2">
             Email ↗
-          </a>
+          </Button>
         </div>
       </aside>
 
@@ -89,36 +43,31 @@ export default function Home() {
         <p className="text-sm max-w-sm leading-relaxed mb-16" style={{ color: "var(--muted-foreground)" }}>
           Diseño productos digitales centrados en las personas. Especializada en UX, sistemas de diseño y experiencias con IA.
         </p>
-        <ul className="flex flex-col divide-y" style={{ borderColor: "var(--border)" }}>
-          {projects.map((project) => (
+        <ul className="flex flex-col">
+          {projects.map((project, i) => (
             <li key={project.slug}>
+              {i > 0 && <Separator />}
               <Link
                 href={`/projects/${project.slug}`}
-                className="group flex items-start gap-8 py-8 -mx-4 px-4 rounded-xl transition-colors hover:bg-[#EFEDE9]"
+                className="group flex items-start gap-8 py-8 -mx-4 px-4 rounded-xl transition-colors hover:bg-secondary"
               >
-                <span className="text-xs font-mono mt-1 w-6 shrink-0" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
+                <span className="text-xs font-mono mt-1 w-6 shrink-0 text-muted-foreground/50">
                   {project.number}
                 </span>
                 <div className="flex-1 flex flex-col gap-2">
-                  <h2 className="text-base font-medium transition-colors" style={{ color: "var(--foreground)" }}>
+                  <h2 className="text-base font-medium text-foreground">
                     {project.title}
                   </h2>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
                     {project.description}
                   </p>
                   <div className="flex gap-2 mt-1 flex-wrap">
                     {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs rounded-full px-2.5 py-0.5 border"
-                        style={{ color: "var(--muted-foreground)", borderColor: "var(--border)" }}
-                      >
-                        {tag}
-                      </span>
+                      <Badge key={tag} variant="outline">{tag}</Badge>
                     ))}
                   </div>
                 </div>
-                <span className="text-xs font-mono mt-1 shrink-0" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
+                <span className="text-xs font-mono mt-1 shrink-0 text-muted-foreground/50">
                   {project.year}
                 </span>
               </Link>

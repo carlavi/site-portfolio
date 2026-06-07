@@ -1,101 +1,48 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { getProject, projects, type Section } from "@/lib/projects";
 
-type Section =
-  | { type: "text"; heading: string; body: string }
-  | { type: "image"; alt: string; caption?: string }
-  | { type: "image-text"; alt: string; heading: string; body: string; imageLeft?: boolean }
-  | { type: "cards"; heading: string; cards: { title: string; body: string }[] }
-  | { type: "metrics"; heading: string; rows: { label: string; value: string }[] };
-
-const project = {
-  meta: {
-    title: "Helia: Giving Your Plants a Voice",
-    client: "Personal project",
-    role: "UX / Product Design",
-    year: "2024",
-    link: "https://example.com",
-  },
-  sections: [
-    {
-      type: "text",
-      heading: "Where AI Turns Care Into Connection",
-      body: "Helia is a plant care app that uses AI to help users understand and respond to their plants' needs in a natural, conversational way.",
-    },
-    {
-      type: "text",
-      heading: "Outcome & Impact",
-      body: "After two rounds of usability testing, 85% of users reported feeling more confident about their plant care routines. The AI conversation feature had a 92% satisfaction rate.",
-    },
-    {
-      type: "image",
-      alt: "App mockups showing the main screens",
-      caption: "Key screens from the final design",
-    },
-    {
-      type: "metrics",
-      heading: "Concept Testing Summary",
-      rows: [
-        { label: "Task completion rate", value: "88%" },
-        { label: "Avg. time on task", value: "1m 42s" },
-        { label: "Net Promoter Score", value: "74" },
-        { label: "Users who'd use it daily", value: "6/8" },
-      ],
-    },
-    {
-      type: "text",
-      heading: "Next Steps",
-      body: "1. Expand the plant database to 500+ species.\n2. Add push notifications for watering reminders.\n3. Build a social layer for plant enthusiasts to share tips.",
-    },
-    {
-      type: "image-text",
-      alt: "Design exploration",
-      heading: "Designing for Immediate Delight",
-      body: "Early explorations focused on reducing friction in the onboarding flow. We tested five different approaches before landing on a conversational setup.",
-      imageLeft: true,
-    },
-    {
-      type: "cards",
-      heading: "AI Personality System",
-      cards: [
-        { title: "Warm", body: "Encouraging tone that celebrates small wins and milestones." },
-        { title: "Knowledgeable", body: "Backed by botanical data but explained in plain language." },
-        { title: "Curious", body: "Asks follow-up questions to refine care recommendations." },
-        { title: "Playful", body: "Light humor to make plant care feel fun, not stressful." },
-      ],
-    },
-  ] as Section[],
-};
+export function generateStaticParams() {
+  return projects.map((project) => ({ slug: project.slug }));
+}
 
 function TextSection({ heading, body }: { heading: string; body: string }) {
   return (
-    <section className="py-12 border-t" style={{ borderColor: "var(--border)" }}>
-      <h2 className="text-xl font-semibold mb-4" style={{ color: "var(--foreground)" }}>{heading}</h2>
-      <p className="leading-relaxed whitespace-pre-line max-w-2xl text-sm" style={{ color: "var(--muted-foreground)" }}>{body}</p>
+    <section className="py-12">
+      <Separator className="mb-12" />
+      <h2 className="text-xl font-semibold mb-4 text-foreground">{heading}</h2>
+      <p className="leading-relaxed whitespace-pre-line max-w-4xl text-base text-muted-foreground">{body}</p>
     </section>
   );
 }
 
 function ImageSection({ alt, caption }: { alt: string; caption?: string }) {
   return (
-    <section className="py-12 border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="w-full rounded-xl overflow-hidden aspect-[16/9] flex items-center justify-center" style={{ backgroundColor: "var(--secondary)" }}>
-        <span className="text-sm" style={{ color: "var(--muted-foreground)" }}>{alt}</span>
+    <section className="py-12">
+      <Separator className="mb-12" />
+      <div className="w-full rounded-xl overflow-hidden aspect-[16/9] flex items-center justify-center bg-secondary">
+        <span className="text-sm text-muted-foreground">{alt}</span>
       </div>
-      {caption && <p className="mt-3 text-xs text-center" style={{ color: "var(--muted-foreground)" }}>{caption}</p>}
+      {caption && <p className="mt-3 text-xs text-center text-muted-foreground">{caption}</p>}
     </section>
   );
 }
 
 function ImageTextSection({ alt, heading, body, imageLeft = false }: { alt: string; heading: string; body: string; imageLeft?: boolean }) {
   return (
-    <section className="py-12 border-t" style={{ borderColor: "var(--border)" }}>
+    <section className="py-12">
+      <Separator className="mb-12" />
       <div className={`flex flex-col md:flex-row gap-8 items-center ${imageLeft ? "" : "md:flex-row-reverse"}`}>
-        <div className="w-full md:w-1/2 rounded-xl aspect-[4/3] flex items-center justify-center" style={{ backgroundColor: "var(--secondary)" }}>
-          <span className="text-sm" style={{ color: "var(--muted-foreground)" }}>{alt}</span>
+        <div className="w-full md:w-1/2 rounded-xl aspect-[4/3] flex items-center justify-center bg-secondary">
+          <span className="text-sm text-muted-foreground">{alt}</span>
         </div>
         <div className="w-full md:w-1/2">
-          <h2 className="text-xl font-semibold mb-4" style={{ color: "var(--foreground)" }}>{heading}</h2>
-          <p className="leading-relaxed text-sm" style={{ color: "var(--muted-foreground)" }}>{body}</p>
+          <h2 className="text-xl font-semibold mb-4 text-foreground">{heading}</h2>
+          <p className="leading-relaxed text-base text-muted-foreground">{body}</p>
         </div>
       </div>
     </section>
@@ -104,30 +51,39 @@ function ImageTextSection({ alt, heading, body, imageLeft = false }: { alt: stri
 
 function MetricsSection({ heading, rows }: { heading: string; rows: { label: string; value: string }[] }) {
   return (
-    <section className="py-12 border-t" style={{ borderColor: "var(--border)" }}>
-      <h2 className="text-xl font-semibold mb-6" style={{ color: "var(--foreground)" }}>{heading}</h2>
-      <div className="divide-y rounded-xl overflow-hidden max-w-lg border" style={{ borderColor: "var(--border)", divideColor: "var(--border)" }}>
-        {rows.map((row) => (
-          <div key={row.label} className="flex justify-between px-5 py-3" style={{ backgroundColor: "var(--card)" }}>
-            <span className="text-sm" style={{ color: "var(--muted-foreground)" }}>{row.label}</span>
-            <span className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>{row.value}</span>
+    <section className="py-12">
+      <Separator className="mb-12" />
+      <h2 className="text-xl font-semibold mb-6 text-foreground">{heading}</h2>
+      <Card className="max-w-lg rounded-xl overflow-hidden">
+        {rows.map((row, i) => (
+          <div key={row.label}>
+            {i > 0 && <Separator />}
+            <div className="flex justify-between px-5 py-3">
+              <span className="text-sm text-muted-foreground">{row.label}</span>
+              <span className="text-sm font-semibold text-foreground">{row.value}</span>
+            </div>
           </div>
         ))}
-      </div>
+      </Card>
     </section>
   );
 }
 
 function CardsSection({ heading, cards }: { heading: string; cards: { title: string; body: string }[] }) {
   return (
-    <section className="py-12 border-t" style={{ borderColor: "var(--border)" }}>
-      <h2 className="text-xl font-semibold mb-6" style={{ color: "var(--foreground)" }}>{heading}</h2>
+    <section className="py-12">
+      <Separator className="mb-12" />
+      <h2 className="text-xl font-semibold mb-6 text-foreground">{heading}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cards.map((card) => (
-          <div key={card.title} className="border rounded-xl p-5" style={{ borderColor: "var(--border)", backgroundColor: "var(--card)" }}>
-            <h3 className="font-semibold mb-2" style={{ color: "var(--foreground)" }}>{card.title}</h3>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{card.body}</p>
-          </div>
+          <Card key={card.title}>
+            <CardHeader>
+              <CardTitle>{card.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-base leading-relaxed text-muted-foreground">{card.body}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </section>
@@ -144,23 +100,34 @@ function renderSection(section: Section, index: number) {
   }
 }
 
-export default function ProjectPage() {
-  const { meta, sections } = project;
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = getProject(slug);
+
+  if (!project) {
+    notFound();
+  }
+
+  const { title, meta, sections } = project;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--background)" }}>
       {/* Sidebar */}
-      <aside className="fixed top-0 left-0 h-full w-40 px-6 py-8 flex-col gap-2 z-10 hidden lg:flex border-r" style={{ borderColor: "var(--border)" }}>
-        <span className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>Carla Vivani</span>
-        <Link href="/" className="text-sm transition-colors" style={{ color: "var(--muted-foreground)" }}>
+      <aside className="fixed top-0 left-0 h-full w-40 px-6 py-8 flex-col gap-2 z-10 hidden lg:flex border-r">
+        <span className="text-sm font-semibold text-foreground">Carla Vivani</span>
+        <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="justify-start px-2 -ml-2">
           ← Back
-        </Link>
+        </Button>
       </aside>
 
-      <main className="max-w-3xl mx-auto px-6 py-16 lg:pl-48">
-        <Link href="/" className="lg:hidden inline-block mb-8 text-sm transition-colors" style={{ color: "var(--muted-foreground)" }}>
+      <main className="max-w-5xl mx-auto px-6 py-16 lg:pl-48">
+        <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="lg:hidden mb-8 -ml-2">
           ← Back
-        </Link>
+        </Button>
 
         {/* Hero placeholder */}
         <div className="flex gap-4 mb-10">
@@ -172,7 +139,7 @@ export default function ProjectPage() {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{meta.title}</h1>
+        <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
 
         {/* Metadata */}
         <div className="flex flex-wrap gap-6 text-sm mb-4">
@@ -182,24 +149,33 @@ export default function ProjectPage() {
             { label: "Year", value: meta.year },
           ].map(({ label, value }) => (
             <div key={label}>
-              <span className="block text-xs uppercase tracking-wide mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.6 }}>{label}</span>
-              <span style={{ color: "var(--muted-foreground)" }}>{value}</span>
+              <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">{label}</span>
+              <span className="text-sm text-muted-foreground">{value}</span>
             </div>
           ))}
+          {meta.tools && (
+            <div>
+              <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">Tools</span>
+              <span className="text-sm text-muted-foreground">{meta.tools.join(", ")}</span>
+            </div>
+          )}
           {meta.link && (
             <div>
-              <span className="block text-xs uppercase tracking-wide mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.6 }}>Link</span>
-              <a href={meta.link} className="underline underline-offset-2" style={{ color: "var(--foreground)" }}>View project ↗</a>
+              <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">Link</span>
+              <Button variant="link" size="sm" render={<a href={meta.link} />} nativeButton={false} className="px-0 h-auto text-sm">
+                View project ↗
+              </Button>
             </div>
           )}
         </div>
 
         {sections.map(renderSection)}
 
-        <div className="pt-16 pb-8 border-t mt-8" style={{ borderColor: "var(--border)" }}>
-          <Link href="/" className="text-sm transition-colors" style={{ color: "var(--muted-foreground)" }}>
+        <div className="pt-8 pb-8 mt-8">
+          <Separator className="mb-8" />
+          <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="-ml-2">
             ← Back to projects
-          </Link>
+          </Button>
         </div>
       </main>
     </div>
