@@ -49,7 +49,7 @@
 }
 
 :root {
-  --background: #F9F8F6;
+  --background: #EFEDE9;
   --foreground: #2B261D;
   --card: #F9F8F6;
   --card-foreground: #2B261D;
@@ -116,5 +116,83 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+.glow-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform, opacity;
+}
+
+.glow-blob-1 {
+  top: -12%;
+  right: 0%;
+  width: 30rem;
+  height: 30rem;
+  background: radial-gradient(circle, rgba(255, 170, 200, 0.8), transparent 70%);
+  animation: drift-1 28s ease-in-out infinite;
+}
+
+.glow-blob-2 {
+  top: 8%;
+  right: 18%;
+  width: 26rem;
+  height: 26rem;
+  background: radial-gradient(circle, rgba(160, 190, 255, 0.75), transparent 70%);
+  animation: drift-2 34s ease-in-out infinite;
+}
+
+.glow-blob-3 {
+  top: 28%;
+  right: 32%;
+  width: 28rem;
+  height: 28rem;
+  background: radial-gradient(circle, rgba(205, 175, 255, 0.7), transparent 70%);
+  animation: drift-3 40s ease-in-out infinite;
+}
+
+.glow-blob-4 {
+  top: -4%;
+  right: 36%;
+  width: 22rem;
+  height: 22rem;
+  background: radial-gradient(circle, rgba(175, 240, 220, 0.65), transparent 70%);
+  animation: drift-4 32s ease-in-out infinite;
+}
+
+.glow-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@keyframes drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  50% { transform: translate(-30px, 25px) scale(1.08); opacity: 1; }
+}
+
+@keyframes drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  50% { transform: translate(25px, -20px) scale(1.06); opacity: 0.9; }
+}
+
+@keyframes drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.65; }
+  50% { transform: translate(-20px, -30px) scale(1.05); opacity: 0.85; }
+}
+
+@keyframes drift-4 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+  50% { transform: translate(20px, 20px) scale(1.07); opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-blob {
+    animation: none !important;
   }
 }

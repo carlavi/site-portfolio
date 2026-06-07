@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { IridescentGlow } from "@/components/iridescent-glow";
 import { projects } from "@/lib/projects";
 
 const navLinks = [
@@ -12,9 +13,11 @@ const navLinks = [
 
 export default function Home() {
   return (
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
+    <div className="relative flex h-screen overflow-hidden" style={{ color: "var(--foreground)" }}>
+      <IridescentGlow />
+
       {/* Sidebar */}
-      <aside className="w-56 shrink-0 flex flex-col justify-between px-8 py-10 border-r border-[#E5E3DF]">
+      <aside className="relative z-10 w-56 shrink-0 flex flex-col justify-between px-8 py-10 border-r border-[#E5E3DF]">
         <div className="flex flex-col gap-10">
           <div>
             <p className="text-sm font-semibold leading-snug">Carla Vivani</p>
@@ -39,7 +42,7 @@ export default function Home() {
       </aside>
 
       {/* Main content — scrollable */}
-      <main className="flex-1 overflow-y-auto px-12 py-10">
+      <main className="relative z-10 flex-1 overflow-y-auto px-12 py-10">
         <p className="text-sm max-w-sm leading-relaxed mb-16" style={{ color: "var(--muted-foreground)" }}>
           Diseño productos digitales centrados en las personas. Especializada en UX, sistemas de diseño y experiencias con IA.
         </p>
