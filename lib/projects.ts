@@ -3,7 +3,8 @@ export type Section =
   | { type: "image"; alt: string; caption?: string }
   | { type: "image-text"; alt: string; heading: string; body: string; imageLeft?: boolean }
   | { type: "cards"; heading: string; cards: { title: string; body: string }[] }
-  | { type: "metrics"; heading: string; rows: { label: string; value: string }[] };
+  | { type: "metrics"; heading: string; rows: { label: string; value: string }[] }
+  | { type: "snapshot"; heading: string; items: { label: string; value: string }[] };
 
 export type Project = {
   slug: string;
@@ -70,63 +71,72 @@ export const projects: Project[] = [
   {
     slug: "helia",
     number: "02",
-    title: "Helia: Giving Your Plants a Voice",
-    tags: ["AI", "Mobile", "UX Research"],
-    year: "2024",
-    description: "An AI-powered plant care app that turns care into conversation.",
+    title: "Helia: Building an emotionally-driven product for plant care",
+    tags: ["Mobile", "Product Strategy", "Founder"],
+    year: "2025 – Present",
+    description: "A plant care app combining plant identification, curated care guidance, and conversational interactions — built on the hypothesis that emotional connection improves care consistency.",
     meta: {
-      client: "Personal project",
-      role: "UX / Product Design",
-      year: "2024",
-      link: "https://example.com",
+      client: "Co-Founder",
+      role: "Product Strategy, UX/UI, Frontend",
+      year: "2025 – Present",
     },
     sections: [
       {
-        type: "text",
-        heading: "Where AI Turns Care Into Connection",
-        body: "Helia is a plant care app that uses AI to help users understand and respond to their plants' needs in a natural, conversational way.",
-      },
-      {
-        type: "text",
-        heading: "Outcome & Impact",
-        body: "After two rounds of usability testing, 85% of users reported feeling more confident about their plant care routines. The AI conversation feature had a 92% satisfaction rate.",
-      },
-      {
-        type: "image",
-        alt: "App mockups showing the main screens",
-        caption: "Key screens from the final design",
-      },
-      {
-        type: "metrics",
-        heading: "Concept Testing Summary",
-        rows: [
-          { label: "Task completion rate", value: "88%" },
-          { label: "Avg. time on task", value: "1m 42s" },
-          { label: "Net Promoter Score", value: "74" },
-          { label: "Users who'd use it daily", value: "6/8" },
+        type: "snapshot",
+        heading: "Project Snapshot",
+        items: [
+          { label: "Role", value: "Co-Founder, Product Design" },
+          { label: "Team", value: "2 people" },
+          { label: "What we built", value: "A plant care app combining plant identification, curated care guidance, and conversational interactions to make plant care feel more personal and approachable." },
+          { label: "Hypothesis", value: "Emotional connection could improve care consistency." },
+          { label: "Early signals", value: "117 registered users · 517 plant analyses completed · ~85%+ scan completion rate · 33 beta testers · Advanced to Stage 2 of 500 Global's selection process" },
+          { label: "What I owned", value: "Product strategy, UX/UI, frontend implementation, pricing, brand, GTM, and day-to-day product operations." },
         ],
       },
       {
         type: "text",
-        heading: "Next Steps",
-        body: "1. Expand the plant database to 500+ species.\n2. Add push notifications for watering reminders.\n3. Build a social layer for plant enthusiasts to share tips.",
+        heading: "Can emotional connection change how people care for plants?",
+        body: "Most plant care apps focus on information: watering reminders, care guides, and species databases.\n\nBut as plant owners ourselves, we kept noticing a different problem:\n\nPeople rarely stop caring for plants because information is unavailable.\n\nThey stop because motivation fades.\n\nPlants become another responsibility, uncertainty builds — Am I watering too much? Is this normal? — and over time, care becomes inconsistent.\n\nWe started with a simple hypothesis: if people formed a stronger emotional connection with their plants, they might care for them more consistently.\n\nThat idea became Helia — a plant care app designed to make caring for plants feel more personal, approachable, and easier to sustain over time.",
       },
       {
-        type: "image-text",
-        alt: "Design exploration",
-        heading: "Designing for Immediate Delight",
-        body: "Early explorations focused on reducing friction in the onboarding flow. We tested five different approaches before landing on a conversational setup.",
-        imageLeft: true,
+        type: "text",
+        heading: "Building around emotional motivation",
+        body: "Instead of treating plants as entries in a database, we wanted them to feel more present in people's daily lives.\n\nToday, people can:\n\n• Scan and identify plant species\n• Receive curated care guidance instead of fragmented internet advice\n• Save plants into a personal garden\n• Talk with their plants conversationally\n• Ask contextual care questions at any moment\n\nRather than overwhelming people with generic information, the goal was to create a care experience that felt simpler, more trustworthy, and easier to return to.",
       },
       {
-        type: "cards",
-        heading: "AI Personality System",
-        cards: [
-          { title: "Warm", body: "Encouraging tone that celebrates small wins and milestones." },
-          { title: "Knowledgeable", body: "Backed by botanical data but explained in plain language." },
-          { title: "Curious", body: "Asks follow-up questions to refine care recommendations." },
-          { title: "Playful", body: "Light humor to make plant care feel fun, not stressful." },
-        ],
+        type: "text",
+        heading: "Building for trust, not information overload",
+        body: "One of the earliest product decisions was resisting the temptation to become \"Google for plants.\"\n\nPlant care advice online is often contradictory. Search for the same species and you'll likely find dozens of conflicting recommendations around watering, light, humidity, and care.\n\nInstead, we focused on curation over abundance.\n\nHelia provides structured, simplified care guidance designed to reduce uncertainty and help people feel more confident caring for their plants.\n\nBecause confidence matters. People are more likely to keep caring for something when they feel they're doing it right.",
+      },
+      {
+        type: "text",
+        heading: "From utility to relationship",
+        body: "[PLACEHOLDER: biggest product tension / decision]\n\nWe quickly realized Helia worked best when it balanced practical utility with emotional connection.\n\nToo much utility made the experience feel transactional. Too much emotionality made it feel gimmicky.\n\nWe started exploring ways to make plants feel more present without losing credibility as a care tool.\n\nThis led to features like plant personalities, conversational interactions, personalized care guidance, and narrative elements designed to build emotional attachment.\n\nThe goal wasn't novelty. It was helping people feel more connected — so care became easier to sustain over time.",
+      },
+      {
+        type: "text",
+        heading: "What early product signals told us",
+        body: "Helia is still early, but we intentionally built the product with instrumentation from day one to understand behavior and learn quickly.\n\nOne insight stood out: while onboarding still needs work, the core scan flow showed strong completion rates once people started using the product.\n\nThis helped us separate two different problems: activation was the challenge, and core product value showed stronger signal.\n\nRepeated plant analyses also suggested something interesting: people weren't only scanning once. Many were returning to identify additional plants, explore care guidance, or experiment with the product in ways we hadn't fully expected.\n\n[PLACEHOLDER: stronger behavioral insight]",
+      },
+      {
+        type: "text",
+        heading: "Designing and operating with constraints",
+        body: "Helia is built by a team of two.\n\nI lead product strategy, UX/UI, frontend implementation, pricing, brand, growth experiments, and day-to-day product operations. My husband leads backend systems, infrastructure, app distribution, and legal operations.\n\nWorking at this scale means every decision matters:\n\n• Balancing emotional design with usability\n• Managing infrastructure and AI costs carefully\n• Prioritizing features against engineering constraints\n• Learning directly from user behavior rather than large-scale research\n\nInstead of separating strategy, design, and execution, we move across all three constantly — making decisions quickly, testing ideas, and adapting as we learn.",
+      },
+      {
+        type: "text",
+        heading: "Learning in the real world",
+        body: "[PLACEHOLDER: Family Fest / GreenHub learnings]\n\nBecause Helia exists in a highly emotional category, we wanted to understand behavior beyond analytics dashboards.\n\nThrough in-person events, plant adoption experiences, and direct observation, we've been able to see how people react to the product in real time: what confuses them, what excites them, what makes them immediately want to scan a plant.\n\nThese moments have influenced onboarding, education, and how we introduce conversational interactions.",
+      },
+      {
+        type: "text",
+        heading: "What surprised us",
+        body: "[PLACEHOLDER: unexpected behavior]\n\nExamples:\n\n• People talking to plants more than expected\n• Repeat scanning behavior\n• Emotional attachment patterns\n• Unexpected onboarding friction\n• What people valued most",
+      },
+      {
+        type: "text",
+        heading: "What building Helia changed for me",
+        body: "Helia pushed me beyond designing interfaces.\n\nAs a founder, I've had to move fluidly between product strategy, positioning, pricing, growth, interaction design, and implementation constraints — often within the same week.\n\nBuilding an early-stage product also changed how I think about technology. When new tools make almost anything possible, the hard part stops being: what can we build? It becomes: what is actually worth building?\n\nFor us, that meant resisting novelty for novelty's sake. Every feature had to answer a harder question: would this genuinely help people care for their plants more consistently?\n\nSometimes the answer was emotional connection. Sometimes it was reducing uncertainty. Sometimes it was simply making care feel easier.\n\nWe're still early, but building Helia has taught me that good products aren't built by adding more. They're built by understanding what matters enough to keep.",
       },
     ],
   },

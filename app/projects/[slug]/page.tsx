@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ProjectSnapshot } from "@/components/project-snapshot";
 import { getProject, projects, type Section } from "@/lib/projects";
 
 export function generateStaticParams() {
@@ -69,6 +70,15 @@ function MetricsSection({ heading, rows }: { heading: string; rows: { label: str
   );
 }
 
+function SnapshotSection({ items }: { items: { label: string; value: string }[] }) {
+  return (
+    <section className="py-12">
+      <Separator className="mb-12" />
+      <ProjectSnapshot items={items} />
+    </section>
+  );
+}
+
 function CardsSection({ heading, cards }: { heading: string; cards: { title: string; body: string }[] }) {
   return (
     <section className="py-12">
@@ -96,6 +106,7 @@ function renderSection(section: Section, index: number) {
     case "image": return <ImageSection key={index} {...section} />;
     case "image-text": return <ImageTextSection key={index} {...section} />;
     case "metrics": return <MetricsSection key={index} {...section} />;
+    case "snapshot": return <SnapshotSection key={index} {...section} />;
     case "cards": return <CardsSection key={index} {...section} />;
   }
 }
