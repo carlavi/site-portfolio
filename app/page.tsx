@@ -17,7 +17,7 @@ export default function Home() {
       <IridescentGlow />
 
       {/* Sidebar */}
-      <aside className="relative z-10 w-56 shrink-0 flex flex-col justify-between px-8 py-10 border-r border-[#E5E3DF]">
+      <aside className="relative z-10 w-56 shrink-0 flex flex-col justify-between px-8 py-10 border-r border-border">
         <div className="flex flex-col gap-10">
           <div>
             <p className="text-sm font-semibold leading-snug">Carla Vivani</p>

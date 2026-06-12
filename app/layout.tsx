@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
-import { Google_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const googleSans = Google_Sans({
-  variable: "--font-google-sans",
-  subsets: ["latin"],
-  weight: "variable",
+const generalSans = localFont({
+  variable: "--font-general-sans",
+  src: [
+    {
+      path: "./fonts/GeneralSans-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/GeneralSans-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/GeneralSans-Semibold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${googleSans.variable} h-full antialiased`}>
+    <html lang="es" className={`${generalSans.variable} dark h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
