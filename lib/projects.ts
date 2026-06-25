@@ -1,6 +1,6 @@
 export type Section =
   | { type: "text"; heading: string; body: string }
-  | { type: "image"; alt: string; caption?: string }
+  | { type: "image"; src?: string; alt: string; caption?: string }
   | { type: "image-text"; alt: string; heading: string; body: string; imageLeft?: boolean }
   | { type: "cards"; heading: string; cards: { title: string; body: string }[] }
   | { type: "metrics"; heading: string; rows: { label: string; value: string }[] }
@@ -13,6 +13,7 @@ export type Project = {
   tags: string[];
   year: string;
   description: string;
+  hero?: string;
   meta: {
     client: string;
     role: string;
@@ -27,44 +28,110 @@ export const projects: Project[] = [
   {
     slug: "yalocode",
     number: "01",
-    title: "[Placeholder] YaloCode",
-    tags: ["AI", "Engineering", "Systems Design"],
-    year: "[Placeholder]",
-    description: "[Placeholder] Sistemas de IA diseñados con credibilidad técnica — donde producto e ingeniería hablan el mismo idioma.",
+    hero: "/images/yalocode/yalocode.jpeg",
+    title: "YaloCode: Scaling enterprise AI delivery by empowering non-technical teams",
+    tags: ["AI", "Enterprise", "Product Design"],
+    year: "2026 – Present",
+    description: "An AI-powered platform that enables teams across Yalo to build, configure, test, and manage conversational agents using natural language, reducing WhatsApp agent delivery from 6 months to under 2 weeks.",
     meta: {
-      client: "[Placeholder client]",
-      role: "[Placeholder role]",
-      year: "[Placeholder]",
-      link: "[Placeholder link]",
+      client: "Yalo",
+      role: "Senior Product Designer",
+      year: "February 2026 – Present",
     },
     sections: [
       {
-        type: "text",
-        heading: "[Placeholder] El reto",
-        body: "[Placeholder] Describe el problema técnico/de producto y por qué requería credibilidad de ingeniería para resolverse.",
-      },
-      {
-        type: "text",
-        heading: "[Placeholder] El enfoque",
-        body: "[Placeholder] Cómo se diseñó el sistema de IA: decisiones técnicas, colaboración con ingeniería, trade-offs.",
-      },
-      {
-        type: "image",
-        alt: "[Placeholder] Captura del sistema / arquitectura",
-        caption: "[Placeholder] Descripción de la imagen",
-      },
-      {
-        type: "metrics",
-        heading: "[Placeholder] Resultados",
-        rows: [
-          { label: "[Placeholder métrica]", value: "[Placeholder valor]" },
-          { label: "[Placeholder métrica]", value: "[Placeholder valor]" },
+        type: "snapshot",
+        heading: "Project Snapshot",
+        items: [
+          { label: "Role", value: "Senior Product Designer" },
+          { label: "Team", value: "Product Manager, Tech Manager, Frontend & Backend Engineers, Design Lead" },
+          { label: "Timeline", value: "February 2026 – Present" },
+          { label: "What we built", value: "An AI-powered platform for building, configuring, testing, and managing conversational agents using natural language." },
+          { label: "Impact", value: "104 active users · 4.5 CSAT · WhatsApp agent delivery reduced from ~6 months to under 2 weeks" },
+          { label: "What I owned", value: "End-to-end UX for non-technical users, AI interaction models, structured in-chat widgets, information architecture, and frontend implementation." },
         ],
       },
       {
         type: "text",
-        heading: "[Placeholder] Aprendizajes",
-        body: "[Placeholder] Qué aprendiste sobre construir credibilidad técnica como diseñador.",
+        heading: "What if non-technical teams could build enterprise AI agents on their own?",
+        body: "YaloCode started as a hackathon proof of concept built on top of pi.dev.\n\nAfter an initial internal release, the product team validated the concept with approximately 20 users and quickly identified its potential to transform how conversational experiences were delivered across the company.\n\nWhat began as an experiment became one of Yalo's key initiatives to accelerate AI adoption and reduce delivery timelines for enterprise clients.\n\nAs a Senior Product Designer, I led the end-to-end user experience for non-technical users, helped define how YaloCode should behave as an AI product, designed key interaction patterns, and contributed directly to frontend implementation.",
+      },
+      {
+        type: "text",
+        heading: "The problem: six months to launch a WhatsApp agent",
+        body: "As AI adoption accelerated, one of Yalo's primary company objectives became reducing implementation time and increasing customer time-to-value.\n\nAt the time, launching a WhatsApp agent for an enterprise customer could take up to six months.\n\nThe process involved multiple teams, extensive engineering support, and long periods where customers could only review mockups instead of interacting with a working solution.\n\nInternally, many platform capabilities already existed, but they were hidden behind technical workflows, undocumented processes, and platform knowledge that only experienced engineers possessed.",
+      },
+      {
+        type: "cards",
+        heading: "Three major challenges",
+        cards: [
+          { title: "Long implementation timelines", body: "Up to six months from kickoff to a working WhatsApp agent for enterprise clients." },
+          { title: "High engineering dependency", body: "Critical delivery work required specialized platform knowledge only experienced engineers possessed." },
+          { title: "Limited team autonomy", body: "Customer Success, Sales, Marketing, and Conversational Design teams could not execute independently." },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Who we were designing for",
+        body: "The primary users were internal teams across the organization: Customer Success Managers, Sales teams running demos, Conversational Designers, Engineers, and Marketing teams.\n\nMore recently, YaloCode has expanded beyond internal teams and is now being adopted by external implementation partners.\n\nDespite having different goals, these users shared a common frustration: they needed access to powerful platform capabilities but lacked the technical expertise required to use existing tools efficiently.",
+      },
+      {
+        type: "text",
+        heading: "My role",
+        body: "My role extended beyond interface design.\n\nI worked closely with Product, Engineering, and Leadership teams to define how complex agent-building capabilities could be transformed into workflows that non-technical users could confidently operate.\n\nMy contributions included:\n\n• Information architecture for agent creation and management\n• End-to-end workflow design\n• Designing interaction models between users and AI\n• Creating skills and behavioral instructions that defined how YaloCode operated and responded\n• Designing structured in-chat widgets\n• Stakeholder alignment across Product and Engineering\n• Shipping frontend pull requests for implementation",
+      },
+      {
+        type: "image",
+        src: "/images/yalocode/chat-ui-gallery.jpeg",
+        alt: "YaloCode chat UI gallery",
+      },
+      {
+        type: "text",
+        heading: "The key design challenge: when chat isn't enough",
+        body: "One of the biggest challenges we encountered was balancing the flexibility of conversational AI with the structure required for complex operational workflows.\n\nEarly versions of YaloCode relied heavily on chat interactions.\n\nWhile this worked well for simple requests, users struggled when reviewing large outputs, validating configurations, or collaborating on generated content.\n\nAs usage increased, it became clear that conversational interfaces alone were not sufficient for tasks that required scanning, comparison, editing, and decision-making.",
+      },
+      {
+        type: "text",
+        heading: "The design decision: structured in-chat widgets",
+        body: "Instead of forcing users to switch between conversational AI and traditional product interfaces, we introduced a system of structured in-chat widgets.\n\nThese widgets transformed AI-generated outputs into actionable interfaces directly within the conversation.\n\nThis hybrid interaction model preserved the speed and flexibility of natural language interactions while providing the clarity and control users needed for complex tasks.\n\nRather than replacing interfaces with chat, we combined both paradigms into a single experience.",
+      },
+      {
+        type: "cards",
+        heading: "Widget examples",
+        cards: [
+          { title: "Test plan summaries", body: "Structured overviews of generated test plans, scannable and actionable without leaving the conversation." },
+          { title: "Configuration outputs", body: "Structured representations of agent configurations, reviewable and editable directly in-chat." },
+          { title: "Review and validation components", body: "Inline interfaces for approving, editing, or flagging AI-generated content during complex workflows." },
+        ],
+      },
+      {
+        type: "image",
+        src: "/images/yalocode/widget.jpeg",
+        alt: "YaloCode structured in-chat widget",
+      },
+      {
+        type: "metrics",
+        heading: "Adoption",
+        rows: [
+          { label: "Active users", value: "104 of ~150 internal" },
+          { label: "Avg. session duration", value: "2h 24m" },
+          { label: "Prompts created by power users", value: "200+" },
+          { label: "Active skills per power user", value: "10–20" },
+        ],
+      },
+      {
+        type: "metrics",
+        heading: "Impact",
+        rows: [
+          { label: "CSAT score", value: "4.5 / 5" },
+          { label: "WhatsApp agent delivery", value: "6 months → under 2 weeks" },
+          { label: "Reach", value: "Expanded to external implementation partners" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Designing for adoption, not just capability",
+        body: "Building AI products requires more than adding a chat interface to existing workflows.\n\nThe most successful experiences emerge when conversational interactions are combined with the structure, visibility, and control users need to complete complex tasks.\n\nYaloCode reinforced the importance of designing for adoption rather than capability alone.\n\nThe challenge was never simply enabling users to build agents with AI. It was creating enough trust, clarity, and usability for them to make AI part of their daily work.\n\nOne Conversational Designer summarized the impact best:\n\n\"Now almost 95% of my work happens in YaloCode. I barely open our legacy flow platform anymore.\"",
       },
     ],
   },
@@ -74,7 +141,7 @@ export const projects: Project[] = [
     title: "Helia: Building an emotionally-driven product for plant care",
     tags: ["Mobile", "Product Strategy", "Founder"],
     year: "2025 – Present",
-    description: "A plant care app combining plant identification, curated care guidance, and conversational interactions — built on the hypothesis that emotional connection improves care consistency.",
+    description: "A plant care app combining plant identification, curated care guidance, and conversational interactions, built on the hypothesis that emotional connection improves care consistency.",
     meta: {
       client: "Co-Founder",
       role: "Product Strategy, UX/UI, Frontend",
@@ -96,7 +163,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Can emotional connection change how people care for plants?",
-        body: "Most plant care apps focus on information: watering reminders, care guides, and species databases.\n\nBut as plant owners ourselves, we kept noticing a different problem:\n\nPeople rarely stop caring for plants because information is unavailable.\n\nThey stop because motivation fades.\n\nPlants become another responsibility, uncertainty builds — Am I watering too much? Is this normal? — and over time, care becomes inconsistent.\n\nWe started with a simple hypothesis: if people formed a stronger emotional connection with their plants, they might care for them more consistently.\n\nThat idea became Helia — a plant care app designed to make caring for plants feel more personal, approachable, and easier to sustain over time.",
+        body: "Most plant care apps focus on information: watering reminders, care guides, and species databases.\n\nBut as plant owners ourselves, we kept noticing a different problem:\n\nPeople rarely stop caring for plants because information is unavailable.\n\nThey stop because motivation fades.\n\nPlants become another responsibility, uncertainty builds. Am I watering too much? Is this normal? Over time, care becomes inconsistent.\n\nWe started with a simple hypothesis: if people formed a stronger emotional connection with their plants, they might care for them more consistently.\n\nThat idea became Helia, a plant care app designed to make caring for plants feel more personal, approachable, and easier to sustain over time.",
       },
       {
         type: "text",
@@ -111,7 +178,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "From utility to relationship",
-        body: "[PLACEHOLDER: biggest product tension / decision]\n\nWe quickly realized Helia worked best when it balanced practical utility with emotional connection.\n\nToo much utility made the experience feel transactional. Too much emotionality made it feel gimmicky.\n\nWe started exploring ways to make plants feel more present without losing credibility as a care tool.\n\nThis led to features like plant personalities, conversational interactions, personalized care guidance, and narrative elements designed to build emotional attachment.\n\nThe goal wasn't novelty. It was helping people feel more connected — so care became easier to sustain over time.",
+        body: "[PLACEHOLDER: biggest product tension / decision]\n\nWe quickly realized Helia worked best when it balanced practical utility with emotional connection.\n\nToo much utility made the experience feel transactional. Too much emotionality made it feel gimmicky.\n\nWe started exploring ways to make plants feel more present without losing credibility as a care tool.\n\nThis led to features like plant personalities, conversational interactions, personalized care guidance, and narrative elements designed to build emotional attachment.\n\nThe goal wasn't novelty. It was helping people feel more connected, so care became easier to sustain over time.",
       },
       {
         type: "text",
@@ -121,7 +188,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Designing and operating with constraints",
-        body: "Helia is built by a team of two.\n\nI lead product strategy, UX/UI, frontend implementation, pricing, brand, growth experiments, and day-to-day product operations. My husband leads backend systems, infrastructure, app distribution, and legal operations.\n\nWorking at this scale means every decision matters:\n\n• Balancing emotional design with usability\n• Managing infrastructure and AI costs carefully\n• Prioritizing features against engineering constraints\n• Learning directly from user behavior rather than large-scale research\n\nInstead of separating strategy, design, and execution, we move across all three constantly — making decisions quickly, testing ideas, and adapting as we learn.",
+        body: "Helia is built by a team of two.\n\nI lead product strategy, UX/UI, frontend implementation, pricing, brand, growth experiments, and day-to-day product operations. My husband leads backend systems, infrastructure, app distribution, and legal operations.\n\nWorking at this scale means every decision matters:\n\n• Balancing emotional design with usability\n• Managing infrastructure and AI costs carefully\n• Prioritizing features against engineering constraints\n• Learning directly from user behavior rather than large-scale research\n\nInstead of separating strategy, design, and execution, we move across all three constantly, making decisions quickly, testing ideas, and adapting as we learn.",
       },
       {
         type: "text",
@@ -136,7 +203,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "What building Helia changed for me",
-        body: "Helia pushed me beyond designing interfaces.\n\nAs a founder, I've had to move fluidly between product strategy, positioning, pricing, growth, interaction design, and implementation constraints — often within the same week.\n\nBuilding an early-stage product also changed how I think about technology. When new tools make almost anything possible, the hard part stops being: what can we build? It becomes: what is actually worth building?\n\nFor us, that meant resisting novelty for novelty's sake. Every feature had to answer a harder question: would this genuinely help people care for their plants more consistently?\n\nSometimes the answer was emotional connection. Sometimes it was reducing uncertainty. Sometimes it was simply making care feel easier.\n\nWe're still early, but building Helia has taught me that good products aren't built by adding more. They're built by understanding what matters enough to keep.",
+        body: "Helia pushed me beyond designing interfaces.\n\nAs a founder, I've had to move fluidly between product strategy, positioning, pricing, growth, interaction design, and implementation constraints, often within the same week.\n\nBuilding an early-stage product also changed how I think about technology. When new tools make almost anything possible, the hard part stops being: what can we build? It becomes: what is actually worth building?\n\nFor us, that meant resisting novelty for novelty's sake. Every feature had to answer a harder question: would this genuinely help people care for their plants more consistently?\n\nSometimes the answer was emotional connection. Sometimes it was reducing uncertainty. Sometimes it was simply making care feel easier.\n\nWe're still early, but building Helia has taught me that good products aren't built by adding more. They're built by understanding what matters enough to keep.",
       },
     ],
   },

@@ -24,7 +24,7 @@ const generalSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Carla Vivani — Product Designer",
+  title: "Carla Vivani, Product Designer",
   description: "Portfolio de diseño de producto y UX.",
 };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${generalSans.variable} dark h-full antialiased`}>
+    <html lang="es" className={`${generalSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import { FadeUp } from "@/components/fade-up";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -21,12 +23,15 @@ function TextSection({ heading, body }: { heading: string; body: string }) {
   );
 }
 
-function ImageSection({ alt, caption }: { alt: string; caption?: string }) {
+function ImageSection({ src, alt, caption }: { src?: string; alt: string; caption?: string }) {
   return (
     <section className="py-12">
       <Separator className="mb-12" />
-      <div className="w-full rounded-xl overflow-hidden aspect-[16/9] flex items-center justify-center bg-secondary">
-        <span className="text-sm text-muted-foreground">{alt}</span>
+      <div className="relative w-full rounded-xl overflow-hidden aspect-[16/9] bg-secondary">
+        {src
+          ? <Image src={src} alt={alt} fill className="object-cover" />
+          : <span className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">{alt}</span>
+        }
       </div>
       {caption && <p className="mt-3 text-xs text-center text-muted-foreground">{caption}</p>}
     </section>
@@ -123,7 +128,7 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, meta, sections } = project;
+  const { title, hero, meta, sections } = project;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--background)" }}>
@@ -140,19 +145,20 @@ export default async function ProjectPage({
           ← Back
         </Button>
 
-        {/* Hero placeholder */}
-        <div className="flex gap-4 mb-10">
-          {[1, 2].map((i) => (
-            <div key={i} className="flex-1 rounded-2xl aspect-[9/16] max-w-[180px] flex items-center justify-center" style={{ backgroundColor: "var(--secondary)" }}>
-              <span className="text-xs" style={{ color: "var(--muted-foreground)" }}>Mockup {i}</span>
-            </div>
-          ))}
-        </div>
+        {/* Hero */}
+        {hero && (
+          <FadeUp delay={100} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
+            <Image src={hero} alt={title} fill className="object-cover" priority />
+          </FadeUp>
+        )}
 
         {/* Title */}
-        <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
+        <FadeUp delay={hero ? 220 : 100}>
+          <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
+        </FadeUp>
 
         {/* Metadata */}
+        <FadeUp delay={hero ? 320 : 180}>
         <div className="flex flex-wrap gap-6 text-sm mb-4">
           {[
             { label: "Client", value: meta.client },
@@ -179,8 +185,11 @@ export default async function ProjectPage({
             </div>
           )}
         </div>
+        </FadeUp>
 
-        {sections.map(renderSection)}
+        <FadeUp delay={hero ? 420 : 280}>
+          {sections.map(renderSection)}
+        </FadeUp>
 
         <div className="pt-8 pb-8 mt-8">
           <Separator className="mb-8" />
