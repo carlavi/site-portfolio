@@ -13,26 +13,38 @@ export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-function TextSection({ heading, body }: { heading: string; body: string }) {
+function TextSection({ heading, body, hideSeparator }: { heading: string; body: string; hideSeparator?: boolean }) {
+  const paragraphs = body.split("\n\n");
   return (
-    <section className="py-12">
-      <Separator className="mb-12" />
+    <section className="py-8">
+      {!hideSeparator && <Separator className="mb-8" />}
       <h2 className="text-xl font-semibold mb-4 text-foreground">{heading}</h2>
-      <p className="leading-relaxed whitespace-pre-line max-w-4xl text-base text-muted-foreground">{body}</p>
+      <div className="max-w-2xl flex flex-col gap-3 text-base leading-relaxed text-muted-foreground">
+        {paragraphs.map((p, i) => (
+          <p key={i} className="whitespace-pre-line">{p}</p>
+        ))}
+      </div>
     </section>
   );
 }
 
-function ImageSection({ src, alt, caption }: { src?: string; alt: string; caption?: string }) {
+function ImageSection({ src, alt, caption, fit = "cover", imgWidth = 1920, imgHeight = 1080 }: { src?: string; alt: string; caption?: string; fit?: "cover" | "contain"; imgWidth?: number; imgHeight?: number }) {
   return (
-    <section className="py-12">
-      <Separator className="mb-12" />
-      <div className="relative w-full rounded-xl overflow-hidden aspect-[16/9] bg-secondary">
-        {src
-          ? <Image src={src} alt={alt} fill className="object-cover" />
-          : <span className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">{alt}</span>
-        }
-      </div>
+    <section className="py-8">
+      <Separator className="mb-8" />
+      {src ? (
+        fit === "contain" ? (
+          <Image src={src} alt={alt} width={imgWidth} height={imgHeight} className="w-full h-auto rounded-2xl block" />
+        ) : (
+          <div className="relative w-full rounded-2xl overflow-hidden aspect-[16/9]">
+            <Image src={src} alt={alt} fill className="object-cover" />
+          </div>
+        )
+      ) : (
+        <div className="rounded-2xl aspect-[16/9] flex items-center justify-center bg-secondary">
+          <span className="text-sm text-muted-foreground">{alt}</span>
+        </div>
+      )}
       {caption && <p className="mt-3 text-xs text-center text-muted-foreground">{caption}</p>}
     </section>
   );
@@ -40,8 +52,8 @@ function ImageSection({ src, alt, caption }: { src?: string; alt: string; captio
 
 function ImageTextSection({ alt, heading, body, imageLeft = false }: { alt: string; heading: string; body: string; imageLeft?: boolean }) {
   return (
-    <section className="py-12">
-      <Separator className="mb-12" />
+    <section className="py-8">
+      <Separator className="mb-8" />
       <div className={`flex flex-col md:flex-row gap-8 items-center ${imageLeft ? "" : "md:flex-row-reverse"}`}>
         <div className="w-full md:w-1/2 rounded-xl aspect-[4/3] flex items-center justify-center bg-secondary">
           <span className="text-sm text-muted-foreground">{alt}</span>
@@ -57,8 +69,8 @@ function ImageTextSection({ alt, heading, body, imageLeft = false }: { alt: stri
 
 function MetricsSection({ heading, rows }: { heading: string; rows: { label: string; value: string }[] }) {
   return (
-    <section className="py-12">
-      <Separator className="mb-12" />
+    <section className="py-8">
+      <Separator className="mb-8" />
       <h2 className="text-xl font-semibold mb-6 text-foreground">{heading}</h2>
       <Card className="max-w-lg rounded-xl overflow-hidden">
         {rows.map((row, i) => (
@@ -77,8 +89,8 @@ function MetricsSection({ heading, rows }: { heading: string; rows: { label: str
 
 function SnapshotSection({ items }: { items: { label: string; value: string }[] }) {
   return (
-    <section className="py-12">
-      <Separator className="mb-12" />
+    <section className="py-8">
+      <Separator className="mb-8" />
       <ProjectSnapshot items={items} />
     </section>
   );
@@ -86,8 +98,8 @@ function SnapshotSection({ items }: { items: { label: string; value: string }[] 
 
 function CardsSection({ heading, cards }: { heading: string; cards: { title: string; body: string }[] }) {
   return (
-    <section className="py-12">
-      <Separator className="mb-12" />
+    <section className="py-8">
+      <Separator className="mb-8" />
       <h2 className="text-xl font-semibold mb-6 text-foreground">{heading}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cards.map((card) => (
@@ -107,8 +119,8 @@ function CardsSection({ heading, cards }: { heading: string; cards: { title: str
 
 function renderSection(section: Section, index: number) {
   switch (section.type) {
-    case "text": return <TextSection key={index} {...section} />;
-    case "image": return <ImageSection key={index} {...section} />;
+    case "text": return <TextSection key={index} heading={section.heading} body={section.body} hideSeparator={section.hideSeparator} />;
+    case "image": return <ImageSection key={index} src={section.src} alt={section.alt} caption={section.caption} fit={section.fit} imgWidth={section.imgWidth} imgHeight={section.imgHeight} />;
     case "image-text": return <ImageTextSection key={index} {...section} />;
     case "metrics": return <MetricsSection key={index} {...section} />;
     case "snapshot": return <SnapshotSection key={index} {...section} />;
@@ -128,10 +140,11 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, hero, meta, sections } = project;
+  const { title, hero, meta, sections, pageTheme } = project;
+  const isDark = pageTheme === "dark";
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--background)" }}>
+    <div className={`min-h-screen${isDark ? " dark" : ""}`} style={{ backgroundColor: isDark ? "#141414" : "var(--background)" }}>
       {/* Sidebar */}
       <aside className="fixed top-0 left-0 h-full w-40 px-6 py-8 flex-col gap-2 z-10 hidden lg:flex border-r">
         <span className="text-sm font-semibold text-foreground">Carla Vivani</span>
@@ -161,7 +174,6 @@ export default async function ProjectPage({
         <FadeUp delay={hero ? 320 : 180}>
         <div className="flex flex-wrap gap-6 text-sm mb-4">
           {[
-            { label: "Client", value: meta.client },
             { label: "Role", value: meta.role },
             { label: "Year", value: meta.year },
           ].map(({ label, value }) => (

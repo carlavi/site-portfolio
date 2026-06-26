@@ -1,6 +1,6 @@
 export type Section =
-  | { type: "text"; heading: string; body: string }
-  | { type: "image"; src?: string; alt: string; caption?: string }
+  | { type: "text"; heading: string; body: string; hideSeparator?: boolean }
+  | { type: "image"; src?: string; alt: string; caption?: string; fit?: "cover" | "contain"; imgWidth?: number; imgHeight?: number }
   | { type: "image-text"; alt: string; heading: string; body: string; imageLeft?: boolean }
   | { type: "cards"; heading: string; cards: { title: string; body: string }[] }
   | { type: "metrics"; heading: string; rows: { label: string; value: string }[] }
@@ -14,6 +14,7 @@ export type Project = {
   year: string;
   description: string;
   hero?: string;
+  pageTheme?: "dark";
   meta: {
     client: string;
     role: string;
@@ -208,8 +209,112 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "reveri",
+    slug: "reveri-ai-sessions",
     number: "03",
+    pageTheme: "dark",
+    hero: "/images/reveri-ai-sessions/02%20ReveriAI.jpg",
+    title: "Reveri: Introducing AI into a clinical pain relief experience",
+    tags: ["AI", "Healthcare", "Product Design"],
+    year: "2025",
+    description: "Redesigning Reveri's hypnosis sessions around real-time, personalized AI guidance, and the trust-building work that came with it.",
+    meta: {
+      client: "Reveri",
+      role: "Product Design",
+      year: "March–June 2025",
+      tools: ["Figma", "ChatGPT", "Bolt"],
+    },
+    sections: [
+      {
+        type: "text",
+        heading: "Helping users feel relief, faster and more personally",
+        body: "After exploring (and ultimately stepping away from) a more ambitious AI onboarding concept, we shifted toward a smaller but more meaningful question: could AI make Reveri's hypnosis sessions feel more responsive to each person's pain?\n\nBefore AI, sessions followed a fixed structure. Every user received the same guidance, regardless of what hurt, how pain showed up, or what imagery resonated most.\n\nWe saw an opportunity to make sessions more adaptive: listening, responding, and adjusting in real time based on what users shared.",
+      },
+      {
+        type: "image",
+        src: "/images/reveri-ai-sessions/01%20ReveriAI.jpg",
+        alt: "Reveri AI Talk session screen",
+        fit: "contain",
+        imgWidth: 3840,
+        imgHeight: 2161,
+      },
+      {
+        type: "text",
+        heading: "Outcome",
+        body: "The shift toward personalization had a measurable impact.\n\nUsers who completed AI-guided sessions reported notably higher improvement rates than those who completed non-AI sessions. Post-session feedback also showed higher feelings of being \"heard\" and \"understood\" during the experience.\n\nRather than simply introducing AI into the app, we focused on a more practical question: how could conversational interaction improve the care experience in a way users could genuinely feel?",
+      },
+      {
+        type: "metrics",
+        heading: "Reported improvement rates",
+        rows: [
+          { label: "AI-guided sessions", value: "87%" },
+          { label: "Non-AI sessions", value: "60%" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Redesigning how users enter care",
+        body: "This work also changed how users entered the Reveri experience.\n\nPreviously, the product relied on a card-based system where users selected static hypnosis sessions. As conversational AI became part of the experience, we redesigned the Home Tab to support two clearer entry paths, prioritizing one as the default while keeping the other easily accessible.\n\nThis helped simplify decision-making, reduce visual complexity, and focus attention without overwhelming users.",
+      },
+      {
+        type: "image",
+        src: "/images/reveri-ai-sessions/Before%20and%20After%20Reveri.jpg",
+        alt: "Before and after redesign of Reveri's home tab",
+        fit: "contain",
+        imgWidth: 2490,
+        imgHeight: 1620,
+      },
+      {
+        type: "cards",
+        heading: "Two paths into care",
+        cards: [
+          { title: "Talk Mode", body: "A real-time, conversational experience powered by AI, positioned as the primary entry point into the product." },
+          { title: "Listen Mode", body: "A more traditional, audio-only hypnosis experience, kept easily accessible for users who prefer it." },
+        ],
+      },
+      {
+        type: "image",
+        src: "/images/reveri-ai-sessions/02%20ReveriAI.jpg",
+        alt: "Talk mode and Listen mode side by side",
+        fit: "contain",
+        imgWidth: 3840,
+        imgHeight: 2160,
+      },
+      {
+        type: "text",
+        heading: "Building trust through educational moments",
+        body: "Introducing AI into a clinical setting brought a new challenge: uncertainty.\n\nPeople naturally had questions. Will this work for me? Can I use this with pain medication? What exactly am I paying for?\n\nInstead of interrupting the experience with long explanations, we introduced lightweight educational moments designed to appear contextually throughout the session. These moments helped answer concerns early while preserving emotional flow.\n\nWe also saw an interesting signal: users who engaged with these touchpoints during their first sessions showed higher retention over time.",
+      },
+      {
+        type: "image",
+        src: "/images/reveri-ai-sessions/03%20ReveriAI.jpg",
+        alt: "Educational trust-building screens in Reveri",
+        fit: "contain",
+        imgWidth: 3840,
+        imgHeight: 2161,
+      },
+      {
+        type: "text",
+        heading: "Fast iteration through prototyping",
+        body: "Designing conversational AI required a different workflow than traditional product design.\n\nBecause behavior mattered just as much as interface, static screens alone weren't enough to evaluate the experience.\n\nI used low-fidelity flows, conversational prompts, and Bolt prototypes to simulate interactions before implementation, helping us validate assumptions, align quickly with engineering, and test ideas with beta users before investing heavily in development.\n\nThis made it easier to understand not just how the UI looked, but how the experience actually felt in motion.",
+      },
+      {
+        type: "image",
+        src: "/images/reveri-ai-sessions/04%20ReveriAI.jpg",
+        alt: "Early prototypes of the Reveri AI session flow",
+        fit: "contain",
+        imgWidth: 3840,
+        imgHeight: 2161,
+      },
+      {
+        type: "text",
+        heading: "What this project reinforced",
+        body: "This work reinforced an important lesson from our earlier onboarding experiments: AI becomes useful when it solves a specific problem well.\n\nThe breakthrough wasn't trying to redesign everything around AI. It was identifying a moment where personalization could meaningfully improve the user experience, and designing around that constraint.\n\nIn this case, helping people feel relief sooner, while feeling more understood in the process.",
+      },
+    ],
+  },
+  {
+    slug: "reveri",
+    number: "04",
     title: "Reveri: Designing an AI onboarding, and deciding not to ship it",
     tags: ["AI", "Experimentation", "Product Design"],
     year: "2025",
@@ -262,70 +367,9 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "reveri-ai-sessions",
-    number: "04",
-    title: "Reveri: Introducing AI into a clinical pain relief experience",
-    tags: ["AI", "Healthcare", "Product Design"],
-    year: "2025",
-    description: "Redesigning Reveri's hypnosis sessions around real-time, personalized AI guidance, and the trust-building work that came with it.",
-    meta: {
-      client: "Reveri",
-      role: "Product Design",
-      year: "March–June 2025",
-      tools: ["Figma", "ChatGPT", "Bolt"],
-    },
-    sections: [
-      {
-        type: "text",
-        heading: "Helping users feel relief, faster and more personally",
-        body: "After exploring (and ultimately stepping away from) a more ambitious AI onboarding concept, we shifted toward a smaller but more meaningful question: could AI make Reveri's hypnosis sessions feel more responsive to each person's pain?\n\nBefore AI, sessions followed a fixed structure. Every user received the same guidance, regardless of what hurt, how pain showed up, or what imagery resonated most.\n\nWe saw an opportunity to make sessions more adaptive: listening, responding, and adjusting in real time based on what users shared.",
-      },
-      {
-        type: "text",
-        heading: "Outcome",
-        body: "The shift toward personalization had a measurable impact.\n\nUsers who completed AI-guided sessions reported notably higher improvement rates than those who completed non-AI sessions. Post-session feedback also showed higher feelings of being \"heard\" and \"understood\" during the experience.\n\nRather than simply introducing AI into the app, we focused on a more practical question: how could conversational interaction improve the care experience in a way users could genuinely feel?",
-      },
-      {
-        type: "metrics",
-        heading: "Reported improvement rates",
-        rows: [
-          { label: "AI-guided sessions", value: "87%" },
-          { label: "Non-AI sessions", value: "60%" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Redesigning how users enter care",
-        body: "This work also changed how users entered the Reveri experience.\n\nPreviously, the product relied on a card-based system where users selected static hypnosis sessions. As conversational AI became part of the experience, we redesigned the Home Tab to support two clearer entry paths, prioritizing one as the default while keeping the other easily accessible.\n\nThis helped simplify decision-making, reduce visual complexity, and focus attention without overwhelming users.",
-      },
-      {
-        type: "cards",
-        heading: "Two paths into care",
-        cards: [
-          { title: "Talk Mode", body: "A real-time, conversational experience powered by AI, positioned as the primary entry point into the product." },
-          { title: "Listen Mode", body: "A more traditional, audio-only hypnosis experience, kept easily accessible for users who prefer it." },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Building trust through educational moments",
-        body: "Introducing AI into a clinical setting brought a new challenge: uncertainty.\n\nPeople naturally had questions. Will this work for me? Can I use this with pain medication? What exactly am I paying for?\n\nInstead of interrupting the experience with long explanations, we introduced lightweight educational moments designed to appear contextually throughout the session. These moments helped answer concerns early while preserving emotional flow.\n\nWe also saw an interesting signal: users who engaged with these touchpoints during their first sessions showed higher retention over time.",
-      },
-      {
-        type: "text",
-        heading: "Fast iteration through prototyping",
-        body: "Designing conversational AI required a different workflow than traditional product design.\n\nBecause behavior mattered just as much as interface, static screens alone weren't enough to evaluate the experience.\n\nI used low-fidelity flows, conversational prompts, and Bolt prototypes to simulate interactions before implementation, helping us validate assumptions, align quickly with engineering, and test ideas with beta users before investing heavily in development.\n\nThis made it easier to understand not just how the UI looked, but how the experience actually felt in motion.",
-      },
-      {
-        type: "text",
-        heading: "What this project reinforced",
-        body: "This work reinforced an important lesson from our earlier onboarding experiments: AI becomes useful when it solves a specific problem well.\n\nThe breakthrough wasn't trying to redesign everything around AI. It was identifying a moment where personalization could meaningfully improve the user experience, and designing around that constraint.\n\nIn this case, helping people feel relief sooner, while feeling more understood in the process.",
-      },
-    ],
-  },
-  {
     slug: "nubank",
     number: "05",
+    hero: "/images/nubank/NuCuenta%20Cover.jpg",
     title: "Nubank: Cuenta Nu México",
     tags: ["Fintech", "Design Systems", "Banking"],
     year: "2021–2023",
@@ -361,17 +405,60 @@ export const projects: Project[] = [
         ],
       },
       {
+        type: "image",
+        src: "/images/nubank/Feed%20Detail%20Anatomy.jpg",
+        alt: "Feed Detail Anatomy",
+        fit: "contain",
+        imgWidth: 2490,
+        imgHeight: 1621,
+      },
+      {
+        type: "image",
+        src: "/images/nubank/Feed%20Item%20System.jpg",
+        alt: "Feed Item System",
+        fit: "contain",
+        imgWidth: 2490,
+        imgHeight: 1620,
+      },
+      {
+        type: "image",
+        src: "/images/nubank/Nu%20Transfers.jpg",
+        alt: "Nu Transfers flow",
+        fit: "contain",
+        imgWidth: 2490,
+        imgHeight: 1620,
+      },
+      {
         type: "text",
+        hideSeparator: true,
         heading: "Simplifying transfers for a different financial context",
         body: "Brazil's transfer experience relied heavily on PIX: fast, direct, and deeply embedded into people's habits. In Mexico, SPEI worked differently, and several assumptions from the original flow created unnecessary friction.\n\nRather than simply localizing the interface, we focused on adapting the experience to local expectations.\n\nI partnered closely with my Design Lead and teammates across research, content, product, and engineering to identify moments that didn't translate well to the Mexican context and redesign the experience to feel more direct, predictable, and familiar.\n\nKey challenge: balancing consistency with Nubank's core product while adapting to a different way people move money.",
       },
       {
+        type: "image",
+        src: "/images/nubank/Nu%20CC%20Payment.jpg",
+        alt: "Nu credit card payment flow",
+        fit: "contain",
+        imgWidth: 2490,
+        imgHeight: 1620,
+      },
+      {
         type: "text",
+        hideSeparator: true,
         heading: "Designing credit card payments with clarity",
         body: "As part of launching Cuenta Nu, we introduced a new payment experience that allowed users to pay their Nu credit card directly from their debit account.\n\nResearch surfaced a critical issue: many users struggled to understand the difference between minimum and full payment, sometimes leading to unintentional debt.\n\nInstead of optimizing purely for speed, our team prioritized clarity. I led the design of the payment flow, partnering closely with Content Design and UX Research to make payment decisions easier to understand and less intimidating.\n\nTogether, we tested language, hierarchy, and educational moments to help users better understand payment consequences before confirming.",
       },
       {
+        type: "image",
+        src: "/images/nubank/Nu%20Account%20Statement.jpg",
+        alt: "Nu account statement design",
+        fit: "contain",
+        imgWidth: 2490,
+        imgHeight: 1620,
+      },
+      {
         type: "text",
+        hideSeparator: true,
         heading: "Making account statements easier to understand",
         body: "Account statements are usually dense, technical, and difficult to navigate. We saw an opportunity to make them feel more useful: less like a legal document and more like something people could actually understand.\n\nI collaborated with Legal, Finance, Content, and Product partners to restructure information, simplify language, and align the experience with Nubank's transparent tone of voice. We also incorporated insights from Legal Design research to make complex financial information easier to understand.\n\nNo small letters. No overly technical language. Just clearer financial information designed around trust.",
       },
