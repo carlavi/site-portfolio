@@ -1,49 +1,18 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { FadeUp } from "@/components/fade-up";
-import { ProjectList } from "@/components/project-list";
+import { Sidebar } from "@/components/sidebar";
+import { ProjectGallery } from "@/components/project-gallery";
 import { projects } from "@/lib/projects";
-
-const navLinks = [
-  { label: "Work", href: "/" },
-  { label: "About", href: "/about" },
-];
+import { MEDIA_WIDTH } from "@/lib/layout";
 
 export default function Home() {
   return (
-    <div className="relative flex h-screen overflow-hidden" style={{ color: "var(--foreground)" }}>
-      {/* Sidebar */}
-      <aside className="relative z-10 w-56 shrink-0 flex flex-col justify-between px-8 py-10 border-r border-border">
-        <FadeUp delay={0}>
-          <div className="flex flex-col gap-10">
-            <div>
-              <p className="text-sm font-semibold leading-snug">Carla Vivani</p>
-              <p className="text-sm mt-0.5" style={{ color: "var(--muted-foreground)" }}>Product Designer</p>
-            </div>
-            <nav className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Button key={link.label} variant="ghost" size="sm" render={<Link href={link.href} />} nativeButton={false} className="justify-start px-2">
-                  {link.label}
-                </Button>
-              ))}
-            </nav>
-          </div>
-        </FadeUp>
-        <FadeUp delay={100}>
-          <div className="flex flex-col gap-1">
-            <Button variant="ghost" size="xs" render={<a href="https://www.linkedin.com/in/carlavivani/" target="_blank" rel="noopener noreferrer" />} nativeButton={false} className="justify-start px-2">
-              LinkedIn ↗
-            </Button>
-            <Button variant="ghost" size="xs" render={<a href="mailto:carlavivani@gmail.com" />} nativeButton={false} className="justify-start px-2">
-              Email ↗
-            </Button>
-          </div>
-        </FadeUp>
-      </aside>
+    <div className="relative flex flex-col md:flex-row md:h-screen md:overflow-hidden" style={{ color: "var(--foreground)" }}>
+      <Sidebar />
 
       {/* Main content - scrollable */}
-      <main className="relative z-10 flex-1 overflow-y-auto px-12 py-10">
-        <ProjectList projects={projects} />
+      <main className="relative z-10 flex-1 md:overflow-y-auto px-4 py-6 md:px-12 md:py-10">
+        <div className={`${MEDIA_WIDTH} mx-auto`}>
+          <ProjectGallery projects={projects} />
+        </div>
       </main>
     </div>
   );

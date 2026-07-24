@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { FadeUp } from "@/components/fade-up";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ProjectSnapshot } from "@/components/project-snapshot";
 import { getProject, projects, type Section } from "@/lib/projects";
+import { TEXT_WIDTH, MEDIA_WIDTH } from "@/lib/layout";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -19,7 +21,7 @@ function TextSection({ heading, body, hideSeparator }: { heading: string; body: 
     <section className="py-8">
       {!hideSeparator && <Separator className="mb-8" />}
       <h2 className="text-xl font-semibold mb-4 text-foreground">{heading}</h2>
-      <div className="max-w-2xl flex flex-col gap-3 text-base leading-relaxed text-muted-foreground">
+      <div className={`${TEXT_WIDTH} flex flex-col gap-3 text-base leading-relaxed text-muted-foreground`}>
         {paragraphs.map((p, i) => (
           <p key={i} className="whitespace-pre-line">{p}</p>
         ))}
@@ -146,32 +148,37 @@ export default async function ProjectPage({
   return (
     <div className={`min-h-screen${isDark ? " dark" : ""}`} style={{ backgroundColor: isDark ? "#141414" : "var(--background)" }}>
       {/* Sidebar */}
-      <aside className="fixed top-0 left-0 h-full w-40 px-6 py-8 flex-col gap-2 z-10 hidden lg:flex border-r">
+      <aside className="fixed top-0 left-0 h-full w-40 px-6 py-8 flex-col gap-2 z-10 hidden lg:flex">
         <span className="text-sm font-semibold text-foreground">Carla Vivani</span>
-        <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="justify-start px-2 -ml-2">
-          ← Back
-        </Button>
       </aside>
 
-      <main className="max-w-5xl mx-auto px-6 py-16 lg:pl-48">
-        <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="lg:hidden mb-8 -ml-2">
-          ← Back
-        </Button>
-
+      <main className={`${MEDIA_WIDTH} mx-auto px-6 py-16 lg:pl-48`}>
         {/* Hero */}
-        {hero && (
-          <FadeUp delay={100} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
+        <FadeUp delay={100} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
+          {hero ? (
             <Image src={hero} alt={title} fill className="object-cover" priority />
-          </FadeUp>
-        )}
+          ) : (
+            <div className="absolute inset-0 bg-secondary" />
+          )}
+          <Button
+            variant="secondary"
+            size="icon-sm"
+            render={<Link href="/" />}
+            nativeButton={false}
+            aria-label="Back to projects"
+            className="absolute top-4 left-4 z-10 rounded-full bg-background/70 backdrop-blur-sm hover:bg-background/90"
+          >
+            <ArrowLeft />
+          </Button>
+        </FadeUp>
 
         {/* Title */}
-        <FadeUp delay={hero ? 220 : 100}>
+        <FadeUp delay={220}>
           <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
         </FadeUp>
 
         {/* Metadata */}
-        <FadeUp delay={hero ? 320 : 180}>
+        <FadeUp delay={320}>
         <div className="flex flex-wrap gap-6 text-sm mb-4">
           {[
             { label: "Role", value: meta.role },
@@ -199,7 +206,7 @@ export default async function ProjectPage({
         </div>
         </FadeUp>
 
-        <FadeUp delay={hero ? 420 : 280}>
+        <FadeUp delay={420}>
           {sections.map(renderSection)}
         </FadeUp>
 
