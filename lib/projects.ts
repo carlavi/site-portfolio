@@ -6,6 +6,13 @@ export type Section =
   | { type: "metrics"; heading: string; rows: { label: string; value: string }[] }
   | { type: "snapshot"; heading: string; items: { label: string; value: string }[] };
 
+// Newer, image-forward case study template: a single Overview intro, a run of
+// plain image containers (full-width or side-by-side pairs), and a closing
+// Conclusion. Used by projects that set `overview`/`gallery`/`conclusion`.
+export type GallerySection =
+  | { type: "image"; src?: string; alt: string }
+  | { type: "image-pair"; images: [{ src?: string; alt: string }, { src?: string; alt: string }] };
+
 export type Project = {
   slug: string;
   number: string;
@@ -25,6 +32,11 @@ export type Project = {
     link?: string;
   };
   sections: Section[];
+  // New image-forward template (see `GallerySection`). When these three are
+  // all set, the project page renders the new template instead of `sections`.
+  overview?: string;
+  gallery?: GallerySection[];
+  conclusion?: { heading: string; body: string };
 };
 
 export const projects: Project[] = [
@@ -33,58 +45,39 @@ export const projects: Project[] = [
     number: "02",
     name: "Helia",
     coverSpan: "full",
-    title: "Helia: Turning plant care from a responsibility into a relationship",
+    hero: "/images/helia/cover.webm",
+    title: "Turning plant care into an ongoing relationship",
     tags: ["Mobile", "Product Strategy", "Founder"],
-    year: "2025 – Present",
+    year: "2026",
     description: "I co-founded Helia and led the product from an early hypothesis to a live plant care experience used to identify, understand, and build a more personal relationship with plants.",
     meta: {
       client: "Co-Founder",
       role: "Product Strategy, UX/UI, Frontend",
-      year: "2025 – Present",
+      year: "2026",
     },
-    sections: [
+    sections: [],
+    overview: "Helia started with a simple question: **what if plants could talk?** We created a plant care app that combines identification, curated guidance, and conversation to make everyday care feel more personal and approachable.\n\nAs co-founder and product designer, I've shaped Helia from early concept to a live iOS and Android product working across product strategy, research, interaction design, brand, frontend implementation, pricing, and growth.\n\nWhat began as an experiment in using emerging AI tools to make plant care feel more personal has grown into a fully functioning product, with 530+ users, 600+ plant analysis, and a place in Stage 2 of 500 Global's selection process.",
+    gallery: [
       {
-        type: "snapshot",
-        heading: "Project Snapshot",
-        items: [
-          { label: "Role", value: "Co-Founder, Product Design" },
-          { label: "Team", value: "Two-person founding team" },
-          { label: "Timeline", value: "2025–Present" },
-          { label: "Scope", value: "Product strategy, UX/UI, frontend implementation, pricing, brand, growth, and product operations" },
-          { label: "Early signals", value: "117 registered users · 517 plant analyses · 85%+ scan completion rate · Advanced to Stage 2 of 500 Global's selection process" },
+        type: "image-pair",
+        images: [
+          { alt: "Home screen — garden and stories" },
+          { alt: "Care guidance cards — riego, luz, fertilizante, temperatura" },
         ],
       },
+      { type: "image", alt: "Product screenshot" },
       {
-        type: "text",
-        heading: "People didn't stop caring because information was unavailable. They stopped when confidence and motivation faded.",
-        body: "Most plant care products focus on information: watering reminders, care guides, and species databases.\n\nBut plant owners already have access to more advice than they can realistically process. The harder problem is knowing which advice to trust, understanding what applies to a specific plant, and staying motivated once care begins to feel like another responsibility.\n\nWe started with a hypothesis:\n\nA stronger emotional connection could help people care for their plants more consistently.\n\nThat idea became Helia, a plant care product designed to make care feel more personal, approachable, and easier to sustain over time.",
-      },
-      {
-        type: "text",
-        heading: "We made emotional connection part of the care model, not a decorative layer on top of it.",
-        body: "Instead of treating plants as entries in a database, Helia makes each one feel present within the product.\n\nPeople can identify a plant, save it to their garden, receive curated care guidance, ask contextual questions, and talk with it through a distinct conversational personality.\n\nThe plant becomes the interface through which care is understood.\n\nThis changed the experience from:\n\nSearch → Interpret → Remember\n\nto:\n\nScan → Understand → Ask → Care\n\nThe goal was not to make plants talking feel novel. It was to use personality and conversation to reduce distance between receiving advice and acting on it.",
-      },
-      {
-        type: "text",
-        heading: "Utility created trust. Personality gave people a reason to return.",
-        body: "One of our biggest product tensions was balancing practical value with emotional connection.\n\nToo much utility made Helia feel like another plant database. Too much personality risked making the experience feel entertaining but unreliable.\n\nWe designed around both needs:\n\n• Curated guidance reduced contradictory or overwhelming advice\n• Plant histories gave conversations useful context\n• Personalities made individual plants feel distinct\n• Care actions and reminders connected conversation to real behavior\n• Contextual questions let people ask what mattered in the moment\n\nEvery emotional interaction needed to support a practical outcome: greater confidence, clearer next steps, or a stronger reason to keep caring.",
-      },
-      {
-        type: "text",
-        heading: "Early behavior showed stronger core value than initial activation.",
-        body: "We instrumented Helia from the beginning to understand where people moved forward, where they abandoned the experience, and which behaviors repeated.\n\nThe scan flow reached a completion rate above 85% once users started it. People also completed 517 plant analyses across 117 registered accounts, suggesting that usage extended beyond a single curiosity-driven scan.\n\nThis helped us distinguish two different product challenges:\n\nActivation still needed work. Getting people into the first meaningful interaction required clearer onboarding and stronger expectation-setting.\n\nThe core experience showed more promising signals. Once people began scanning and exploring their plants, they frequently completed the flow and returned to analyze additional plants.\n\nThe next challenge was no longer proving that people found the concept interesting. It was turning that initial interest into an ongoing care habit.",
-      },
-      {
-        type: "text",
-        heading: "A two-person team forced strategy, design, and execution to operate as one system.",
-        body: "Helia is built and operated by two people.\n\nI lead product strategy, UX/UI, frontend implementation, pricing, positioning, brand, growth experiments, and day-to-day product decisions. My co-founder leads backend systems, infrastructure, application distribution, and legal operations.\n\nAt this scale, product decisions cannot be separated from technical and business constraints.\n\nA new feature affects infrastructure cost. A pricing decision changes product architecture. A growth experiment reveals onboarding problems. A conversational behavior can alter trust in the entire experience.\n\nWorking this way has required constant movement between framing the problem, designing the experience, shipping the product, and evaluating what happened next.",
-      },
-      {
-        type: "text",
-        heading: "Building Helia changed the question from \"What can we make?\" to \"What is worth making?\"",
-        body: "New technology makes it increasingly easy to generate ideas, interfaces, and features. That abundance makes product judgment more important, not less.\n\nBuilding Helia pushed me beyond designing screens and into the full set of decisions required to sustain a product: what to prioritize, what to postpone, what people might pay for, how much uncertainty is acceptable, and which behaviors genuinely indicate value.\n\nFor us, that has meant resisting novelty for its own sake.\n\nSometimes the right answer is emotional connection. Sometimes it is clearer guidance. Sometimes it is simply removing enough friction for someone to care confidently.\n\nThe product becomes stronger not when we add more, but when we understand what matters enough for people to return.",
+        type: "image-pair",
+        images: [
+          { alt: "Product screenshot" },
+          { alt: "Product screenshot" },
+        ],
       },
     ],
+    conclusion: {
+      heading: "Changing the question from \"What can we make?\" to \"What is worth making?\"",
+      body: "Building Helia has made me think less about individual features and more about the product as a whole.\n\nWhen it's easy to prototype new ideas, the harder part is deciding which ones actually make the experience better. Some things sounded interesting but added friction. Others were much simpler, but made the product clearer or easier to trust.\n\nA lot of the work became about making those calls: what should be conversational, what should be structured, what needed more explanation, and what didn't need to exist at all.\n\nHelia has made me more intentional about design. Not just in how something looks or works, but in deciding what deserves to be part of the product in the first place.",
+    },
   },
   {
     slug: "yalocode",
@@ -101,120 +94,27 @@ export const projects: Project[] = [
       role: "Senior Product Designer",
       year: "February 2026 – Present",
     },
-    sections: [
-      {
-        type: "snapshot",
-        heading: "Project Snapshot",
-        items: [
-          { label: "Role", value: "Senior Product Designer" },
-          { label: "Team", value: "Product Manager, Tech Manager, Design Lead, Frontend and Backend Engineers" },
-          { label: "Timeline", value: "February 2026 – Present" },
-          { label: "Scope", value: "Product definition, end-to-end UX, interaction systems, information architecture and frontend implementation" },
-          { label: "Impact", value: "104 active users · 4.5/5 CSAT · Delivery reduced from up to six months to under two weeks" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "The transformation",
-        body: "Yalo had already built many of the capabilities required to create and operate enterprise conversational agents. But accessing them required deep platform knowledge, technical workflows, and support from experienced engineers.\n\nYaloCode transformed those capabilities into a natural-language workspace where teams could build, configure, test, and manage agents without needing to understand the complexity of the underlying platform. What began as an internal experiment is now used across Yalo teams and external implementation partners.\n\nBefore YaloCode:\n• Up to six months to launch\n• Multiple team handoffs\n• High engineering dependency\n• Customer feedback based primarily on mockups\n• Critical knowledge concentrated among experienced platform users\n\nWith YaloCode:\n• Working agents in under two weeks\n• Earlier customer validation\n• More autonomous internal teams\n• Reusable workflows and institutional knowledge\n• A common workspace for building, testing and reviewing",
-      },
-      {
-        type: "text",
-        heading: "The organizational bottleneck",
-        body: "The problem was not missing capability. It was access.\n\nAs AI adoption accelerated, one of Yalo's central objectives was to reduce implementation time and improve customer time-to-value. At the time, launching a WhatsApp agent for an enterprise client could take up to six months. Delivery required coordination across multiple teams, extensive engineering support, and long periods in which customers could review only mockups rather than interact with a working solution.\n\nMany of the necessary platform capabilities already existed. However, they were distributed across technical tools, undocumented workflows, and institutional knowledge that only experienced engineers and platform specialists possessed.\n\nThe product challenge was not to create more capability, but to make existing capability understandable, operable, and reusable across the organization.",
-      },
-      {
-        type: "text",
-        heading: "Who we were designing for",
-        body: "YaloCode served teams with very different responsibilities: Customer Success Managers delivering client implementations, Sales teams creating demos, Conversational Designers building experiences, engineers extending the platform, and Marketing teams launching internal initiatives.\n\nTheir goals varied, but their constraint was the same: they needed access to powerful platform capabilities without becoming platform experts.",
-      },
-      {
-        type: "cards",
-        heading: "Shared constraint, different goals",
-        cards: [
-          { title: "Deliver", body: "Customer Success and implementation teams needed to create and modify real client solutions without waiting for specialized engineering support." },
-          { title: "Demonstrate", body: "Sales and Marketing teams needed to turn ideas into working experiences quickly enough to use in demos and campaigns." },
-          { title: "Build and extend", body: "Conversational Designers and Engineers needed greater speed without losing control, visibility, or technical depth." },
-        ],
-      },
-      {
-        type: "text",
-        heading: "My role",
-        body: "Turning an internal prototype into an operational product\n\nI joined YaloCode after its initial hackathon prototype and early internal validation. My responsibility was to help turn a promising technical concept into a product that non-technical teams could use confidently in real delivery workflows.\n\nI partnered closely with Product, Engineering, Design, and Leadership to define how complex platform capabilities should be exposed, how users would collaborate with the agent, and where conversational interaction needed to give way to more structured interfaces.\n\nProduct direction:\n• Framed end-to-end workflows for creating and managing agents\n• Defined information architecture and product structure\n• Aligned product and engineering stakeholders around user needs and interaction principles\n\nInteraction system:\n• Designed how users communicated and collaborated with YaloCode\n• Created reusable skills and behavioral instructions\n• Defined structured in-chat widgets for reviewing, editing and validating generated work\n\nDelivery:\n• Designed high-fidelity workflows and interaction states\n• Worked directly with engineers throughout implementation\n• Contributed frontend pull requests to help ship the experience",
-      },
-      {
-        type: "image",
-        src: "/images/yalocode/chat-ui-gallery.jpeg",
-        alt: "YaloCode chat UI gallery",
-      },
-      {
-        type: "text",
-        heading: "01. Designing for operators, not platform experts",
-        body: "The existing platform reflected its technical architecture. YaloCode needed to reflect the way internal teams thought about their work.\n\nInstead of requiring users to navigate platform concepts, configurations, and undocumented dependencies, we made their intent the starting point. Users could describe what they wanted to create or change, while YaloCode translated those requests into the operations required by the platform.\n\nNatural language did not eliminate the underlying complexity. It gave the product a new way to orchestrate it.",
-      },
-      {
-        type: "text",
-        heading: "02. When conversation stopped being the simplest interface",
-        body: "Early versions of YaloCode relied heavily on chat. This worked well for expressing intent, asking questions, and triggering simple actions.\n\nIt became less effective as users moved into operational work. Reviewing large outputs, comparing configurations, validating generated content, and identifying errors required more structure than a stream of messages could provide.\n\nUsers could ask YaloCode to perform complex work, but understanding and controlling the result was becoming increasingly difficult.",
-      },
-      {
-        type: "text",
-        heading: "A hybrid model of conversation and interface",
-        body: "Rather than forcing users to switch between a chatbot and a separate administrative product, we introduced structured widgets directly within the conversation.\n\nNatural language remained the entry point and orchestration layer. When a task required scanning, comparison, editing, or approval, the response became an interface. This allowed us to preserve the flexibility of conversation while introducing the visibility and control required for enterprise workflows.\n\nChat orchestrated the work. Structured interfaces made the work understandable and actionable.",
-      },
-      {
-        type: "cards",
-        heading: "Widget examples",
-        cards: [
-          { title: "Test plan summaries", body: "Scannable overviews of generated test plans, with direct access to the next action." },
-          { title: "Configuration outputs", body: "Structured representations of agent settings that users could review without parsing long conversational responses." },
-          { title: "Review and validation states", body: "Inline components for approving, editing, retrying, or flagging generated work." },
-        ],
-      },
-      {
-        type: "image",
-        src: "/images/yalocode/widget.jpeg",
-        alt: "YaloCode structured in-chat widget",
-      },
-      {
-        type: "text",
-        heading: "03. Designing verification into the workflow",
-        body: "Generating an output was not the same as completing the work.\n\nIn enterprise delivery, users needed to understand what YaloCode had changed, validate whether the result was correct, and know what would happen next. Without those signals, greater automation could also create greater uncertainty.\n\nWe designed review and validation as part of the interaction itself, rather than treating them as secondary states after generation, through patterns like progress and status, previews, summaries of changes, validation results, confirmation before consequential actions, editing and retrying, and clear recovery from errors.\n\nThe goal was not to make YaloCode appear autonomous. It was to give users the right level of confidence and control to delegate meaningful work to it.",
-      },
-      {
-        type: "text",
-        heading: "Designing the operating system",
-        body: "YaloCode's experience was shaped not only through screens, but through the instructions, skills, structures, and interaction rules that determined how the product behaved.\n\nI worked on the system connecting user intent, agent behavior, generated outputs, and interface responses. This included defining reusable skills, behavioral instructions, response structures, and the conditions under which YaloCode should respond conversationally or render a structured component.\n\nUser intent → Skill selection → Platform action → Generated result → Structured response → Review or next action",
-      },
-      {
-        type: "cards",
-        heading: "Three layers of the system",
-        cards: [
-          { title: "Intent", body: "How users describe their goals without needing platform terminology." },
-          { title: "Behavior", body: "How skills and instructions guide YaloCode through repeatable workflows." },
-          { title: "Interface", body: "How outputs are rendered according to the task: conversation, structured content, validation or action." },
-        ],
-      },
-      {
-        type: "metrics",
-        heading: "Adoption and impact",
-        rows: [
-          { label: "Active users", value: "104 of ~150 internal" },
-          { label: "CSAT score", value: "4.5 / 5" },
-          { label: "WhatsApp agent delivery", value: "Up to 6 months → under 2 weeks" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "What adoption looked like",
-        body: "Beyond the headline numbers:\n\n• Expanded from internal teams to external implementation partners\n• Power users regularly work with 10–20 active skills\n• Some power users have created more than 200 reusable prompts and workflows\n• YaloCode is replacing parts of the legacy delivery workflow\n\nOne Conversational Designer summarized the impact best:\n\n\"Now almost 95% of my work happens in YaloCode. I barely open our legacy flow platform anymore.\"",
-      },
-      {
-        type: "text",
-        heading: "Making power usable",
-        body: "YaloCode reinforced that giving users access to powerful technology is not the same as making that technology usable.\n\nAdoption depended on translating platform complexity into workflows teams could understand, making generated work visible and reviewable, and giving users enough control to trust the product in real delivery scenarios.\n\nThe product became valuable not because conversation replaced every interface, but because we learned when conversation was the right tool, and when structure needed to take over.\n\nThe most important shift was not making the platform more powerful. It was making its existing power accessible to the rest of the organization.",
-      },
+    sections: [],
+    overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and led the product experience for non-technical users, working closely with Product and Engineering across product definition, interaction design, information architecture, and frontend implementation.\n\nWhat began as an experiment grew into a workspace used across Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, 104 of roughly 150 internal users are active in YaloCode, CSAT is 4.5/5, and WhatsApp agent delivery has gone from as much as six months to under two weeks.",
+    gallery: [
+      { type: "image", alt: "Who we were designing for" },
+      { type: "image", alt: "Shared constraint, different goals" },
+      { type: "image", src: "/images/yalocode/chat-ui-gallery.jpeg", alt: "YaloCode chat UI gallery" },
+      { type: "image", alt: "Designing for operators, not platform experts" },
+      { type: "image", alt: "When conversation stopped being the simplest interface" },
+      { type: "image", alt: "A hybrid model of conversation and interface" },
+      { type: "image", alt: "Widget examples" },
+      { type: "image", src: "/images/yalocode/widget.jpeg", alt: "YaloCode structured in-chat widget" },
+      { type: "image", alt: "Designing verification into the workflow" },
+      { type: "image", alt: "Designing the operating system" },
+      { type: "image", alt: "Three layers of the system" },
+      { type: "image", alt: "Adoption and impact" },
+      { type: "image", alt: "What adoption looked like" },
     ],
+    conclusion: {
+      heading: "Making power usable",
+      body: "YaloCode has evolved from an internal prototype into a core workspace used by roughly 70% of the company, with a 4.5/5 CSAT and delivery time cut from six months to under two weeks. Its next step was expanding beyond internal teams and opening the platform to a broader audience.",
+    },
   },
   {
     slug: "reveri-ai-sessions",

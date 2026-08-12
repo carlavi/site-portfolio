@@ -3,13 +3,25 @@ import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { FadeUp } from "@/components/fade-up";
-import { Badge } from "@/components/ui/badge";
+import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ProjectSnapshot } from "@/components/project-snapshot";
-import { getProject, projects, type Section } from "@/lib/projects";
-import { TEXT_WIDTH, MEDIA_WIDTH } from "@/lib/layout";
+import { getProject, projects, type Section, type GallerySection } from "@/lib/projects";
+import { TEXT_WIDTH, CASE_STUDY_WIDTH } from "@/lib/layout";
+
+// Renders **bold** spans within otherwise plain paragraph text.
+function formatInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} className="font-semibold text-foreground">{part.slice(2, -2)}</strong>
+    ) : (
+      part
+    )
+  );
+}
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -130,6 +142,49 @@ function renderSection(section: Section, index: number) {
   }
 }
 
+function GalleryImage({ src, alt }: { src?: string; alt: string }) {
+  return (
+    <div className="relative w-full rounded-2xl overflow-hidden aspect-[16/9]">
+      {src ? (
+        <Image src={src} alt={alt} fill className="object-cover" />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+          <span className="text-sm text-muted-foreground">{alt}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GalleryPairImage({ src, alt }: { src?: string; alt: string }) {
+  return (
+    <div className="relative w-full rounded-2xl overflow-hidden aspect-[4/5]">
+      {src ? (
+        <Image src={src} alt={alt} fill className="object-cover" />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+          <span className="text-sm text-muted-foreground">{alt}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function renderGallerySection(section: GallerySection, index: number) {
+  switch (section.type) {
+    case "image":
+      return <GalleryImage key={index} src={section.src} alt={section.alt} />;
+    case "image-pair":
+      return (
+        <div key={index} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {section.images.map((img, i) => (
+            <GalleryPairImage key={i} src={img.src} alt={img.alt} />
+          ))}
+        </div>
+      );
+  }
+}
+
 export default async function ProjectPage({
   params,
 }: {
@@ -142,79 +197,132 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, hero, meta, sections, pageTheme } = project;
+  const { title, hero, meta, sections, pageTheme, overview, gallery, conclusion } = project;
   const isDark = pageTheme === "dark";
+  const usesNewTemplate = Boolean(overview && gallery && conclusion);
 
   return (
-    <div className={`min-h-screen${isDark ? " dark" : ""}`} style={{ backgroundColor: isDark ? "#141414" : "var(--background)" }}>
-      {/* Sidebar */}
-      <aside className="fixed top-0 left-0 h-full w-40 px-6 py-8 flex-col gap-2 z-10 hidden lg:flex">
-        <span className="text-sm font-semibold text-foreground">Carla Vivani</span>
-      </aside>
+    <div
+      className={`relative flex flex-col md:flex-row md:h-screen md:overflow-hidden${isDark ? " dark" : ""}`}
+      style={{ color: "var(--foreground)", backgroundColor: isDark ? "#141414" : undefined }}
+    >
+      <Sidebar />
 
-      <main className={`${MEDIA_WIDTH} mx-auto px-6 py-16 lg:pl-48`}>
-        {/* Hero */}
-        <FadeUp delay={100} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
-          {hero ? (
-            <Image src={hero} alt={title} fill className="object-cover" priority />
+      <main className="relative z-10 flex-1 md:overflow-y-auto px-4 py-6 md:px-12 md:py-10">
+        <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
+          {/* Hero */}
+          <FadeUp delay={100} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
+            {hero ? (
+              hero.endsWith(".webm") || hero.endsWith(".mp4") ? (
+                <video
+                  src={hero}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Image src={hero} alt={title} fill className="object-cover" priority />
+              )
+            ) : (
+              <div className="absolute inset-0 bg-secondary" />
+            )}
+            <Button
+              variant="secondary"
+              size="icon-sm"
+              render={<Link href="/" />}
+              nativeButton={false}
+              aria-label="Back to projects"
+              className="absolute top-4 left-4 z-10 rounded-full bg-background/70 backdrop-blur-sm hover:bg-background/90"
+            >
+              <ArrowLeft />
+            </Button>
+          </FadeUp>
+
+          {usesNewTemplate ? (
+            <>
+              {/* Title */}
+              <FadeUp delay={220} className="w-full mb-8">
+                <h1 className="text-3xl font-bold mb-2 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
+                <p className="text-sm text-muted-foreground">Year: {meta.year}</p>
+              </FadeUp>
+
+              {/* Overview */}
+              <FadeUp delay={300} className="flex md:justify-end mb-14">
+                <div className="w-full md:w-3/5 py-8 md:py-12">
+                  <h2 className="text-sm text-muted-foreground/70 mb-3">Overview</h2>
+                  <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
+                    {overview!.split("\n\n").map((p, i) => (
+                      <p key={i}>{formatInline(p)}</p>
+                    ))}
+                  </div>
+                </div>
+              </FadeUp>
+
+              {/* Gallery */}
+              <FadeUp delay={340} className="flex flex-col gap-4 mb-14">
+                {gallery!.map(renderGallerySection)}
+              </FadeUp>
+
+              {/* Conclusion */}
+              <FadeUp delay={460} className={`${TEXT_WIDTH} py-8 md:py-12 pb-8`}>
+                <h2 className="text-sm text-muted-foreground/70 mb-3">{conclusion!.heading}</h2>
+                <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
+                  {conclusion!.body.split("\n\n").map((p, i) => (
+                    <p key={i}>{formatInline(p)}</p>
+                  ))}
+                </div>
+              </FadeUp>
+            </>
           ) : (
-            <div className="absolute inset-0 bg-secondary" />
+            <>
+              {/* Title */}
+              <FadeUp delay={220}>
+                <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
+              </FadeUp>
+
+              {/* Metadata */}
+              <FadeUp delay={320}>
+              <div className="flex flex-wrap gap-6 text-sm mb-4">
+                {[
+                  { label: "Role", value: meta.role },
+                  { label: "Year", value: meta.year },
+                ].map(({ label, value }) => (
+                  <div key={label}>
+                    <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">{label}</span>
+                    <span className="text-sm text-muted-foreground">{value}</span>
+                  </div>
+                ))}
+                {meta.tools && (
+                  <div>
+                    <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">Tools</span>
+                    <span className="text-sm text-muted-foreground">{meta.tools.join(", ")}</span>
+                  </div>
+                )}
+                {meta.link && (
+                  <div>
+                    <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">Link</span>
+                    <Button variant="link" size="sm" render={<a href={meta.link} />} nativeButton={false} className="px-0 h-auto text-sm">
+                      View project ↗
+                    </Button>
+                  </div>
+                )}
+              </div>
+              </FadeUp>
+
+              <FadeUp delay={420}>
+                {sections.map(renderSection)}
+              </FadeUp>
+            </>
           )}
-          <Button
-            variant="secondary"
-            size="icon-sm"
-            render={<Link href="/" />}
-            nativeButton={false}
-            aria-label="Back to projects"
-            className="absolute top-4 left-4 z-10 rounded-full bg-background/70 backdrop-blur-sm hover:bg-background/90"
-          >
-            <ArrowLeft />
-          </Button>
-        </FadeUp>
 
-        {/* Title */}
-        <FadeUp delay={220}>
-          <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
-        </FadeUp>
-
-        {/* Metadata */}
-        <FadeUp delay={320}>
-        <div className="flex flex-wrap gap-6 text-sm mb-4">
-          {[
-            { label: "Role", value: meta.role },
-            { label: "Year", value: meta.year },
-          ].map(({ label, value }) => (
-            <div key={label}>
-              <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">{label}</span>
-              <span className="text-sm text-muted-foreground">{value}</span>
-            </div>
-          ))}
-          {meta.tools && (
-            <div>
-              <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">Tools</span>
-              <span className="text-sm text-muted-foreground">{meta.tools.join(", ")}</span>
-            </div>
-          )}
-          {meta.link && (
-            <div>
-              <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">Link</span>
-              <Button variant="link" size="sm" render={<a href={meta.link} />} nativeButton={false} className="px-0 h-auto text-sm">
-                View project ↗
-              </Button>
-            </div>
-          )}
-        </div>
-        </FadeUp>
-
-        <FadeUp delay={420}>
-          {sections.map(renderSection)}
-        </FadeUp>
-
-        <div className="pt-8 pb-8 mt-8">
-          <Separator className="mb-8" />
-          <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="-ml-2">
-            ← Back to projects
-          </Button>
+          <div className="pt-8 pb-8 mt-8">
+            <Separator className="mb-8" />
+            <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="-ml-2">
+              ← Back to projects
+            </Button>
+          </div>
         </div>
       </main>
     </div>
