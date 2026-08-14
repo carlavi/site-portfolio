@@ -38,7 +38,7 @@ export function ProjectGallery({ projects }: { projects: Project[] }) {
   return (
     <div className="flex flex-col gap-10 sm:gap-16">
       {rows.map((row, i) => (
-        <FadeUp key={row[0].slug} delay={150 + i * 100} className="flex flex-col sm:flex-row gap-8 sm:gap-16">
+        <FadeUp key={row[0].slug} delay={i === 0 ? 0 : 60} className="flex flex-col sm:flex-row gap-8 sm:gap-16">
           {row.map((project) => (
             <Tile key={project.slug} project={project} aspect={row.length === 1 ? "aspect-square sm:aspect-[16/9]" : "aspect-square"} />
           ))}

@@ -85,7 +85,7 @@ export const projects: Project[] = [
     name: "YaloCode",
     coverSpan: "half",
     hero: "/images/yalocode/yalocode.jpeg",
-    title: "YaloCode: From six-month implementations to self-serve agent delivery",
+    title: "YaloCode: Making everyone a builder",
     tags: ["AI", "Enterprise", "Product Design"],
     year: "2026 – Present",
     description: "Designing a hybrid workspace that helped non-technical teams build, test, and launch enterprise WhatsApp agents in under two weeks.",
@@ -95,7 +95,7 @@ export const projects: Project[] = [
       year: "February 2026 – Present",
     },
     sections: [],
-    overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and led the product experience for non-technical users, working closely with Product and Engineering across product definition, interaction design, information architecture, and frontend implementation.\n\nWhat began as an experiment grew into a workspace used across Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, 104 of roughly 150 internal users are active in YaloCode, CSAT is 4.5/5, and WhatsApp agent delivery has gone from as much as six months to under two weeks.",
+    overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and worked across the product system, from E2E workflows and information architecture to the behavior that shaped how YaloCode responded. I defined reusable skills, behavioral instructions, response structures, and the rules that determined when the product should respond conversationally or shift into a more structured interaction. I also designed the chat patterns and components that supported those behaviors, and contributed directly to frontend implementation.\n\nYaloCode became a shared workspace across Yalo, supporting Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, it is actively used by around 80% of the company, with a 4.5/5 CSAT, while WhatsApp agent delivery has gone from as much as six months to under two weeks.",
     gallery: [
       { type: "image", alt: "Who we were designing for" },
       { type: "image", alt: "Shared constraint, different goals" },
@@ -112,8 +112,8 @@ export const projects: Project[] = [
       { type: "image", alt: "What adoption looked like" },
     ],
     conclusion: {
-      heading: "Making power usable",
-      body: "YaloCode has evolved from an internal prototype into a core workspace used by roughly 70% of the company, with a 4.5/5 CSAT and delivery time cut from six months to under two weeks. Its next step was expanding beyond internal teams and opening the platform to a broader audience.",
+      heading: "Designing for builders",
+      body: "Early on, we noticed that people were already building their own AI workflows: moving between tools like ChatGPT, Claude, Gemini, and Yalo platform to get their work done. The opportunity wasn't to invent a completely new way of working, but to bring those behaviors into one place and make them easier to reuse, share, and build on.\n\nThat principle shaped YaloCode from the start. Skills were designed as reusable building blocks, eventually growing into a shared marketplace, while patterns like the chat gallery made successful workflows visible and accessible to others.\n\nFor me, the project reinforced that **good systems don't require everyone to start from scratch**. By designing around behaviors people had already adopted, we could turn individual workflows into shared infrastructure, and make more people across Yalo capable of building for themselves.",
     },
   },
   {
@@ -221,6 +221,17 @@ export const projects: Project[] = [
         body: "This work reinforced an important lesson from our earlier onboarding experiments: AI becomes useful when it solves a specific problem well.\n\nThe breakthrough wasn't trying to redesign everything around AI. It was identifying a moment where personalization could meaningfully improve the user experience, and designing around that constraint.\n\nIn this case, helping people feel relief sooner, while feeling more understood in the process.",
       },
     ],
+    overview: "Reveri is a clinical hypnosis app focused on helping people manage pain, stress, and sleep. The product already had a strong library of guided sessions, but the experience was largely static: users selected a session and followed the same structure regardless of what they were feeling or how their pain showed up.\n\nAs product designer, I defined how conversational AI would fit into the existing Reveri experience, designing the interaction model, session experience, and new paths into care from Home. Rather than redesigning the product around AI, we narrowed the opportunity to one specific moment: helping users feel more heard and supported during pain relief sessions.\n\nWe introduced a conversational mode that could adapt in real time based on what users shared, while preserving Reveri's existing audio experience for those who preferred it. The shift increased reported improvement rates from **60% to 87%**, while also strengthening users' sense of being heard and understood.",
+    gallery: [
+      { type: "image", src: "/images/reveri-ai-sessions/01%20ReveriAI.jpg", alt: "Reveri AI Talk session screen" },
+      { type: "image", src: "/images/reveri-ai-sessions/Before%20and%20After%20Reveri.jpg", alt: "Before and after redesign of Reveri's home tab" },
+      { type: "image", src: "/images/reveri-ai-sessions/03%20ReveriAI.jpg", alt: "Educational trust-building screens in Reveri" },
+      { type: "image", src: "/images/reveri-ai-sessions/04%20ReveriAI.jpg", alt: "Early prototypes of the Reveri AI session flow" },
+    ],
+    conclusion: {
+      heading: "Bringing the live experience into the product",
+      body: "Throughout the project, we kept coming back to one question: how could Reveri capture more of what made a live session with Dr. David Spiegel feel so effective?\n\nThe answer turned out to be simpler than redesigning the entire experience. By letting users describe their pain and preferences through voice, we could personalize the session around what they shared, something AI finally made possible at scale.\n\nReveri reinforced the importance of designing around the emotional context of an experience, not just the interaction itself. In a product built around pain relief, the goal wasn't to make the technology more visible, but to make the experience feel more responsive, personal, and human.",
+    },
   },
   {
     slug: "nubank",

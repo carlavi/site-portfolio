@@ -211,7 +211,7 @@ export default async function ProjectPage({
       <main className="relative z-10 flex-1 md:overflow-y-auto px-4 py-6 md:px-12 md:py-10">
         <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
           {/* Hero */}
-          <FadeUp delay={100} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
+          <FadeUp delay={0} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
             {hero ? (
               hero.endsWith(".webm") || hero.endsWith(".mp4") ? (
                 <video
@@ -243,13 +243,13 @@ export default async function ProjectPage({
           {usesNewTemplate ? (
             <>
               {/* Title */}
-              <FadeUp delay={220} className="w-full mb-8">
+              <FadeUp delay={80} className="w-full mb-8">
                 <h1 className="text-3xl font-bold mb-2 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
                 <p className="text-sm text-muted-foreground">Year: {meta.year}</p>
               </FadeUp>
 
               {/* Overview */}
-              <FadeUp delay={300} className="flex md:justify-end mb-14">
+              <FadeUp delay={160} className="flex md:justify-end mb-14">
                 <div className="w-full md:w-3/5 py-8 md:py-12">
                   <h2 className="text-sm text-muted-foreground/70 mb-3">Overview</h2>
                   <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
@@ -261,12 +261,12 @@ export default async function ProjectPage({
               </FadeUp>
 
               {/* Gallery */}
-              <FadeUp delay={340} className="flex flex-col gap-4 mb-14">
+              <FadeUp delay={0} className="flex flex-col gap-4 mb-14">
                 {gallery!.map(renderGallerySection)}
               </FadeUp>
 
               {/* Conclusion */}
-              <FadeUp delay={460} className={`${TEXT_WIDTH} py-8 md:py-12 pb-8`}>
+              <FadeUp delay={0} className={`${TEXT_WIDTH} py-8 md:py-12 pb-8`}>
                 <h2 className="text-sm text-muted-foreground/70 mb-3">{conclusion!.heading}</h2>
                 <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
                   {conclusion!.body.split("\n\n").map((p, i) => (
@@ -278,12 +278,12 @@ export default async function ProjectPage({
           ) : (
             <>
               {/* Title */}
-              <FadeUp delay={220}>
+              <FadeUp delay={80}>
                 <h1 className="text-3xl font-bold mb-6 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
               </FadeUp>
 
               {/* Metadata */}
-              <FadeUp delay={320}>
+              <FadeUp delay={160}>
               <div className="flex flex-wrap gap-6 text-sm mb-4">
                 {[
                   { label: "Role", value: meta.role },
@@ -311,7 +311,7 @@ export default async function ProjectPage({
               </div>
               </FadeUp>
 
-              <FadeUp delay={420}>
+              <FadeUp delay={0}>
                 {sections.map(renderSection)}
               </FadeUp>
             </>

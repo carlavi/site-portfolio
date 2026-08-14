@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ViewTransition } from "react";
 import "./globals.css";
 
 const generalSans = localFont({
@@ -35,7 +36,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${generalSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ViewTransition>{children}</ViewTransition>
+      </body>
     </html>
   );
 }

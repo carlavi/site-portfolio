@@ -16,12 +16,26 @@ export function FadeUp({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const id = setTimeout(() => {
-      el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0)";
-    }, delay);
-    return () => clearTimeout(id);
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(el);
+        timeoutId = setTimeout(() => {
+          el.style.transition = "opacity 0.35s ease, transform 0.35s ease";
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0)";
+        }, delay);
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, [delay]);
 
   return (

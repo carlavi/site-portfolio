@@ -45,7 +45,7 @@ export function Sidebar() {
       </FadeUp>
 
       {/* Desktop nav */}
-      <FadeUp delay={100} className="hidden md:block">
+      <FadeUp delay={40} className="hidden md:block">
         <div className="flex flex-col gap-3">
           <nav className="flex flex-col gap-1">
             <Button variant="ghost" size="sm" render={<Link href="/about" />} nativeButton={false} className="justify-start px-2">
@@ -60,7 +60,7 @@ export function Sidebar() {
       </FadeUp>
 
       {/* Mobile burger menu */}
-      <FadeUp delay={100} className="md:hidden">
+      <FadeUp delay={40} className="md:hidden">
         <Popover>
           <PopoverTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Menu" />}>
             <Menu className="size-5" />
