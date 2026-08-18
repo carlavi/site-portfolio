@@ -11,7 +11,30 @@ export type Section =
 // Conclusion. Used by projects that set `overview`/`gallery`/`conclusion`.
 export type GallerySection =
   | { type: "image"; src?: string; alt: string }
-  | { type: "image-pair"; images: [{ src?: string; alt: string }, { src?: string; alt: string }] };
+  | { type: "image-pair"; images: [{ src?: string; alt: string }, { src?: string; alt: string }] }
+  // A single rounded container in a brand color, holding one or more inset
+  // (not cropped) images side by side. Used for screenshots that need to sit
+  // on a colored backdrop instead of bleeding full-width.
+  // `fill`: media bleeds edge to edge (no inner padding, no border) instead
+  // of sitting inset with a margin — the rounded corners act as a mask.
+  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean }
+  // Two independent colored containers side by side, each with its own bg.
+  | { type: "frame-pair"; frames: [{ bg: FrameBg; src?: string; alt: string }, { bg: FrameBg; src?: string; alt: string }] }
+  // A single colored container that auto-cycles between two screens with a
+  // slide transition, instead of splitting them into two static boxes. An
+  // optional static `companion` box sits next to it in the same row.
+  | {
+      type: "screen-swap";
+      bg: FrameBg;
+      screens: [{ src?: string; alt: string }, { src?: string; alt: string }];
+      companion?: { bg: FrameBg; src?: string; alt: string };
+    }
+  // Two document pages staggered/interleaved (one sits higher, one lower)
+  // inside one colored container, instead of two evenly centered thumbnails.
+  | { type: "document-pair"; bg: FrameBg; documents: [{ src?: string; alt: string }, { src?: string; alt: string }] };
+
+// Background options for `frame`/`frame-pair` gallery sections and `heroFrame`.
+export type FrameBg = "light" | "purple" | "dark" | "gray";
 
 export type Project = {
   slug: string;
@@ -37,6 +60,9 @@ export type Project = {
   overview?: string;
   gallery?: GallerySection[];
   conclusion?: { heading: string; body: string };
+  // When set, replaces the default full-bleed `hero` with a colored container
+  // holding one or more inset phone/screen images (e.g. a twin-phone showcase).
+  heroFrame?: { bg: FrameBg; images: { src?: string; alt: string }[] };
 };
 
 export const projects: Project[] = [
@@ -83,7 +109,7 @@ export const projects: Project[] = [
     slug: "yalocode",
     number: "01",
     name: "YaloCode",
-    coverSpan: "half",
+    coverSpan: "full",
     hero: "/images/yalocode/yalocode.jpeg",
     title: "YaloCode: Making everyone a builder",
     tags: ["AI", "Enterprise", "Product Design"],
@@ -234,111 +260,6 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "nubank",
-    number: "05",
-    name: "Nubank",
-    coverSpan: "full",
-    hero: "/images/nubank/NuCuenta%20Cover.jpg",
-    title: "Nubank: Cuenta Nu México",
-    tags: ["Fintech", "Design Systems", "Banking"],
-    year: "2021–2023",
-    description: "Diseñando experiencias bancarias clave para el lanzamiento de Cuenta Nu en México.",
-    meta: {
-      client: "Nubank México",
-      role: "Product Designer, Transactions",
-      year: "2021–2023",
-    },
-    sections: [
-      {
-        type: "text",
-        heading: "Launching a banking product for Mexico",
-        body: "When Nubank expanded into Mexico, we faced a challenge beyond localization: adapting a banking product built for Brazil to a very different financial context.\n\nI joined as one of the first designers on the Cuenta Nu team, helping shape key banking experiences for launch, from transfers and credit card payments to account transparency and transaction systems.\n\nWe quickly realized that adapting the product required more than translating existing flows. We had to rethink how people move money, what they expect from banking, local regulations, and how to make financial decisions feel intuitive for Mexican users.",
-      },
-      {
-        type: "text",
-        heading: "My role",
-        body: "As a Product Designer on the Transactions team, I worked closely with a Design Lead, UX Research, Content Design, Product, and Engineering partners to shape key financial experiences for Cuenta Nu México.\n\nMy focus included transfer flows, credit card payments, account transparency, and transaction systems that helped debit and credit experiences feel more connected as the product evolved.",
-      },
-      {
-        type: "text",
-        heading: "Designing with systems in mind",
-        body: "As Cuenta Nu launched in Mexico, Nubank was also transitioning toward a new design system. Some product areas had already adopted it, while others still relied on older patterns, creating inconsistencies across shared experiences, especially around transactions.\n\nTo help teams stay aligned as the product grew, I contributed to a set of artifacts that clarified transaction states, interaction logic, and content patterns across debit and credit experiences.\n\nThese helped create more consistency for users, while making it easier for teams to design and build around the same logic.",
-      },
-      {
-        type: "cards",
-        heading: "Systems artifacts I contributed to",
-        cards: [
-          { title: "Feed Detail Anatomy", body: "A component-level breakdown of the transaction detail experience, identifying mandatory vs. optional information and clarifying how content should behave across different scenarios. Became a helpful reference for more consistent design and content decisions." },
-          { title: "Feed Item System", body: "Transactions came with a lot of edge cases: pending, settled, reversed, failed. A visual catalog of transaction states and behaviors helped product and engineering teams implement experiences more consistently." },
-          { title: "Transactions Map", body: "A system map connecting transaction types to UI states, push notifications, and account statement visibility. Became a shared reference point as teams aligned debit and credit experiences during the transition to the new design system." },
-        ],
-      },
-      {
-        type: "image",
-        src: "/images/nubank/Feed%20Detail%20Anatomy.jpg",
-        alt: "Feed Detail Anatomy",
-        fit: "contain",
-        imgWidth: 2490,
-        imgHeight: 1621,
-      },
-      {
-        type: "image",
-        src: "/images/nubank/Feed%20Item%20System.jpg",
-        alt: "Feed Item System",
-        fit: "contain",
-        imgWidth: 2490,
-        imgHeight: 1620,
-      },
-      {
-        type: "image",
-        src: "/images/nubank/Nu%20Transfers.jpg",
-        alt: "Nu Transfers flow",
-        fit: "contain",
-        imgWidth: 2490,
-        imgHeight: 1620,
-      },
-      {
-        type: "text",
-        hideSeparator: true,
-        heading: "Simplifying transfers for a different financial context",
-        body: "Brazil's transfer experience relied heavily on PIX: fast, direct, and deeply embedded into people's habits. In Mexico, SPEI worked differently, and several assumptions from the original flow created unnecessary friction.\n\nRather than simply localizing the interface, we focused on adapting the experience to local expectations.\n\nI partnered closely with my Design Lead and teammates across research, content, product, and engineering to identify moments that didn't translate well to the Mexican context and redesign the experience to feel more direct, predictable, and familiar.\n\nKey challenge: balancing consistency with Nubank's core product while adapting to a different way people move money.",
-      },
-      {
-        type: "image",
-        src: "/images/nubank/Nu%20CC%20Payment.jpg",
-        alt: "Nu credit card payment flow",
-        fit: "contain",
-        imgWidth: 2490,
-        imgHeight: 1620,
-      },
-      {
-        type: "text",
-        hideSeparator: true,
-        heading: "Designing credit card payments with clarity",
-        body: "As part of launching Cuenta Nu, we introduced a new payment experience that allowed users to pay their Nu credit card directly from their debit account.\n\nResearch surfaced a critical issue: many users struggled to understand the difference between minimum and full payment, sometimes leading to unintentional debt.\n\nInstead of optimizing purely for speed, our team prioritized clarity. I led the design of the payment flow, partnering closely with Content Design and UX Research to make payment decisions easier to understand and less intimidating.\n\nTogether, we tested language, hierarchy, and educational moments to help users better understand payment consequences before confirming.",
-      },
-      {
-        type: "image",
-        src: "/images/nubank/Nu%20Account%20Statement.jpg",
-        alt: "Nu account statement design",
-        fit: "contain",
-        imgWidth: 2490,
-        imgHeight: 1620,
-      },
-      {
-        type: "text",
-        hideSeparator: true,
-        heading: "Making account statements easier to understand",
-        body: "Account statements are usually dense, technical, and difficult to navigate. We saw an opportunity to make them feel more useful: less like a legal document and more like something people could actually understand.\n\nI collaborated with Legal, Finance, Content, and Product partners to restructure information, simplify language, and align the experience with Nubank's transparent tone of voice. We also incorporated insights from Legal Design research to make complex financial information easier to understand.\n\nNo small letters. No overly technical language. Just clearer financial information designed around trust.",
-      },
-      {
-        type: "text",
-        heading: "Outcome",
-        body: "This work contributed to the public launch of Cuenta Nu in Mexico and helped establish several interaction patterns that remained part of the product as it evolved.\n\nBeyond shipping individual features, it also helped debit and credit experiences feel more connected while improving alignment across design, product, engineering, and content teams.",
-      },
-    ],
-  },
-  {
     slug: "reveri",
     number: "04",
     name: "Reveri: Onboarding",
@@ -393,6 +314,66 @@ export const projects: Project[] = [
         body: "This project changed how I think about product design.\n\nBefore Reveri, I still approached experiences in relatively linear ways: mapping flows, anticipating edge cases, defining expected outcomes. AI challenged that instinct.\n\nI learned that designing for probabilistic systems means working with uncertainty. You can't map every path in advance. Instead, you shape boundaries, collaborate closely with engineering, and design around behavior that won't always be predictable.\n\nMost importantly, I learned that no amount of interface polish matters if the underlying AI doesn't provide real value. That lesson has stayed with me across every AI product I've worked on since.",
       },
     ],
+  },
+  {
+    slug: "nubank",
+    number: "05",
+    name: "Nubank",
+    coverSpan: "full",
+    hero: "/images/nubank/hero-nubank.png",
+    heroFrame: {
+      bg: "light",
+      images: [
+        { src: "/images/nubank/hero-nubank.png", alt: "Cuenta Nu payment and transfer confirmation screens" },
+      ],
+    },
+    title: "Nubank: Cuenta Nu México",
+    tags: ["Fintech", "Design Systems", "Banking"],
+    year: "2021–2023",
+    description: "Diseñando experiencias bancarias clave para el lanzamiento de Cuenta Nu en México.",
+    meta: {
+      client: "Nubank México",
+      role: "Product Designer, Transactions",
+      year: "2021–2023",
+    },
+    sections: [],
+    overview: "When Nubank expanded its banking product in Mexico, the work went beyond adapting an existing experience to a new market. Different financial habits, local infrastructure, regulation, and expectations around money meant that many of the patterns built for Brazil needed to be reconsidered.\n\nI joined as one of the first designers on the Cuenta Nu team, working closely with a Design Lead, Content Design, UX Research, Product, and Engineering. As part of the Transactions team, I focused on transfers, credit card payments, account transparency, and the systems connecting debit and credit experiences. Over two years, I helped shape some of the core banking journeys that supported Cuenta Nu's launch in Mexico, while contributing to the patterns and shared logic the product needed as it grew.",
+    gallery: [
+      {
+        type: "screen-swap",
+        bg: "purple",
+        screens: [
+          { src: "/images/nubank/pago-minimo.png", alt: "Credit card payment amount screen — \"¿Cuánto quieres pagar?\"" },
+          { src: "/images/nubank/Intereses.png", alt: "Interest-avoidance tip screen — \"¡Estás evitando pagar intereses!\"" },
+        ],
+        companion: { bg: "gray", src: "/images/nubank/pago-cc.png", alt: "Credit card payment confirmation screen" },
+      },
+      {
+        type: "frame",
+        bg: "light",
+        images: [{ src: "/images/nubank/transferflow.webm", alt: "Transfer amount entry screen with numeric keypad — \"¿Cuánto vas a transferir?\"" }],
+        fill: true,
+      },
+      {
+        type: "document-pair",
+        bg: "purple",
+        documents: [
+          { src: "/images/nubank/edocuenta-1.png", alt: "Account statement cover page — \"Así podrás consultar tu estado de cuenta\"" },
+          { src: "/images/nubank/edocuenta-2.png", alt: "Account statement transaction detail page" },
+        ],
+      },
+      {
+        type: "frame",
+        bg: "dark",
+        images: [
+          { src: "/images/nubank/anatomy.png", alt: "Feed item anatomy wireframe — app header, screen main area, body, actions" },
+        ],
+      },
+    ],
+    conclusion: {
+      heading: "Designing for a product that had to feel both familiar and local",
+      body: "Working on Cuenta Nu made me more aware of how much context shapes a product. Patterns that worked well in Brazil didn't always translate directly to Mexico, and even small financial interactions could carry different expectations, habits, and levels of understanding.\n\nDesign has always been at the core of the Nubank experience, and I feel very lucky to have been part of an organization that treated it that way. But what stayed with me most was **the customer obsession behind the work**: understanding people deeply, questioning assumptions, and using that understanding to shape the experience.\n\n**Years later, I still find myself using many of the practices I learned at Nubank. That customer obsession became part of how I approach product design, and it's something I've carried with me ever since.**",
+    },
   },
 ];
 

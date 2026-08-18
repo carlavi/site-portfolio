@@ -1,16 +1,26 @@
 import Link from "next/link";
+import Image from "next/image";
 import { FadeUp } from "@/components/fade-up";
 import { type Project } from "@/lib/projects";
 
 function Tile({ project, aspect }: { project: Project; aspect: string }) {
+  const { hero } = project;
+  const isVideo = hero?.endsWith(".webm") || hero?.endsWith(".mp4");
+
   return (
-    <Link href={`/projects/${project.slug}`} className="group relative block flex-1 overflow-hidden rounded-2xl">
-      <div className={`${aspect} bg-secondary`} />
-      <div className="absolute inset-0 flex items-end p-4 opacity-100 sm:opacity-0 transition-opacity sm:group-hover:opacity-100 bg-gradient-to-t from-black/50 to-transparent">
-        <div>
-          <p className="text-sm font-medium text-white">{project.name}</p>
-          <p className="text-xs text-white/70">{project.year}</p>
-        </div>
+    <Link href={`/projects/${project.slug}`} className="group block flex-1">
+      <div className={`relative ${aspect} bg-secondary rounded-2xl overflow-hidden`}>
+        {hero && (
+          isVideo ? (
+            <video src={hero} className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline />
+          ) : (
+            <Image src={hero} alt={project.name} fill className="object-cover" />
+          )
+        )}
+      </div>
+      <div className="mt-3 opacity-100 sm:opacity-0 transition-opacity sm:group-hover:opacity-100">
+        <p className="text-sm text-muted-foreground">{project.name}</p>
+        <p className="text-xs text-muted-foreground/60">{project.year}</p>
       </div>
     </Link>
   );

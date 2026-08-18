@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 export function FadeUp({
   children,
   delay = 0,
   className,
+  style,
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  style?: CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -42,7 +44,7 @@ export function FadeUp({
     <div
       ref={ref}
       className={className}
-      style={{ opacity: 0, transform: "translateY(10px)" }}
+      style={{ opacity: 0, transform: "translateY(10px)", ...style }}
     >
       {children}
     </div>

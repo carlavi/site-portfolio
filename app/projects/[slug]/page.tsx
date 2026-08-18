@@ -8,7 +8,32 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ProjectSnapshot } from "@/components/project-snapshot";
-import { getProject, projects, type Section, type GallerySection } from "@/lib/projects";
+import { ScreenSwap } from "@/components/screen-swap";
+import { FrameVideo } from "@/components/frame-video";
+import { getProject, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
+
+const FRAME_BG: Record<FrameBg, string> = {
+  light: "#FCF9FD",
+  purple: "#820AD1",
+  dark: "#1F1F20",
+  gray: "#F3F3F3",
+};
+
+const FRAME_TEXT: Record<FrameBg, string> = {
+  light: "#6b7280",
+  purple: "#f3e6fc",
+  dark: "#9ca3af",
+  gray: "#6b7280",
+};
+
+// #FCF9FD sits almost flush against the page's own #FAFAFA background, so
+// light frames get a hairline border to read as a distinct container.
+const FRAME_BORDER: Record<FrameBg, string | undefined> = {
+  light: "1px solid rgba(0, 0, 0, 0.08)",
+  purple: undefined,
+  dark: undefined,
+  gray: undefined,
+};
 import { TEXT_WIDTH, CASE_STUDY_WIDTH } from "@/lib/layout";
 
 // Renders **bold** spans within otherwise plain paragraph text.
@@ -158,7 +183,7 @@ function GalleryImage({ src, alt }: { src?: string; alt: string }) {
 
 function GalleryPairImage({ src, alt }: { src?: string; alt: string }) {
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden aspect-[4/5]">
+    <div className="relative w-full rounded-2xl overflow-hidden aspect-[7/8]">
       {src ? (
         <Image src={src} alt={alt} fill className="object-cover" />
       ) : (
@@ -166,6 +191,114 @@ function GalleryPairImage({ src, alt }: { src?: string; alt: string }) {
           <span className="text-sm text-muted-foreground">{alt}</span>
         </div>
       )}
+    </div>
+  );
+}
+
+function FrameInsetImage({ src, alt, bg }: { src?: string; alt: string; bg: FrameBg }) {
+  const isVideo = src?.endsWith(".webm") || src?.endsWith(".mp4");
+  return (
+    <div className="relative flex-1 h-full min-w-0">
+      {src ? (
+        isVideo ? (
+          <FrameVideo src={src} rate={2} className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <Image src={src} alt={alt} fill className="object-contain p-2" />
+        )
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center px-6">
+          <span className="text-sm text-center" style={{ color: FRAME_TEXT[bg] }}>{alt}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FrameFillMedia({ src, alt, bg }: { src?: string; alt: string; bg: FrameBg }) {
+  const isVideo = src?.endsWith(".webm") || src?.endsWith(".mp4");
+  return (
+    <div className="relative flex-1 h-full min-w-0">
+      {src ? (
+        isVideo ? (
+          <FrameVideo src={src} rate={2} className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <Image src={src} alt={alt} fill className="object-cover" />
+        )
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center px-6">
+          <span className="text-sm text-center" style={{ color: FRAME_TEXT[bg] }}>{alt}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Frame({ bg, images, fill }: { bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean }) {
+  if (fill) {
+    return (
+      <div
+        className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch"
+        style={{ backgroundColor: FRAME_BG[bg] }}
+      >
+        {images.map((img, i) => (
+          <FrameFillMedia key={i} src={img.src} alt={img.alt} bg={bg} />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch gap-2 p-4"
+      style={{ backgroundColor: FRAME_BG[bg], border: FRAME_BORDER[bg] }}
+    >
+      {images.map((img, i) => (
+        <FrameInsetImage key={i} src={img.src} alt={img.alt} bg={bg} />
+      ))}
+    </div>
+  );
+}
+
+function FramePair({ frames }: { frames: [{ bg: FrameBg; src?: string; alt: string }, { bg: FrameBg; src?: string; alt: string }] }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {frames.map((frame, i) => (
+        <div
+          key={i}
+          className="relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex p-4"
+          style={{ backgroundColor: FRAME_BG[frame.bg], border: FRAME_BORDER[frame.bg] }}
+        >
+          <FrameInsetImage src={frame.src} alt={frame.alt} bg={frame.bg} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DocumentPage({ src, alt, bg, left, top }: { src?: string; alt: string; bg: FrameBg; left: string; top: string }) {
+  return (
+    <div className="absolute" style={{ left, top, width: "42%", height: "86%" }}>
+      {src ? (
+        <Image src={src} alt={alt} fill className="object-contain object-top" />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/10 px-4">
+          <span className="text-xs text-center" style={{ color: FRAME_TEXT[bg] }}>{alt}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Two document pages staggered — one higher/left, one lower/right — so they
+// read as a loose stack rather than two evenly centered thumbnails.
+function DocumentPair({ bg, documents }: { bg: FrameBg; documents: [{ src?: string; alt: string }, { src?: string; alt: string }] }) {
+  return (
+    <div
+      className="relative w-full rounded-2xl overflow-hidden aspect-[16/9]"
+      style={{ backgroundColor: FRAME_BG[bg], border: FRAME_BORDER[bg] }}
+    >
+      <DocumentPage src={documents[0].src} alt={documents[0].alt} bg={bg} left="7%" top="4%" />
+      <DocumentPage src={documents[1].src} alt={documents[1].alt} bg={bg} left="50%" top="12%" />
     </div>
   );
 }
@@ -180,6 +313,35 @@ function renderGallerySection(section: GallerySection, index: number) {
           {section.images.map((img, i) => (
             <GalleryPairImage key={i} src={img.src} alt={img.alt} />
           ))}
+        </div>
+      );
+    case "frame":
+      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} />;
+    case "frame-pair":
+      return <FramePair key={index} frames={section.frames} />;
+    case "screen-swap":
+      return (
+        <div key={index} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {section.companion && (
+            <div
+              className="relative w-full aspect-[7/8] rounded-2xl overflow-hidden flex p-4"
+              style={{ backgroundColor: FRAME_BG[section.companion.bg], border: FRAME_BORDER[section.companion.bg] }}
+            >
+              <FrameInsetImage src={section.companion.src} alt={section.companion.alt} bg={section.companion.bg} />
+            </div>
+          )}
+          <ScreenSwap variant="slide" bg={FRAME_BG[section.bg]} screens={section.screens} />
+        </div>
+      );
+    case "document-pair":
+      return (
+        <div key={index}>
+          <div className="sm:hidden">
+            <ScreenSwap variant="slide" aspect="aspect-square" bg={FRAME_BG[section.bg]} screens={section.documents} />
+          </div>
+          <div className="hidden sm:block">
+            <DocumentPair bg={section.bg} documents={section.documents} />
+          </div>
         </div>
       );
   }
@@ -197,7 +359,7 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, hero, meta, sections, pageTheme, overview, gallery, conclusion } = project;
+  const { title, hero, heroFrame, meta, sections, pageTheme, overview, gallery, conclusion } = project;
   const isDark = pageTheme === "dark";
   const usesNewTemplate = Boolean(overview && gallery && conclusion);
 
@@ -211,8 +373,43 @@ export default async function ProjectPage({
       <main className="relative z-10 flex-1 md:overflow-y-auto px-4 py-6 md:px-12 md:py-10">
         <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
           {/* Hero */}
-          <FadeUp delay={0} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
-            {hero ? (
+          <FadeUp
+            delay={0}
+            className={`relative w-full rounded-2xl overflow-hidden mb-10 aspect-[16/9] ${heroFrame && heroFrame.images.length > 1 ? "flex items-center justify-center gap-6 p-8 sm:gap-10 sm:p-12" : ""}`}
+            style={
+              heroFrame && heroFrame.images.length > 1
+                ? { backgroundColor: FRAME_BG[heroFrame.bg], border: FRAME_BORDER[heroFrame.bg] }
+                : undefined
+            }
+          >
+            {heroFrame ? (
+              heroFrame.images.length === 1 ? (
+                // Single pre-composed asset (e.g. a flat PNG with the phones
+                // already laid out) — fill the frame edge to edge.
+                heroFrame.images[0].src ? (
+                  <Image src={heroFrame.images[0].src} alt={heroFrame.images[0].alt} fill className="object-contain" priority />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center px-8">
+                    <span className="text-sm text-center" style={{ color: FRAME_TEXT[heroFrame.bg] }}>{heroFrame.images[0].alt}</span>
+                  </div>
+                )
+              ) : (
+                heroFrame.images.map((img, i) => (
+                  <div key={i} className="relative h-full aspect-[9/19] shrink-0">
+                    {img.src ? (
+                      <Image src={img.src} alt={img.alt} fill className="object-contain" priority={i === 0} />
+                    ) : (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center rounded-2xl border"
+                        style={{ borderColor: FRAME_TEXT[heroFrame.bg] + "40" }}
+                      >
+                        <span className="text-xs text-center px-3" style={{ color: FRAME_TEXT[heroFrame.bg] }}>{img.alt}</span>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )
+            ) : hero ? (
               hero.endsWith(".webm") || hero.endsWith(".mp4") ? (
                 <video
                   src={hero}
@@ -245,7 +442,7 @@ export default async function ProjectPage({
               {/* Title */}
               <FadeUp delay={80} className="w-full mb-8">
                 <h1 className="text-3xl font-bold mb-2 leading-snug" style={{ color: "var(--foreground)" }}>{title}</h1>
-                <p className="text-sm text-muted-foreground">Year: {meta.year}</p>
+                <p className="text-sm text-muted-foreground">{meta.year} · {meta.role}</p>
               </FadeUp>
 
               {/* Overview */}
@@ -261,7 +458,7 @@ export default async function ProjectPage({
               </FadeUp>
 
               {/* Gallery */}
-              <FadeUp delay={0} className="flex flex-col gap-4 mb-14">
+              <FadeUp delay={0} className="flex flex-col gap-8 mb-14">
                 {gallery!.map(renderGallerySection)}
               </FadeUp>
 
