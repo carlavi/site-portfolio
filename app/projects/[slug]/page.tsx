@@ -458,9 +458,13 @@ export default async function ProjectPage({
               </FadeUp>
 
               {/* Gallery */}
-              <FadeUp delay={0} className="flex flex-col gap-8 mb-14">
-                {gallery!.map(renderGallerySection)}
-              </FadeUp>
+              <div className="flex flex-col gap-8 mb-14">
+                {gallery!.map((section, i) => (
+                  <FadeUp key={i} delay={0}>
+                    {renderGallerySection(section, i)}
+                  </FadeUp>
+                ))}
+              </div>
 
               {/* Conclusion */}
               <FadeUp delay={0} className={`${TEXT_WIDTH} py-8 md:py-12 pb-8`}>

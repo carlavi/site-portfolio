@@ -123,19 +123,9 @@ export const projects: Project[] = [
     sections: [],
     overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and worked across the product system, from E2E workflows and information architecture to the behavior that shaped how YaloCode responded. I defined reusable skills, behavioral instructions, response structures, and the rules that determined when the product should respond conversationally or shift into a more structured interaction. I also designed the chat patterns and components that supported those behaviors, and contributed directly to frontend implementation.\n\nYaloCode became a shared workspace across Yalo, supporting Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, it is actively used by around 80% of the company, with a 4.5/5 CSAT, while WhatsApp agent delivery has gone from as much as six months to under two weeks.",
     gallery: [
-      { type: "image", alt: "Who we were designing for" },
-      { type: "image", alt: "Shared constraint, different goals" },
+      { type: "image", src: "/images/yalocode/yalocode.jpeg", alt: "Who we were designing for" },
       { type: "image", src: "/images/yalocode/chat-ui-gallery.jpeg", alt: "YaloCode chat UI gallery" },
-      { type: "image", alt: "Designing for operators, not platform experts" },
-      { type: "image", alt: "When conversation stopped being the simplest interface" },
-      { type: "image", alt: "A hybrid model of conversation and interface" },
-      { type: "image", alt: "Widget examples" },
       { type: "image", src: "/images/yalocode/widget.jpeg", alt: "YaloCode structured in-chat widget" },
-      { type: "image", alt: "Designing verification into the workflow" },
-      { type: "image", alt: "Designing the operating system" },
-      { type: "image", alt: "Three layers of the system" },
-      { type: "image", alt: "Adoption and impact" },
-      { type: "image", alt: "What adoption looked like" },
     ],
     conclusion: {
       heading: "Designing for builders",
@@ -273,47 +263,16 @@ export const projects: Project[] = [
       role: "Product Design",
       year: "January 2025",
     },
-    sections: [
-      {
-        type: "text",
-        heading: "Could AI recreate the feeling of being guided by Dr. Spiegel?",
-        body: "At Reveri, we explored an ambitious question: could onboarding feel less like setup and more like stepping into a first session with Dr. David Spiegel?\n\nOur hypothesis was simple: if users could experience the doctor's presence and clinical approach earlier, they might feel relief faster, before ever reaching a paywall.\n\nAt the time, it took users 15 to 20 minutes to reach their first hypnosis session. While the longer onboarding helped educate users and supported retention, we kept coming back to the same question: could we help people feel better, sooner?",
-      },
-      {
-        type: "text",
-        heading: "Outcome",
-        body: "We explored two onboarding directions powered by AI and tested them internally. In the end, we decided not to ship either.\n\nThe experience felt slower, more rigid, and less natural than we hoped. Instead of helping users reach relief faster, the onboarding was adding friction.\n\nThe biggest insight: we were still designing AI like a traditional flow. Question, answer, repeat. That logic worked for onboarding forms, but broke down in conversation.\n\nAs interactions became more complex, the experience felt increasingly forced. The more we added, the further it moved away from feeling intuitive.\n\nRather than push forward with something that wasn't working, we decided to stop and rethink the problem. That decision changed how our team approached AI across the product.",
-      },
-      {
-        type: "text",
-        heading: "Why this was difficult",
-        body: "Designing onboarding for AI introduced challenges we hadn't fully encountered before:\n\n• Voice interactions created latency and pacing issues\n• Conversation felt unnatural when users were forced into rigid flows\n• Giving users control (pause, skip, volume, responses) quickly increased complexity\n• Some questions felt easier to answer by tapping, not speaking\n• Designing predictable experiences became harder with probabilistic behavior\n\nWe realized something important: good onboarding logic didn't automatically translate into good AI interaction.",
-      },
-      {
-        type: "image-text",
-        alt: "Concept render of the video-guided onboarding with Dr. Spiegel",
-        heading: "Iteration 1: Video-guided onboarding",
-        body: "Our first prototype imagined onboarding as a guided session with Dr. Spiegel. Users would see him in the background while progressing through a conversational Q&A experience layered through bottom sheets.\n\nThe idea felt emotionally compelling, but practical limitations surfaced quickly. Filming new content would take time, and early AI avatar options didn't feel convincing enough. More importantly, the interaction itself felt too structured to feel conversational.",
-        imageLeft: true,
-      },
-      {
-        type: "image-text",
-        alt: "Concept render of the beacon-based talk-or-tap onboarding",
-        heading: "Iteration 2: Beacon + Talk or Tap",
-        body: "We simplified. Instead of video, we introduced a soft animated beacon to represent the doctor's presence. Users could respond through voice or tap, with voice positioned as the default interaction and tap available quietly when needed.\n\nThis version helped reduce visual complexity, but surfaced a deeper issue: the friction wasn't visual, it was conversational. Even after simplifying the interface, interactions still felt slower and less fluid than intended.",
-        imageLeft: false,
-      },
-      {
-        type: "text",
-        heading: "A smaller, more useful starting point",
-        body: "Rather than continue expanding onboarding, we shifted direction. Engineering first scoped what AI could realistically support inside the product, and I partnered closely with them to design around those constraints.\n\nTogether, we built Reveri's first voice-responsive hypnosis session, trained around Dr. Spiegel's clinical approach and designed to help users feel relief from the very beginning.\n\nInstead of a complex onboarding experience, we focused on a much simpler question: what is the smallest interaction that can genuinely help someone feel better?\n\nThe result was a lightweight, focused player built around only what users actually needed.",
-      },
-      {
-        type: "text",
-        heading: "What designing for AI changed for me",
-        body: "This project changed how I think about product design.\n\nBefore Reveri, I still approached experiences in relatively linear ways: mapping flows, anticipating edge cases, defining expected outcomes. AI challenged that instinct.\n\nI learned that designing for probabilistic systems means working with uncertainty. You can't map every path in advance. Instead, you shape boundaries, collaborate closely with engineering, and design around behavior that won't always be predictable.\n\nMost importantly, I learned that no amount of interface polish matters if the underlying AI doesn't provide real value. That lesson has stayed with me across every AI product I've worked on since.",
-      },
+    sections: [],
+    overview: "At Reveri, we explored whether onboarding could feel less like setup and more like being guided through a first session with Dr. David Spiegel. At the time, it could take users 15–20 minutes to reach their first hypnosis session, so we wanted to understand whether a more responsive, conversational experience could help people feel value sooner.\n\nI worked closely with Product and Engineering to explore two directions: a video-guided experience with Dr. Spiegel, followed by a simpler voice-first concept that let users talk or tap their way through onboarding. Both helped us understand the same thing: the more we tried to force a traditional onboarding flow into conversation, the less natural the experience became.\n\nWe ultimately decided not to ship either concept. Instead, the work helped us narrow the problem and redirect our effort toward a smaller, more useful interaction: Reveri's first voice-responsive hypnosis session.",
+    gallery: [
+      { type: "image", alt: "Concept render of the video-guided onboarding with Dr. Spiegel" },
+      { type: "image", alt: "Concept render of the beacon-based talk-or-tap onboarding" },
     ],
+    conclusion: {
+      heading: "Knowing when not to ship",
+      body: "This project changed how I think about designing new interaction models.\n\nWe started with a compelling idea, but prototyping made the problems visible quickly. Voice introduced latency, rigid question-and-answer flows felt unnatural, and every additional control made the experience harder to understand. The issue wasn't something we could solve by polishing the interface.\n\nThe most useful decision was to stop.\n\nRather than keep adding complexity to make the concept work, we took what we had learned and applied it to a much narrower problem where responsiveness could actually improve the experience.\n\nIt also changed the way I prototype. I became less interested in using prototypes to prove that an idea could work, and more interested in using them to find where it breaks.",
+    },
   },
   {
     slug: "nubank",
