@@ -10,6 +10,8 @@ import { Separator } from "@/components/ui/separator";
 import { ProjectSnapshot } from "@/components/project-snapshot";
 import { ScreenSwap } from "@/components/screen-swap";
 import { FrameVideo } from "@/components/frame-video";
+import { ReveriToggle } from "@/components/reveri-toggle";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { getProject, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
 
 const FRAME_BG: Record<FrameBg, string> = {
@@ -17,6 +19,9 @@ const FRAME_BG: Record<FrameBg, string> = {
   purple: "#820AD1",
   dark: "#1F1F20",
   gray: "#F3F3F3",
+  indigo: "#1B1430",
+  charcoal: "#1C1C1E",
+  black: "#000000",
 };
 
 const FRAME_TEXT: Record<FrameBg, string> = {
@@ -24,6 +29,9 @@ const FRAME_TEXT: Record<FrameBg, string> = {
   purple: "#f3e6fc",
   dark: "#9ca3af",
   gray: "#6b7280",
+  indigo: "#c4b5dd",
+  charcoal: "#9ca3af",
+  black: "#9ca3af",
 };
 
 // #FCF9FD sits almost flush against the page's own #FAFAFA background, so
@@ -33,6 +41,9 @@ const FRAME_BORDER: Record<FrameBg, string | undefined> = {
   purple: undefined,
   dark: undefined,
   gray: undefined,
+  indigo: undefined,
+  charcoal: undefined,
+  black: undefined,
 };
 import { TEXT_WIDTH, CASE_STUDY_WIDTH } from "@/lib/layout";
 
@@ -259,16 +270,35 @@ function Frame({ bg, images, fill }: { bg: FrameBg; images: { src?: string; alt:
   );
 }
 
-function FramePair({ frames }: { frames: [{ bg: FrameBg; src?: string; alt: string }, { bg: FrameBg; src?: string; alt: string }] }) {
+function FramePair({
+  frames,
+}: {
+  frames: [
+    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
+    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
+  ];
+}) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {frames.map((frame, i) => (
         <div
           key={i}
-          className="relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex p-4"
+          className={`relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex items-center justify-center ${frame.fill || frame.custom || frame.lottie ? "" : "p-4"}`}
           style={{ backgroundColor: FRAME_BG[frame.bg], border: FRAME_BORDER[frame.bg] }}
         >
-          <FrameInsetImage src={frame.src} alt={frame.alt} bg={frame.bg} />
+          {frame.lottie ? (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative h-[85%] w-[85%]">
+                <DotLottieReact src={frame.lottie} loop autoplay className="absolute inset-0 h-full w-full" />
+              </div>
+            </div>
+          ) : frame.custom === "reveri-toggle" ? (
+            <ReveriToggle />
+          ) : frame.fill ? (
+            <FrameFillMedia src={frame.src} alt={frame.alt} bg={frame.bg} />
+          ) : (
+            <FrameInsetImage src={frame.src} alt={frame.alt} bg={frame.bg} />
+          )}
         </div>
       ))}
     </div>
@@ -359,7 +389,7 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, hero, heroFrame, meta, sections, pageTheme, overview, gallery, conclusion } = project;
+  const { title, hero, heroFrame, heroLayers, meta, sections, pageTheme, overview, gallery, conclusion } = project;
   const isDark = pageTheme === "dark";
   const usesNewTemplate = Boolean(overview && gallery && conclusion);
 
@@ -382,7 +412,21 @@ export default async function ProjectPage({
                 : undefined
             }
           >
-            {heroFrame ? (
+            {heroLayers ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+                <div className="relative w-1/2 aspect-[882/497] animate-breathe-soft">
+                  <Image src={heroLayers.bg} alt="" fill className="object-contain" priority />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="relative w-[29%] aspect-square animate-breathe">
+                      <Image src={heroLayers.fg} alt={title} fill className="object-contain" priority />
+                    </div>
+                  </div>
+                </div>
+                {heroLayers.caption && (
+                  <p className="text-shimmer text-sm font-light">{heroLayers.caption}</p>
+                )}
+              </div>
+            ) : heroFrame ? (
               heroFrame.images.length === 1 ? (
                 // Single pre-composed asset (e.g. a flat PNG with the phones
                 // already laid out) — fill the frame edge to edge.
@@ -419,6 +463,12 @@ export default async function ProjectPage({
                   muted
                   playsInline
                 />
+              ) : hero.endsWith(".svg") ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-[34%] aspect-square">
+                    <Image src={hero} alt={title} fill className="object-contain" priority />
+                  </div>
+                </div>
               ) : (
                 <Image src={hero} alt={title} fill className="object-cover" priority />
               )
@@ -488,7 +538,7 @@ export default async function ProjectPage({
               <div className="flex flex-wrap gap-6 text-sm mb-4">
                 {[
                   { label: "Role", value: meta.role },
-                  { label: "Year", value: meta.year },
+                  { label: "Timeline", value: meta.year },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <span className="block text-xs uppercase tracking-wide mb-0.5 text-muted-foreground/60">{label}</span>

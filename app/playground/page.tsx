@@ -1,6 +1,9 @@
+import Image from "next/image";
 import { Sidebar } from "@/components/sidebar";
 import { IOSPointer } from "@/components/ios-pointer";
 import { ScreenSwap } from "@/components/screen-swap";
+import { ReveriToggle } from "@/components/reveri-toggle";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
 // Hidden playground — not linked from nav. Test animations/transitions here
@@ -32,6 +35,55 @@ export default function Playground() {
               className="flex h-24 w-40 items-center justify-center rounded-2xl bg-secondary text-sm text-muted-foreground"
             >
               Card-shaped target
+            </div>
+          </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Reveri — beacon breathing + shimmer text</h2>
+          <div className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] bg-black dark">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+              <div className="relative w-1/2 aspect-[882/497] animate-breathe-soft">
+                <Image src="/images/reveri-ai-sessions/beacon-bg.svg" alt="" fill className="object-contain" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-[29%] aspect-square animate-breathe">
+                    <Image src="/images/reveri-ai-sessions/Beacon.svg" alt="Beacon" fill className="object-contain" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-shimmer text-sm font-light">The Dr. is on his way...</p>
+            </div>
+          </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Reveri — Talk/Listen toggle (autoloop)</h2>
+          <div className="relative flex w-full items-center justify-center rounded-2xl overflow-hidden aspect-[16/9] p-8" style={{ backgroundColor: "#1B1430" }}>
+            <ReveriToggle />
+          </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Reveri — pain chart (Lottie, footnote removed)</h2>
+          <div className="relative w-full max-w-sm rounded-2xl overflow-hidden aspect-[7/8]" style={{ backgroundColor: "#1C1C1E" }}>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative h-[85%] w-[85%]">
+                <DotLottieReact
+                  src="/images/reveri-ai-sessions/reveri-vs-painkillers.lottie"
+                  loop
+                  autoplay
+                  className="absolute inset-0 h-full w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Reveri — wellness score (png, on #000000)</h2>
+          <div className="relative flex w-full max-w-sm items-center justify-center rounded-2xl overflow-hidden aspect-[7/8] p-4" style={{ backgroundColor: "#000000" }}>
+            <div className="relative h-full w-full">
+              <Image src="/images/reveri-ai-sessions/wellness-score.png" alt="Wellness / pain relief score ring" fill className="object-contain" />
             </div>
           </div>
         </section>

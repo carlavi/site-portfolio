@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Gem, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -53,9 +53,6 @@ export function Sidebar() {
             </Button>
             <ContactDialog triggerClassName="justify-start px-2" />
           </nav>
-          <Link href="/sims" aria-label="Sims" className="inline-flex px-2">
-            <Gem className="size-5 text-green-500" />
-          </Link>
         </div>
       </FadeUp>
 
@@ -71,10 +68,6 @@ export function Sidebar() {
                 About
               </Button>
               <ContactDialog triggerClassName="justify-start px-2" />
-              <Button variant="ghost" size="sm" render={<Link href="/sims" />} nativeButton={false} className="justify-start gap-2 px-2">
-                <Gem className="size-4 text-green-500" />
-                Sims
-              </Button>
             </nav>
           </PopoverContent>
         </Popover>

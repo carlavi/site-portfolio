@@ -1,0 +1,33 @@
+<svg width="258" height="258" viewBox="0 0 258 258" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="129.349" cy="128.468" r="49.0028" fill="white"/>
+<foreignObject x="-54.0187" y="-54.0187" width="365.854" height="365.854"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(27.01px);clip-path:url(#bgblur_0_80_5879_clip_path);height:100%;width:100%"></div></foreignObject><g filter="url(#filter0_i_80_5879)" data-figma-bg-blur-radius="54.0187">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M128.908 257.817C200.102 257.817 257.817 200.102 257.817 128.908C257.817 57.7142 200.102 0 128.908 0C57.7142 0 0 57.7142 0 128.908C0 200.102 57.7142 257.817 128.908 257.817ZM128.908 214.553C176.208 214.553 214.553 176.208 214.553 128.908C214.553 81.6081 176.208 43.2637 128.908 43.2637C81.6081 43.2637 43.2637 81.6081 43.2637 128.908C43.2637 176.208 81.6081 214.553 128.908 214.553Z" fill="white" fill-opacity="0.3"/>
+</g>
+<foreignObject x="2.755" y="2.74908" width="252.317" height="252.317"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(20.26px);clip-path:url(#bgblur_1_80_5879_clip_path);height:100%;width:100%"></div></foreignObject><g filter="url(#filter1_i_80_5879)" data-figma-bg-blur-radius="40.514">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M128.914 214.552C176.214 214.552 214.558 176.208 214.558 128.908C214.558 81.6075 176.214 43.2631 128.914 43.2631C81.6134 43.2631 43.269 81.6075 43.269 128.908C43.269 176.208 81.6134 214.552 128.914 214.552ZM129.355 171.288C153.005 171.288 172.177 152.116 172.177 128.466C172.177 104.816 153.005 85.6439 129.355 85.6439C105.705 85.6439 86.5328 104.816 86.5328 128.466C86.5328 152.116 105.705 171.288 129.355 171.288Z" fill="white" fill-opacity="0.4"/>
+</g>
+<defs>
+<filter id="filter0_i_80_5879" x="-54.0187" y="-54.0187" width="365.854" height="365.854" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="9.64819" dy="9.64819"/>
+<feGaussianBlur stdDeviation="10.8037"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_80_5879"/>
+</filter>
+<clipPath id="bgblur_0_80_5879_clip_path" transform="translate(54.0187 54.0187)"><path fill-rule="evenodd" clip-rule="evenodd" d="M128.908 257.817C200.102 257.817 257.817 200.102 257.817 128.908C257.817 57.7142 200.102 0 128.908 0C57.7142 0 0 57.7142 0 128.908C0 200.102 57.7142 257.817 128.908 257.817ZM128.908 214.553C176.208 214.553 214.553 176.208 214.553 128.908C214.553 81.6081 176.208 43.2637 128.908 43.2637C81.6081 43.2637 43.2637 81.6081 43.2637 128.908C43.2637 176.208 81.6081 214.553 128.908 214.553Z"/>
+</clipPath><filter id="filter1_i_80_5879" x="2.755" y="2.74908" width="252.317" height="252.317" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="8.26528" dy="8.26528"/>
+<feGaussianBlur stdDeviation="13.5047"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_80_5879"/>
+</filter>
+<clipPath id="bgblur_1_80_5879_clip_path" transform="translate(-2.755 -2.74908)"><path fill-rule="evenodd" clip-rule="evenodd" d="M128.914 214.552C176.214 214.552 214.558 176.208 214.558 128.908C214.558 81.6075 176.214 43.2631 128.914 43.2631C81.6134 43.2631 43.269 81.6075 43.269 128.908C43.269 176.208 81.6134 214.552 128.914 214.552ZM129.355 171.288C153.005 171.288 172.177 152.116 172.177 128.466C172.177 104.816 153.005 85.6439 129.355 85.6439C105.705 85.6439 86.5328 104.816 86.5328 128.466C86.5328 152.116 105.705 171.288 129.355 171.288Z"/>
+</clipPath></defs>
+</svg>

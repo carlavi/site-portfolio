@@ -134,3 +134,136 @@
   }
 }
 
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes breathe-soft {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.animate-breathe {
+  animation: breathe 4.5s ease-in-out infinite;
+}
+
+.animate-breathe-soft {
+  animation: breathe-soft 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe,
+  .animate-breathe-soft {
+    animation: none;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes text-loop {
+  0%, 11% { opacity: 0; }
+  17%, 50% { opacity: 1; }
+  61%, 100% { opacity: 0; }
+}
+
+.text-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    #4B4B4B 0%,
+    #4B4B4B 40%,
+    #F9F8F6 50%,
+    #4B4B4B 60%,
+    #4B4B4B 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation:
+    shimmer 3s linear infinite,
+    text-loop 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer {
+    animation: none;
+    opacity: 1;
+    background-image: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: #F9F8F6;
+  }
+}
+
+/* Reveri Talk/Listen toggle — pill slides right, both labels swap color,
+   holds, then slides back. 40-50% and 90-100% are the transition windows. */
+@keyframes toggle-slide {
+  0%, 40% { transform: translateX(0%); }
+  50%, 90% { transform: translateX(100%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes toggle-color-talk {
+  0%, 40% { color: #161517; }
+  50%, 90% { color: #E0DFDD; }
+  100% { color: #161517; }
+}
+
+@keyframes toggle-color-listen {
+  0%, 40% { color: #E0DFDD; }
+  50%, 90% { color: #161517; }
+  100% { color: #E0DFDD; }
+}
+
+@keyframes toggle-color-icon {
+  0%, 40% { color: #090909; }
+  50%, 90% { color: #E0DFDD; }
+  100% { color: #090909; }
+}
+
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 4px rgba(251, 249, 247, 0.8)); }
+}
+
+.toggle-pill {
+  animation: toggle-slide 6s ease-in-out infinite;
+}
+
+.toggle-label-talk {
+  animation: toggle-color-talk 6s ease-in-out infinite;
+}
+
+.toggle-label-listen {
+  animation: toggle-color-listen 6s ease-in-out infinite;
+}
+
+.toggle-icon {
+  animation:
+    toggle-color-icon 6s ease-in-out infinite,
+    icon-pulse 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle-pill,
+  .toggle-label-talk,
+  .toggle-label-listen,
+  .toggle-icon {
+    animation: none;
+  }
+  .toggle-label-talk {
+    color: #161517;
+  }
+  .toggle-icon {
+    color: #090909;
+  }
+  .toggle-label-listen {
+    color: #E0DFDD;
+  }
+}
+
+

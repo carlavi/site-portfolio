@@ -19,7 +19,19 @@ export type GallerySection =
   // of sitting inset with a margin — the rounded corners act as a mask.
   | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean }
   // Two independent colored containers side by side, each with its own bg.
-  | { type: "frame-pair"; frames: [{ bg: FrameBg; src?: string; alt: string }, { bg: FrameBg; src?: string; alt: string }] }
+  // `fill` on a frame bleeds its media edge to edge (cropped, no inset
+  // padding) instead of sitting inset with a margin — e.g. a photo that's
+  // taller than the container and needs to be masked rather than shrunk.
+  // `custom` swaps the frame's content for a bespoke component (e.g. a
+  // hand-built, animated recreation of a UI element) instead of an image.
+  // `lottie` renders a looping Lottie/dotLottie animation edge to edge.
+  | {
+      type: "frame-pair";
+      frames: [
+        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
+        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
+      ];
+    }
   // A single colored container that auto-cycles between two screens with a
   // slide transition, instead of splitting them into two static boxes. An
   // optional static `companion` box sits next to it in the same row.
@@ -34,7 +46,10 @@ export type GallerySection =
   | { type: "document-pair"; bg: FrameBg; documents: [{ src?: string; alt: string }, { src?: string; alt: string }] };
 
 // Background options for `frame`/`frame-pair` gallery sections and `heroFrame`.
-export type FrameBg = "light" | "purple" | "dark" | "gray";
+// `indigo`/`charcoal` are Reveri's brand shades — kept distinct from `purple`
+// (Nubank's brand purple) and `dark` so changing one project's palette can't
+// bleed into another's.
+export type FrameBg = "light" | "purple" | "dark" | "gray" | "indigo" | "charcoal" | "black";
 
 export type Project = {
   slug: string;
@@ -63,6 +78,11 @@ export type Project = {
   // When set, replaces the default full-bleed `hero` with a colored container
   // holding one or more inset phone/screen images (e.g. a twin-phone showcase).
   heroFrame?: { bg: FrameBg; images: { src?: string; alt: string }[] };
+  // When set, replaces `hero` on the case study page with two stacked SVG
+  // layers (a background glow/aura behind a smaller foreground mark),
+  // both rendered with object-contain so neither gets cropped. `caption`
+  // is an optional shimmer line that loops beneath the mark.
+  heroLayers?: { bg: string; fg: string; caption?: string };
 };
 
 export const projects: Project[] = [
@@ -79,7 +99,7 @@ export const projects: Project[] = [
     meta: {
       client: "Co-Founder",
       role: "Product Strategy, UX/UI, Frontend",
-      year: "2026",
+      year: "January 2026 – Present",
     },
     sections: [],
     overview: "Helia started with a simple question: **what if plants could talk?** We created a plant care app that combines identification, curated guidance, and conversation to make everyday care feel more personal and approachable.\n\nAs co-founder and product designer, I've shaped Helia from early concept to a live iOS and Android product working across product strategy, research, interaction design, brand, frontend implementation, pricing, and growth.\n\nWhat began as an experiment in using emerging AI tools to make plant care feel more personal has grown into a fully functioning product, with 530+ users, 600+ plant analysis, and a place in Stage 2 of 500 Global's selection process.",
@@ -118,7 +138,7 @@ export const projects: Project[] = [
     meta: {
       client: "Yalo",
       role: "Senior Product Designer",
-      year: "February 2026 – Present",
+      year: "February 2026 – July 2026",
     },
     sections: [],
     overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and worked across the product system, from E2E workflows and information architecture to the behavior that shaped how YaloCode responded. I defined reusable skills, behavioral instructions, response structures, and the rules that determined when the product should respond conversationally or shift into a more structured interaction. I also designed the chat patterns and components that supported those behaviors, and contributed directly to frontend implementation.\n\nYaloCode became a shared workspace across Yalo, supporting Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, it is actively used by around 80% of the company, with a 4.5/5 CSAT, while WhatsApp agent delivery has gone from as much as six months to under two weeks.",
@@ -138,15 +158,20 @@ export const projects: Project[] = [
     name: "Reveri: AI Sessions",
     coverSpan: "half",
     pageTheme: "dark",
-    hero: "/images/reveri-ai-sessions/02%20ReveriAI.jpg",
-    title: "Reveri: Introducing AI into a clinical pain relief experience",
+    hero: "/images/reveri-ai-sessions/beacon-container.svg",
+    heroLayers: {
+      bg: "/images/reveri-ai-sessions/beacon-bg.svg",
+      fg: "/images/reveri-ai-sessions/Beacon.svg",
+      caption: "The Dr. is on his way...",
+    },
+    title: "Reveri: Hypnosis for pain relief",
     tags: ["AI", "Healthcare", "Product Design"],
     year: "2025",
     description: "Redesigning Reveri's hypnosis sessions around real-time, personalized AI guidance, and the trust-building work that came with it.",
     meta: {
       client: "Reveri",
-      role: "Product Design",
-      year: "March–June 2025",
+      role: "Senior Product Designer",
+      year: "March 2025 – June 2025",
       tools: ["Figma", "ChatGPT", "Bolt"],
     },
     sections: [
@@ -237,12 +262,28 @@ export const projects: Project[] = [
         body: "This work reinforced an important lesson from our earlier onboarding experiments: AI becomes useful when it solves a specific problem well.\n\nThe breakthrough wasn't trying to redesign everything around AI. It was identifying a moment where personalization could meaningfully improve the user experience, and designing around that constraint.\n\nIn this case, helping people feel relief sooner, while feeling more understood in the process.",
       },
     ],
-    overview: "Reveri is a clinical hypnosis app focused on helping people manage pain, stress, and sleep. The product already had a strong library of guided sessions, but the experience was largely static: users selected a session and followed the same structure regardless of what they were feeling or how their pain showed up.\n\nAs product designer, I defined how conversational AI would fit into the existing Reveri experience, designing the interaction model, session experience, and new paths into care from Home. Rather than redesigning the product around AI, we narrowed the opportunity to one specific moment: helping users feel more heard and supported during pain relief sessions.\n\nWe introduced a conversational mode that could adapt in real time based on what users shared, while preserving Reveri's existing audio experience for those who preferred it. The shift increased reported improvement rates from **60% to 87%**, while also strengthening users' sense of being heard and understood.",
+    overview: "Reveri is a clinical hypnosis app co-founded by Dr. David Spiegel, a renowned psychiatrist and hypnosis researcher at Stanford University. His work has shaped decades of research into how hypnosis can support pain, stress, and sleep. Still, the product experience was largely static: users selected a guided session and followed the same structure regardless of what they were feeling or how their pain showed up.\n\nAs product designer, I defined how conversational AI would fit into the existing Reveri experience, designing the interaction model, session experience, and new paths into care from Home. Rather than redesigning the product around AI, we narrowed the opportunity to one specific moment: helping users feel more heard and supported during pain relief sessions.\n\nWe introduced a conversational mode that could adapt in real time based on what users shared, while preserving Reveri's existing audio experience for those who preferred it.\n\n**Users who completed conversational sessions reported improvement at a higher rate: 87%, compared with 60% for the standard sessions, while also strengthening users' sense of being heard and understood.**",
     gallery: [
-      { type: "image", src: "/images/reveri-ai-sessions/01%20ReveriAI.jpg", alt: "Reveri AI Talk session screen" },
-      { type: "image", src: "/images/reveri-ai-sessions/Before%20and%20After%20Reveri.jpg", alt: "Before and after redesign of Reveri's home tab" },
-      { type: "image", src: "/images/reveri-ai-sessions/03%20ReveriAI.jpg", alt: "Educational trust-building screens in Reveri" },
-      { type: "image", src: "/images/reveri-ai-sessions/04%20ReveriAI.jpg", alt: "Early prototypes of the Reveri AI session flow" },
+      {
+        type: "frame-pair",
+        frames: [
+          { bg: "indigo", alt: "Talk and Listen mode selector screen", custom: "reveri-toggle" },
+          { bg: "charcoal", src: "/images/reveri-ai-sessions/lifestyle.webp", alt: "Lifestyle photo of someone starting a Reveri session on their phone", fill: true },
+        ],
+      },
+      {
+        type: "frame",
+        bg: "charcoal",
+        images: [{ src: "/images/reveri-ai-sessions/flow.webm", alt: "Home screen with a personalized greeting and wellness check prompt" }],
+        fill: true,
+      },
+      {
+        type: "frame-pair",
+        frames: [
+          { bg: "charcoal", alt: "Pain tracking chart over time: Reveri vs. painkillers", lottie: "/images/reveri-ai-sessions/reveri-vs-painkillers.lottie" },
+          { bg: "black", src: "/images/reveri-ai-sessions/wellness-score.png", alt: "Wellness / pain relief score ring" },
+        ],
+      },
     ],
     conclusion: {
       heading: "Bringing the live experience into the product",
@@ -260,7 +301,7 @@ export const projects: Project[] = [
     description: "Two AI onboarding concepts, tested and shelved, and what that taught the team about designing for probabilistic systems.",
     meta: {
       client: "Reveri",
-      role: "Product Design",
+      role: "Senior Product Designer",
       year: "January 2025",
     },
     sections: [],
@@ -293,7 +334,7 @@ export const projects: Project[] = [
     meta: {
       client: "Nubank México",
       role: "Product Designer, Transactions",
-      year: "2021–2023",
+      year: "July 2021 – June 2023",
     },
     sections: [],
     overview: "When Nubank expanded its banking product in Mexico, the work went beyond adapting an existing experience to a new market. Different financial habits, local infrastructure, regulation, and expectations around money meant that many of the patterns built for Brazil needed to be reconsidered.\n\nI joined as one of the first designers on the Cuenta Nu team, working closely with a Design Lead, Content Design, UX Research, Product, and Engineering. As part of the Transactions team, I focused on transfers, credit card payments, account transparency, and the systems connecting debit and credit experiences. Over two years, I helped shape some of the core banking journeys that supported Cuenta Nu's launch in Mexico, while contributing to the patterns and shared logic the product needed as it grew.",
