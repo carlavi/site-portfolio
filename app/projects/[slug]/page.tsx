@@ -22,6 +22,7 @@ const FRAME_BG: Record<FrameBg, string> = {
   indigo: "#1B1430",
   charcoal: "#1C1C1E",
   black: "#000000",
+  lavender: "#E5E0E9",
 };
 
 const FRAME_TEXT: Record<FrameBg, string> = {
@@ -32,6 +33,7 @@ const FRAME_TEXT: Record<FrameBg, string> = {
   indigo: "#c4b5dd",
   charcoal: "#9ca3af",
   black: "#9ca3af",
+  lavender: "#6b7280",
 };
 
 // #FCF9FD sits almost flush against the page's own #FAFAFA background, so
@@ -44,19 +46,29 @@ const FRAME_BORDER: Record<FrameBg, string | undefined> = {
   indigo: undefined,
   charcoal: undefined,
   black: undefined,
+  lavender: undefined,
 };
 import { TEXT_WIDTH, CASE_STUDY_WIDTH } from "@/lib/layout";
 
 // Renders **bold** spans within otherwise plain paragraph text.
+// Renders **bold** spans and [text](/href) internal links within otherwise
+// plain paragraph text.
 function formatInline(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) =>
-    part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i} className="font-semibold text-foreground">{part.slice(2, -2)}</strong>
-    ) : (
-      part
-    )
-  );
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i} className="font-semibold text-foreground">{part.slice(2, -2)}</strong>;
+    }
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (linkMatch) {
+      return (
+        <Link key={i} href={linkMatch[2]} className="underline underline-offset-2 hover:text-foreground">
+          {linkMatch[1]}
+        </Link>
+      );
+    }
+    return part;
+  });
 }
 
 export function generateStaticParams() {

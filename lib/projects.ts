@@ -49,7 +49,7 @@ export type GallerySection =
 // `indigo`/`charcoal` are Reveri's brand shades — kept distinct from `purple`
 // (Nubank's brand purple) and `dark` so changing one project's palette can't
 // bleed into another's.
-export type FrameBg = "light" | "purple" | "dark" | "gray" | "indigo" | "charcoal" | "black";
+export type FrameBg = "light" | "purple" | "dark" | "gray" | "indigo" | "charcoal" | "black" | "lavender";
 
 export type Project = {
   slug: string;
@@ -83,6 +83,12 @@ export type Project = {
   // both rendered with object-contain so neither gets cropped. `caption`
   // is an optional shimmer line that loops beneath the mark.
   heroLayers?: { bg: string; fg: string; caption?: string };
+  // Overrides `hero` for the Home gallery card only — for when the case
+  // study's own cover shouldn't be a video, but the home thumbnail should.
+  homeThumb?: string;
+  // Small floating UI pill/badge overlaid on the Home gallery card, gently
+  // fading in and out — Home-only, doesn't appear on the case study page.
+  homeBadge?: string;
 };
 
 export const projects: Project[] = [
@@ -92,7 +98,7 @@ export const projects: Project[] = [
     name: "Helia",
     coverSpan: "full",
     hero: "/images/helia/cover.webm",
-    title: "Turning plant care into an ongoing relationship",
+    title: "Give your plants a voice",
     tags: ["Mobile", "Product Strategy", "Founder"],
     year: "2026",
     description: "I co-founded Helia and led the product from an early hypothesis to a live plant care experience used to identify, understand, and build a more personal relationship with plants.",
@@ -295,7 +301,16 @@ export const projects: Project[] = [
     number: "04",
     name: "Reveri: Onboarding",
     coverSpan: "half",
-    title: "Reveri: Designing an AI onboarding, and deciding not to ship it",
+    hero: "/images/reveri/onb-cover.png",
+    homeThumb: "/images/reveri/session.webm",
+    homeBadge: "/images/reveri/Pain.png",
+    heroFrame: {
+      bg: "charcoal",
+      images: [
+        { src: "/images/reveri/onb-cover.png", alt: "Concept renders of the video-guided and voice-first onboarding" },
+      ],
+    },
+    title: "Designing a conversational onboarding",
     tags: ["AI", "Experimentation", "Product Design"],
     year: "2025",
     description: "Two AI onboarding concepts, tested and shelved, and what that taught the team about designing for probabilistic systems.",
@@ -305,10 +320,15 @@ export const projects: Project[] = [
       year: "January 2025",
     },
     sections: [],
-    overview: "At Reveri, we explored whether onboarding could feel less like setup and more like being guided through a first session with Dr. David Spiegel. At the time, it could take users 15–20 minutes to reach their first hypnosis session, so we wanted to understand whether a more responsive, conversational experience could help people feel value sooner.\n\nI worked closely with Product and Engineering to explore two directions: a video-guided experience with Dr. Spiegel, followed by a simpler voice-first concept that let users talk or tap their way through onboarding. Both helped us understand the same thing: the more we tried to force a traditional onboarding flow into conversation, the less natural the experience became.\n\nWe ultimately decided not to ship either concept. Instead, the work helped us narrow the problem and redirect our effort toward a smaller, more useful interaction: Reveri's first voice-responsive hypnosis session.",
+    overview: "At Reveri, we explored whether onboarding could feel less like setup and more like being guided through a first session with Dr. David Spiegel. At the time, it could take users 15–20 minutes to reach their first hypnosis session, so we wanted to understand whether a more responsive, conversational experience could help people feel value sooner.\n\nI worked closely with Product and Engineering to explore two directions: a video-guided experience with Dr. Spiegel, followed by a simpler voice-first concept that let users talk or tap their way through onboarding. Both helped us understand the same thing: the more we tried to force a traditional onboarding flow into conversation, the less natural the experience became.\n\nWe ultimately decided not to ship either concept. Instead, the work helped us narrow the problem and redirect our effort toward a smaller, more useful interaction: [Reveri's first voice-responsive hypnosis session](/projects/reveri-ai-sessions).",
     gallery: [
-      { type: "image", alt: "Concept render of the video-guided onboarding with Dr. Spiegel" },
-      { type: "image", alt: "Concept render of the beacon-based talk-or-tap onboarding" },
+      {
+        type: "frame-pair",
+        frames: [
+          { bg: "gray", src: "/images/reveri/concept-1.png", alt: "Concept render of the video-guided onboarding with Dr. Spiegel" },
+          { bg: "lavender", src: "/images/reveri/concept-2.png", alt: "Concept render of the beacon-based talk-or-tap onboarding" },
+        ],
+      },
     ],
     conclusion: {
       heading: "Knowing when not to ship",

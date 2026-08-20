@@ -266,4 +266,26 @@
   }
 }
 
+/* Floating UI badge on Home gallery cards (e.g. Reveri's "Relieve Pain"
+   pill) — fades fully in with a slight upward bump, holds, fades back out
+   and down, then loops. */
+@keyframes badge-float {
+  0% { opacity: 0; transform: translateY(8px); }
+  20% { opacity: 1; transform: translateY(0); }
+  75% { opacity: 1; transform: translateY(0); }
+  90%, 100% { opacity: 0; transform: translateY(8px); }
+}
+
+.animate-fade-pulse {
+  animation: badge-float 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-pulse {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 
