@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FadeUp } from "@/components/fade-up";
+import { HoverRevealTile } from "@/components/hover-reveal-tile";
 import { type Project } from "@/lib/projects";
 
 function Tile({ project, aspect }: { project: Project; aspect: string }) {
-  const { hero, heroLayers, homeThumb, homeBadge, pageTheme } = project;
+  const { hero, heroLayers, homeThumb, homeBadge, homeHoverReveal, pageTheme } = project;
   const media = homeThumb ?? hero;
   const isVideo = media?.endsWith(".webm") || media?.endsWith(".mp4");
   const isDark = pageTheme === "dark";
@@ -26,9 +27,17 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
               </div>
             </div>
           </div>
+        ) : media && isVideo && homeHoverReveal ? (
+          <HoverRevealTile
+            video={media}
+            alt={project.name}
+            sun={homeHoverReveal.sun}
+            wordmark={homeHoverReveal.wordmark}
+            wordmarkMobile={homeHoverReveal.wordmarkMobile}
+          />
         ) : media ? (
           isVideo ? (
-            <video src={media} className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline />
+            <video src={media} className="absolute inset-0 w-full h-full object-cover sm:scale-[1.15]" autoPlay loop muted playsInline />
           ) : (
             <Image src={media} alt={project.name} fill className="object-cover" />
           )
@@ -45,7 +54,7 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
         )}
       </div>
       <div className="mt-3 opacity-100 sm:opacity-0 transition-opacity sm:group-hover:opacity-100">
-        <p className="text-lg font-medium text-foreground">{project.name}</p>
+        <p className="text-lg font-medium text-foreground">{project.title}</p>
         <p className="text-xs text-muted-foreground/60">{project.year}</p>
       </div>
     </Link>

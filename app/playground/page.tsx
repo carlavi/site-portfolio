@@ -3,6 +3,7 @@ import { Sidebar } from "@/components/sidebar";
 import { IOSPointer } from "@/components/ios-pointer";
 import { ScreenSwap } from "@/components/screen-swap";
 import { ReveriToggle } from "@/components/reveri-toggle";
+import { HoverRevealTile } from "@/components/hover-reveal-tile";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
@@ -85,6 +86,19 @@ export default function Playground() {
             <div className="relative h-full w-full">
               <Image src="/images/reveri-ai-sessions/wellness-score.png" alt="Wellness / pain relief score ring" fill className="object-contain" />
             </div>
+          </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Helia — hover video → sun/wordmark (desktop only)</h2>
+          <div className="group relative w-full rounded-2xl overflow-hidden bg-secondary aspect-square sm:aspect-[16/9]">
+            <HoverRevealTile
+              video="/images/helia/cover.webm"
+              alt="Helia"
+              sun="/images/helia/helia-sun.svg"
+              wordmark="/images/helia/helia-black.svg"
+              wordmarkMobile="/images/helia/helia-white.svg"
+            />
           </div>
         </section>
 

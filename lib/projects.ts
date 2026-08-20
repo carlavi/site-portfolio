@@ -89,6 +89,11 @@ export type Project = {
   // Small floating UI pill/badge overlaid on the Home gallery card, gently
   // fading in and out — Home-only, doesn't appear on the case study page.
   homeBadge?: string;
+  // When set, the Home card's video (hero/homeThumb) crossfades into a
+  // spinning mark + wordmark on hover (desktop only). On mobile (no
+  // hover), the mark/wordmark sit statically over the video instead,
+  // smaller and using `wordmarkMobile` for contrast against the video.
+  homeHoverReveal?: { sun: string; wordmark: string; wordmarkMobile: string };
 };
 
 export const projects: Project[] = [
@@ -98,6 +103,11 @@ export const projects: Project[] = [
     name: "Helia",
     coverSpan: "full",
     hero: "/images/helia/cover.webm",
+    homeHoverReveal: {
+      sun: "/images/helia/helia-sun.svg",
+      wordmark: "/images/helia/helia-black.svg",
+      wordmarkMobile: "/images/helia/helia-white.svg",
+    },
     title: "Give your plants a voice",
     tags: ["Mobile", "Product Strategy", "Founder"],
     year: "2026",
@@ -170,7 +180,7 @@ export const projects: Project[] = [
       fg: "/images/reveri-ai-sessions/Beacon.svg",
       caption: "The Dr. is on his way...",
     },
-    title: "Reveri: Hypnosis for pain relief",
+    title: "Hypnosis for pain relief",
     tags: ["AI", "Healthcare", "Product Design"],
     year: "2025",
     description: "Redesigning Reveri's hypnosis sessions around real-time, personalized AI guidance, and the trust-building work that came with it.",

@@ -288,4 +288,32 @@
   }
 }
 
+/* Slow continuous spin for the Helia sun mark — distinct from Tailwind's
+   built-in animate-spin, which is tuned for loading spinners, not a
+   decorative logo mark. */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Static by default everywhere (mobile has no hover to trigger it, and
+   spinning by default would compete with the video playing behind it) —
+   only runs on desktop hover. */
+.animate-spin-slow {
+  animation: spin-slow 16s linear infinite;
+  animation-play-state: paused;
+}
+
+@media (min-width: 40rem) {
+  .group:hover .animate-spin-slow {
+    animation-play-state: running;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow {
+    animation: none;
+  }
+}
+
 
