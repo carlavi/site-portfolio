@@ -316,4 +316,79 @@
   }
 }
 
+/* Same spin, always running — for contexts where the mark sits statically
+   over video with no hover to gate it (e.g. a case study hero). */
+.animate-spin-slow-static {
+  animation: spin-slow 16s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow-static {
+    animation: none;
+  }
+}
+
+/* Care-cards carousel (Helia) — the list is rendered 3x (.care-track holds
+   copy1 + copy2 + copy3) and the animation only ever scrolls through copy2's
+   5 cards (positions -5*step..-9*step), wrapping to copy3's first card
+   (-10*step, visually identical to copy2's). Scrolling exclusively inside
+   the middle copy means there's always a real duplicate card peeking above
+   and below the centered one — including right at the loop seam — instead
+   of the empty gap you'd get scrolling from copy1's very first card (nothing
+   above it) into copy2's. Hardcoded for exactly 5 items (5 even slots of the
+   cycle). Each .care-card/.care-icon gets its own --care-delay (set inline
+   per card, evenly spaced across --care-duration) so it's fully grown for
+   the same window the track is holding it centered, then shrinks as the
+   track glides to the next card. All three share --care-duration to stay
+   in sync; the hold/transition split (12%/8% of each slot) keeps that glide
+   long enough to read as a move, not a jump. */
+@keyframes care-track-scroll {
+  0%, 12% { transform: translateY(calc(-5 * var(--care-step, 0px))); }
+  20%, 32% { transform: translateY(calc(-6 * var(--care-step, 0px))); }
+  40%, 52% { transform: translateY(calc(-7 * var(--care-step, 0px))); }
+  60%, 72% { transform: translateY(calc(-8 * var(--care-step, 0px))); }
+  80%, 92% { transform: translateY(calc(-9 * var(--care-step, 0px))); }
+  100% { transform: translateY(calc(-10 * var(--care-step, 0px))); }
+}
+
+.care-track {
+  animation: care-track-scroll var(--care-duration, 20s) ease-in-out infinite;
+}
+
+@keyframes care-card-pulse {
+  0%, 12% { transform: scale(1.16); }
+  20%, 92% { transform: scale(1); }
+  100% { transform: scale(1.16); }
+}
+
+.care-card {
+  animation: care-card-pulse var(--care-duration, 20s) ease-in-out infinite;
+  animation-delay: var(--care-delay, 0s);
+}
+
+@keyframes care-icon-pulse {
+  0%, 12% { transform: scale(1.15) rotate(-4deg); color: #577A4D; }
+  20%, 92% { transform: scale(1) rotate(0deg); color: #737373; }
+  100% { transform: scale(1.15) rotate(-4deg); color: #577A4D; }
+}
+
+.care-icon {
+  color: #737373;
+  animation: care-icon-pulse var(--care-duration, 20s) ease-in-out infinite;
+  animation-delay: var(--care-delay, 0s);
+}
+
+.care-fade-mask {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .care-track,
+  .care-card,
+  .care-icon {
+    animation: none;
+  }
+}
+
 

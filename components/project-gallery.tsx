@@ -55,7 +55,6 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
       </div>
       <div className="mt-3 opacity-100 sm:opacity-0 transition-opacity sm:group-hover:opacity-100">
         <p className="text-lg font-medium text-foreground">{project.title}</p>
-        <p className="text-xs text-muted-foreground/60">{project.year}</p>
       </div>
     </Link>
   );

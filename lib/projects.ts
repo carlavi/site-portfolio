@@ -17,7 +17,7 @@ export type GallerySection =
   // on a colored backdrop instead of bleeding full-width.
   // `fill`: media bleeds edge to edge (no inner padding, no border) instead
   // of sitting inset with a margin — the rounded corners act as a mask.
-  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean }
+  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string }
   // Two independent colored containers side by side, each with its own bg.
   // `fill` on a frame bleeds its media edge to edge (cropped, no inset
   // padding) instead of sitting inset with a margin — e.g. a photo that's
@@ -28,8 +28,8 @@ export type GallerySection =
   | {
       type: "frame-pair";
       frames: [
-        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
-        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
+        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
+        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
       ];
     }
   // A single colored container that auto-cycles between two screens with a
@@ -114,31 +114,38 @@ export const projects: Project[] = [
     description: "I co-founded Helia and led the product from an early hypothesis to a live plant care experience used to identify, understand, and build a more personal relationship with plants.",
     meta: {
       client: "Co-Founder",
-      role: "Product Strategy, UX/UI, Frontend",
+      role: "Product Builder",
       year: "January 2026 – Present",
     },
     sections: [],
     overview: "Helia started with a simple question: **what if plants could talk?** We created a plant care app that combines identification, curated guidance, and conversation to make everyday care feel more personal and approachable.\n\nAs co-founder and product designer, I've shaped Helia from early concept to a live iOS and Android product working across product strategy, research, interaction design, brand, frontend implementation, pricing, and growth.\n\nWhat began as an experiment in using emerging AI tools to make plant care feel more personal has grown into a fully functioning product, with 530+ users, 600+ plant analysis, and a place in Stage 2 of 500 Global's selection process.",
     gallery: [
       {
-        type: "image-pair",
-        images: [
-          { alt: "Home screen — garden and stories" },
-          { alt: "Care guidance cards — riego, luz, fertilizante, temperatura" },
+        type: "frame-pair",
+        frames: [
+          { bg: "gray", custom: "care-cards", alt: "Care guidance cards — water, light, fertilizer, temperature, humidity" },
+          { bg: "gray", src: "/images/helia/app-store.png", alt: "Helia on the App Store", bgColor: "#FFC845" },
         ],
       },
-      { type: "image", alt: "Product screenshot" },
+      {
+        type: "frame",
+        bg: "light",
+        images: [{ src: "/images/helia/scan.webm", alt: "Scanning a plant to identify it and get care guidance" }],
+        radius: 32,
+        noBorder: true,
+        bgColor: "var(--background)",
+      },
       {
         type: "image-pair",
         images: [
-          { alt: "Product screenshot" },
-          { alt: "Product screenshot" },
+          { src: "/images/helia/sun.jpg", alt: "Product screenshot" },
+          { src: "/images/helia/brand.jpg", alt: "Product screenshot" },
         ],
       },
     ],
     conclusion: {
-      heading: "Changing the question from \"What can we make?\" to \"What is worth making?\"",
-      body: "Building Helia has made me think less about individual features and more about the product as a whole.\n\nWhen it's easy to prototype new ideas, the harder part is deciding which ones actually make the experience better. Some things sounded interesting but added friction. Others were much simpler, but made the product clearer or easier to trust.\n\nA lot of the work became about making those calls: what should be conversational, what should be structured, what needed more explanation, and what didn't need to exist at all.\n\nHelia has made me more intentional about design. Not just in how something looks or works, but in deciding what deserves to be part of the product in the first place.",
+      heading: "Taking Helia into the real world",
+      body: "One of the most useful parts of building Helia has been seeing people interact with it outside of a test or a screen. At an in-person community event, people adopted plants, added them to their garden, asked questions, and started conversations with them on the spot. Watching that happen made the product feel very different from something we were simply designing and building.\n\nI never expected to take an app all the way to production without a dedicated frontend developer. Being able to design something and then build much of it myself changed how I think about the line between design and implementation.\n\nWhat I love most about Helia is how varied the work is. One day it's product design, another it's merch or an in-person event, and then it's back to the app, changing what we built based on what we learned.",
     },
   },
   {
@@ -320,7 +327,7 @@ export const projects: Project[] = [
         { src: "/images/reveri/onb-cover.png", alt: "Concept renders of the video-guided and voice-first onboarding" },
       ],
     },
-    title: "Designing a conversational onboarding",
+    title: "Onboarding concept explorations",
     tags: ["AI", "Experimentation", "Product Design"],
     year: "2025",
     description: "Two AI onboarding concepts, tested and shelved, and what that taught the team about designing for probabilistic systems.",
@@ -330,19 +337,37 @@ export const projects: Project[] = [
       year: "January 2025",
     },
     sections: [],
-    overview: "At Reveri, we explored whether onboarding could feel less like setup and more like being guided through a first session with Dr. David Spiegel. At the time, it could take users 15–20 minutes to reach their first hypnosis session, so we wanted to understand whether a more responsive, conversational experience could help people feel value sooner.\n\nI worked closely with Product and Engineering to explore two directions: a video-guided experience with Dr. Spiegel, followed by a simpler voice-first concept that let users talk or tap their way through onboarding. Both helped us understand the same thing: the more we tried to force a traditional onboarding flow into conversation, the less natural the experience became.\n\nWe ultimately decided not to ship either concept. Instead, the work helped us narrow the problem and redirect our effort toward a smaller, more useful interaction: [Reveri's first voice-responsive hypnosis session](/projects/reveri-ai-sessions).",
+    overview: "Reveri's onboarding was designed to educate users before their first hypnosis session, but it could take 15–20 minutes before they experienced the product itself. We wanted to see if that time could feel more like the beginning of a session with Dr. David Spiegel, and less like setup.\n\nAt the time, we were exploring how AI could become part of the Reveri experience. We already had a voice model trained on Dr. Spiegel's voice, which gave us room to experiment with more responsive, conversational interactions. I explored how that could translate into onboarding: bringing more of his presence and guidance into the experience while helping users reach value sooner.\n\nWe ultimately decided not to take the onboarding exploration further. Instead, it helped us narrow the problem and redirect our effort toward a smaller, more useful interaction: [Reveri's first voice-responsive hypnosis session](/projects/reveri-ai-sessions).",
     gallery: [
       {
         type: "frame-pair",
         frames: [
-          { bg: "gray", src: "/images/reveri/concept-1.png", alt: "Concept render of the video-guided onboarding with Dr. Spiegel" },
-          { bg: "lavender", src: "/images/reveri/concept-2.png", alt: "Concept render of the beacon-based talk-or-tap onboarding" },
+          {
+            bg: "gray",
+            src: "/images/reveri/concept-1.png",
+            alt: "Concept render of the video-guided onboarding with Dr. Spiegel",
+            caption: {
+              eyebrow: "Concept 01",
+              title: "Video call",
+              body: "The first direction imagined onboarding as a one-on-one video call with Dr. Spiegel. His trained voice guided the experience while questions and simple tap interactions appeared throughout, making the setup feel closer to a real conversation than a traditional onboarding flow.",
+            },
+          },
+          {
+            bg: "lavender",
+            src: "/images/reveri/concept-2.png",
+            alt: "Concept render of the beacon-based talk-or-tap onboarding",
+            caption: {
+              eyebrow: "Concept 02",
+              title: "Voice-first beacon",
+              body: "For the second direction, I removed the video and introduced a soft visual beacon as a representation of Dr. Spiegel's voice. The experience became simpler and more voice-led, while still giving users the option to tap when speaking wasn't convenient.",
+            },
+          },
         ],
       },
     ],
     conclusion: {
-      heading: "Knowing when not to ship",
-      body: "This project changed how I think about designing new interaction models.\n\nWe started with a compelling idea, but prototyping made the problems visible quickly. Voice introduced latency, rigid question-and-answer flows felt unnatural, and every additional control made the experience harder to understand. The issue wasn't something we could solve by polishing the interface.\n\nThe most useful decision was to stop.\n\nRather than keep adding complexity to make the concept work, we took what we had learned and applied it to a much narrower problem where responsiveness could actually improve the experience.\n\nIt also changed the way I prototype. I became less interested in using prototypes to prove that an idea could work, and more interested in using them to find where it breaks.",
+      heading: "Flexibility became friction",
+      body: "Engineering built an early version of the experience so we could test the interaction beyond static concepts. Once we tried it, the problems became much clearer: the conversation felt rigid, switching between voice and tap added complexity, and the overall experience required more effort than the onboarding it was meant to improve.\n\nSupporting both interaction modes also introduced a lot of complexity behind the scenes without giving users a clear enough benefit. What looked flexible on paper didn't feel particularly simple or natural in use.\n\nWe decided not to take the concept further. For me, the biggest takeaway was that giving people more ways to interact doesn't automatically make a product easier to use. Sometimes the better design decision is to narrow the interaction, reduce what the system needs to handle, and focus on the moment where the technology actually adds something useful.",
     },
   },
   {
@@ -409,4 +434,13 @@ export const projects: Project[] = [
 
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);
+}
+
+// Adjacent projects for the case study footer nav, wrapping around the ends
+// of the list so every project has both a previous and a next.
+export function getAdjacentProjects(slug: string) {
+  const index = projects.findIndex((project) => project.slug === slug);
+  const prev = projects[(index - 1 + projects.length) % projects.length];
+  const next = projects[(index + 1) % projects.length];
+  return { prev, next };
 }

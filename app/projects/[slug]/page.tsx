@@ -11,8 +11,10 @@ import { ProjectSnapshot } from "@/components/project-snapshot";
 import { ScreenSwap } from "@/components/screen-swap";
 import { FrameVideo } from "@/components/frame-video";
 import { ReveriToggle } from "@/components/reveri-toggle";
+import { ProjectFooterNav } from "@/components/project-footer-nav";
+import { CareCardsCarousel } from "@/components/care-cards-carousel";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { getProject, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
+import { getProject, getAdjacentProjects, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
 
 const FRAME_BG: Record<FrameBg, string> = {
   light: "#FCF9FD",
@@ -218,13 +220,19 @@ function GalleryPairImage({ src, alt }: { src?: string; alt: string }) {
   );
 }
 
-function FrameInsetImage({ src, alt, bg }: { src?: string; alt: string; bg: FrameBg }) {
+function FrameInsetImage({ src, alt, bg, radius }: { src?: string; alt: string; bg: FrameBg; radius?: number }) {
   const isVideo = src?.endsWith(".webm") || src?.endsWith(".mp4");
   return (
     <div className="relative flex-1 h-full min-w-0">
       {src ? (
         isVideo ? (
-          <FrameVideo src={src} rate={2} className="absolute inset-0 h-full w-full object-cover" />
+          // object-contain rounds the invisible bounding box, not the video's
+          // own visible edges, when the aspect ratio leaves letterbox gaps —
+          // so size the element to its natural aspect ratio instead and round
+          // that directly.
+          <div className="absolute inset-0 flex items-center justify-center p-2">
+            <FrameVideo src={src} rate={1} className="h-full w-auto max-w-full" style={{ borderRadius: radius }} />
+          </div>
         ) : (
           <Image src={src} alt={alt} fill className="object-contain p-2" />
         )
@@ -256,12 +264,26 @@ function FrameFillMedia({ src, alt, bg }: { src?: string; alt: string; bg: Frame
   );
 }
 
-function Frame({ bg, images, fill }: { bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean }) {
+function Frame({
+  bg,
+  images,
+  fill,
+  radius,
+  noBorder,
+  bgColor,
+}: {
+  bg: FrameBg;
+  images: { src?: string; alt: string }[];
+  fill?: boolean;
+  radius?: number;
+  noBorder?: boolean;
+  bgColor?: string;
+}) {
   if (fill) {
     return (
       <div
         className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch"
-        style={{ backgroundColor: FRAME_BG[bg] }}
+        style={{ backgroundColor: bgColor ?? FRAME_BG[bg], borderRadius: radius }}
       >
         {images.map((img, i) => (
           <FrameFillMedia key={i} src={img.src} alt={img.alt} bg={bg} />
@@ -273,10 +295,10 @@ function Frame({ bg, images, fill }: { bg: FrameBg; images: { src?: string; alt:
   return (
     <div
       className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch gap-2 p-4"
-      style={{ backgroundColor: FRAME_BG[bg], border: FRAME_BORDER[bg] }}
+      style={{ backgroundColor: bgColor ?? FRAME_BG[bg], border: noBorder ? "none" : FRAME_BORDER[bg], borderRadius: radius }}
     >
       {images.map((img, i) => (
-        <FrameInsetImage key={i} src={img.src} alt={img.alt} bg={bg} />
+        <FrameInsetImage key={i} src={img.src} alt={img.alt} bg={bg} radius={radius} />
       ))}
     </div>
   );
@@ -286,30 +308,40 @@ function FramePair({
   frames,
 }: {
   frames: [
-    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
-    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle"; lottie?: string },
+    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
+    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
   ];
 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {frames.map((frame, i) => (
-        <div
-          key={i}
-          className={`relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex items-center justify-center ${frame.fill || frame.custom || frame.lottie ? "" : "p-4"}`}
-          style={{ backgroundColor: FRAME_BG[frame.bg], border: FRAME_BORDER[frame.bg] }}
-        >
-          {frame.lottie ? (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative h-[85%] w-[85%]">
-                <DotLottieReact src={frame.lottie} loop autoplay className="absolute inset-0 h-full w-full" />
+        <div key={i}>
+          <div
+            className={`relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex items-center justify-center ${frame.fill || frame.custom || frame.lottie ? "" : "p-4"}`}
+            style={{ backgroundColor: frame.bgColor ?? FRAME_BG[frame.bg], border: FRAME_BORDER[frame.bg] }}
+          >
+            {frame.lottie ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative h-[85%] w-[85%]">
+                  <DotLottieReact src={frame.lottie} loop autoplay className="absolute inset-0 h-full w-full" />
+                </div>
               </div>
+            ) : frame.custom === "reveri-toggle" ? (
+              <ReveriToggle />
+            ) : frame.custom === "care-cards" ? (
+              <CareCardsCarousel />
+            ) : frame.fill ? (
+              <FrameFillMedia src={frame.src} alt={frame.alt} bg={frame.bg} />
+            ) : (
+              <FrameInsetImage src={frame.src} alt={frame.alt} bg={frame.bg} />
+            )}
+          </div>
+          {frame.caption && (
+            <div className="mt-3">
+              <h3 className="text-sm text-muted-foreground/70 mb-1">{frame.caption.eyebrow}</h3>
+              <p className="text-base font-medium text-foreground mb-1">{frame.caption.title}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{frame.caption.body}</p>
             </div>
-          ) : frame.custom === "reveri-toggle" ? (
-            <ReveriToggle />
-          ) : frame.fill ? (
-            <FrameFillMedia src={frame.src} alt={frame.alt} bg={frame.bg} />
-          ) : (
-            <FrameInsetImage src={frame.src} alt={frame.alt} bg={frame.bg} />
           )}
         </div>
       ))}
@@ -358,7 +390,7 @@ function renderGallerySection(section: GallerySection, index: number) {
         </div>
       );
     case "frame":
-      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} />;
+      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} radius={section.radius} noBorder={section.noBorder} bgColor={section.bgColor} />;
     case "frame-pair":
       return <FramePair key={index} frames={section.frames} />;
     case "screen-swap":
@@ -401,9 +433,10 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, hero, heroFrame, heroLayers, meta, sections, pageTheme, overview, gallery, conclusion } = project;
+  const { title, hero, heroFrame, heroLayers, homeHoverReveal, meta, sections, pageTheme, overview, gallery, conclusion } = project;
   const isDark = pageTheme === "dark";
   const usesNewTemplate = Boolean(overview && gallery && conclusion);
+  const { prev, next } = getAdjacentProjects(slug);
 
   return (
     <div
@@ -467,14 +500,27 @@ export default async function ProjectPage({
               )
             ) : hero ? (
               hero.endsWith(".webm") || hero.endsWith(".mp4") ? (
-                <video
-                  src={hero}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
+                <>
+                  <video
+                    src={hero}
+                    className="absolute inset-0 w-full h-full object-cover sm:scale-[1.15]"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+                  <div className="absolute inset-0 bg-black/[0.08]" />
+                  {homeHoverReveal && (
+                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 sm:gap-6">
+                      <div className="relative h-[94px] w-[94px] sm:h-[130px] sm:w-[130px] animate-spin-slow-static">
+                        <Image src={homeHoverReveal.sun} alt="" fill className="object-contain" />
+                      </div>
+                      <div className="relative h-[38px] w-[156px] sm:h-[54px] sm:w-[216px]">
+                        <Image src={homeHoverReveal.wordmarkMobile} alt={title} fill className="object-contain" />
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : hero.endsWith(".svg") ? (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="relative w-[34%] aspect-square">
@@ -580,12 +626,7 @@ export default async function ProjectPage({
             </>
           )}
 
-          <div className="pt-8 pb-8 mt-8">
-            <Separator className="mb-8" />
-            <Button variant="ghost" size="sm" render={<Link href="/" />} nativeButton={false} className="-ml-2">
-              ← Back to projects
-            </Button>
-          </div>
+          <ProjectFooterNav prev={prev} next={next} />
         </div>
       </main>
     </div>

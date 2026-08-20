@@ -14,7 +14,7 @@ import { FadeUp } from "@/components/fade-up";
 function ContactDialog({ triggerClassName }: { triggerClassName?: string }) {
   return (
     <Dialog>
-      <DialogTrigger render={<Button variant="ghost" size="sm" className={triggerClassName} />}>
+      <DialogTrigger render={<Button variant="ghost" className={triggerClassName} />}>
         Contact
       </DialogTrigger>
       <DialogContent>
@@ -47,11 +47,11 @@ export function Sidebar() {
       {/* Desktop nav */}
       <FadeUp delay={40} className="hidden md:block">
         <div className="flex flex-col gap-3">
-          <nav className="flex flex-col gap-1">
-            <Button variant="ghost" size="sm" render={<Link href="/about" />} nativeButton={false} className="justify-start px-2">
+          <nav className="flex flex-col gap-2">
+            <Button variant="ghost" render={<Link href="/about" />} nativeButton={false} className="justify-start px-2 text-sm font-semibold">
               About
             </Button>
-            <ContactDialog triggerClassName="justify-start px-2" />
+            <ContactDialog triggerClassName="justify-start px-2 text-sm font-semibold" />
           </nav>
         </div>
       </FadeUp>

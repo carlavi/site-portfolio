@@ -4,6 +4,7 @@ import { IOSPointer } from "@/components/ios-pointer";
 import { ScreenSwap } from "@/components/screen-swap";
 import { ReveriToggle } from "@/components/reveri-toggle";
 import { HoverRevealTile } from "@/components/hover-reveal-tile";
+import { CareCardsCarousel } from "@/components/care-cards-carousel";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
@@ -99,6 +100,18 @@ export default function Playground() {
               wordmark="/images/helia/helia-black.svg"
               wordmarkMobile="/images/helia/helia-white.svg"
             />
+          </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Helia — care cards carousel (auto-scroll, centered card pulses)</h2>
+          {/* Same grid-cols-2 gap-4 the real frame-pair row uses — rendering
+              only one child per row sizes it to the true production column
+              width/height (aspect-[7/8]). */}
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="aspect-[7/8] w-full">
+              <CareCardsCarousel />
+            </div>
           </div>
         </section>
 
