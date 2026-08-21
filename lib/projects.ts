@@ -17,7 +17,7 @@ export type GallerySection =
   // on a colored backdrop instead of bleeding full-width.
   // `fill`: media bleeds edge to edge (no inner padding, no border) instead
   // of sitting inset with a margin — the rounded corners act as a mask.
-  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string }
+  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string; custom?: "scan-video" }
   // Two independent colored containers side by side, each with its own bg.
   // `fill` on a frame bleeds its media edge to edge (cropped, no inset
   // padding) instead of sitting inset with a margin — e.g. a photo that's
@@ -134,6 +134,7 @@ export const projects: Project[] = [
         radius: 32,
         noBorder: true,
         bgColor: "var(--background)",
+        custom: "scan-video",
       },
       {
         type: "image-pair",

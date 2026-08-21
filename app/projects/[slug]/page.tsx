@@ -13,6 +13,7 @@ import { FrameVideo } from "@/components/frame-video";
 import { ReveriToggle } from "@/components/reveri-toggle";
 import { ProjectFooterNav } from "@/components/project-footer-nav";
 import { CareCardsCarousel } from "@/components/care-cards-carousel";
+import { ScanVideoFrame } from "@/components/scan-video-frame";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { getProject, getAdjacentProjects, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
 
@@ -230,11 +231,17 @@ function FrameInsetImage({ src, alt, bg, radius }: { src?: string; alt: string; 
           // own visible edges, when the aspect ratio leaves letterbox gaps —
           // so size the element to its natural aspect ratio instead and round
           // that directly.
-          <div className="absolute inset-0 flex items-center justify-center p-2">
+          <div className="absolute inset-[8%] flex items-center justify-center">
             <FrameVideo src={src} rate={1} className="h-full w-auto max-w-full" style={{ borderRadius: radius }} />
           </div>
         ) : (
-          <Image src={src} alt={alt} fill className="object-contain p-2" />
+          // CSS padding-top/bottom percentages resolve against the
+          // container's width, not height — useless for evening out the
+          // gap around a portrait phone screenshot inside a squarer box.
+          // `inset` percentages correctly use each axis's own dimension.
+          <div className="absolute inset-[8%]">
+            <Image src={src} alt={alt} fill className="object-contain" />
+          </div>
         )
       ) : (
         <div className="absolute inset-0 flex items-center justify-center px-6">
@@ -294,7 +301,7 @@ function Frame({
 
   return (
     <div
-      className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch gap-2 p-4"
+      className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch gap-2"
       style={{ backgroundColor: bgColor ?? FRAME_BG[bg], border: noBorder ? "none" : FRAME_BORDER[bg], borderRadius: radius }}
     >
       {images.map((img, i) => (
@@ -317,7 +324,7 @@ function FramePair({
       {frames.map((frame, i) => (
         <div key={i}>
           <div
-            className={`relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex items-center justify-center ${frame.fill || frame.custom || frame.lottie ? "" : "p-4"}`}
+            className="relative w-full rounded-2xl overflow-hidden aspect-[7/8] flex items-center justify-center"
             style={{ backgroundColor: frame.bgColor ?? FRAME_BG[frame.bg], border: FRAME_BORDER[frame.bg] }}
           >
             {frame.lottie ? (
@@ -390,6 +397,9 @@ function renderGallerySection(section: GallerySection, index: number) {
         </div>
       );
     case "frame":
+      if (section.custom === "scan-video") {
+        return <ScanVideoFrame key={index} src={section.images[0].src!} alt={section.images[0].alt} radius={section.radius} />;
+      }
       return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} radius={section.radius} noBorder={section.noBorder} bgColor={section.bgColor} />;
     case "frame-pair":
       return <FramePair key={index} frames={section.frames} />;
@@ -398,7 +408,7 @@ function renderGallerySection(section: GallerySection, index: number) {
         <div key={index} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {section.companion && (
             <div
-              className="relative w-full aspect-[7/8] rounded-2xl overflow-hidden flex p-4"
+              className="relative w-full aspect-[7/8] rounded-2xl overflow-hidden flex"
               style={{ backgroundColor: FRAME_BG[section.companion.bg], border: FRAME_BORDER[section.companion.bg] }}
             >
               <FrameInsetImage src={section.companion.src} alt={section.companion.alt} bg={section.companion.bg} />
@@ -512,10 +522,10 @@ export default async function ProjectPage({
                   <div className="absolute inset-0 bg-black/[0.08]" />
                   {homeHoverReveal && (
                     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 sm:gap-6">
-                      <div className="relative h-[94px] w-[94px] sm:h-[130px] sm:w-[130px] animate-spin-slow-static">
+                      <div className="relative h-[75px] w-[75px] sm:h-[104px] sm:w-[104px] animate-spin-slow-static">
                         <Image src={homeHoverReveal.sun} alt="" fill className="object-contain" />
                       </div>
-                      <div className="relative h-[38px] w-[156px] sm:h-[54px] sm:w-[216px]">
+                      <div className="relative h-[30px] w-[125px] sm:h-[43px] sm:w-[173px]">
                         <Image src={homeHoverReveal.wordmarkMobile} alt={title} fill className="object-contain" />
                       </div>
                     </div>
