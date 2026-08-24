@@ -2,10 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { FadeUp } from "@/components/fade-up";
 import { HoverRevealTile } from "@/components/hover-reveal-tile";
+import { ColorRevealTile } from "@/components/color-reveal-tile";
 import { type Project } from "@/lib/projects";
 
 function Tile({ project, aspect }: { project: Project; aspect: string }) {
-  const { hero, heroLayers, homeThumb, homeBadge, homeHoverReveal, pageTheme } = project;
+  const { hero, heroLayers, homeThumb, homeBadge, homeHoverReveal, homeHoverColor, pageTheme, homeCardTransparent } = project;
   const media = homeThumb ?? hero;
   const isVideo = media?.endsWith(".webm") || media?.endsWith(".mp4");
   const isDark = pageTheme === "dark";
@@ -13,7 +14,7 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block flex-1">
       <div
-        className={`relative ${aspect} ${isDark ? "" : "bg-secondary"} rounded-2xl overflow-hidden`}
+        className={`relative ${aspect} ${isDark || homeCardTransparent ? "" : "bg-secondary"} rounded-2xl overflow-hidden`}
         style={isDark ? { backgroundColor: "#141414" } : undefined}
       >
         {heroLayers ? (
@@ -35,6 +36,8 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
             wordmark={homeHoverReveal.wordmark}
             wordmarkMobile={homeHoverReveal.wordmarkMobile}
           />
+        ) : media && !isVideo && homeHoverColor ? (
+          <ColorRevealTile image={media} alt={project.name} color={homeHoverColor.color} />
         ) : media ? (
           isVideo ? (
             <video src={media} className="absolute inset-0 w-full h-full object-cover sm:scale-[1.15]" autoPlay loop muted playsInline />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ViewTransition } from "react";
+import { DisableRightClick } from "@/components/disable-right-click";
 import "./globals.css";
 
 const generalSans = localFont({
@@ -37,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${generalSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <DisableRightClick />
         <ViewTransition>{children}</ViewTransition>
       </body>
     </html>

@@ -164,6 +164,33 @@
   100% { background-position: -200% center; }
 }
 
+/* Light sweep along the yalocode logomark's stroke ring only (masked to it
+   in yalocode-logo.tsx) — travels from the bottom-left corner to the
+   top-right corner. Runs once per hover rather than looping. */
+@keyframes yalo-shimmer-sweep {
+  0% { transform: translate(-425px, 423px) rotate(45deg); }
+  100% { transform: translate(425px, -423px) rotate(45deg); }
+}
+
+.yalo-shimmer-sweep {
+  /* Without this, rotate() pivots around the SVG viewport's center rather
+     than the rect's own (off-center, non-square) bounding box, swinging it
+     out of alignment with the diagonal it's supposed to travel along. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: translate(-425px, 423px) rotate(45deg);
+}
+
+.group:hover .yalo-shimmer-sweep {
+  animation: yalo-shimmer-sweep 1.1s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yalo-shimmer-sweep {
+    animation: none;
+  }
+}
+
 @keyframes text-loop {
   0%, 11% { opacity: 0; }
   17%, 50% { opacity: 1; }
@@ -196,6 +223,72 @@
     -webkit-background-clip: initial;
     background-clip: initial;
     color: #F9F8F6;
+  }
+}
+
+/* Eyebrow shimmer for the YaloCode chat gallery widgets — a continuous
+   color sweep (gray to white by default), no fade-loop since an eyebrow
+   label should stay put, unlike Reveri's breathing caption. Base/peak
+   colors are CSS custom properties so each widget theme can override them
+   (set inline via style, see widget-card.tsx). */
+.eyebrow-shimmer {
+  --eyebrow-shimmer-base: #8A8A8A;
+  --eyebrow-shimmer-peak: #FFFFFF;
+  background-image: linear-gradient(
+    90deg,
+    var(--eyebrow-shimmer-base) 0%,
+    var(--eyebrow-shimmer-base) 40%,
+    var(--eyebrow-shimmer-peak) 50%,
+    var(--eyebrow-shimmer-base) 60%,
+    var(--eyebrow-shimmer-base) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shimmer 3s linear infinite;
+  /* Without this, some browsers stop repainting a text-clipped gradient
+     animation after a couple of iterations once they decide the layer is
+     "static" — text-shimmer avoids this by accident (its second, opacity-
+     based animation keeps forcing repaints), but this one only animates
+     background-position, so it needs the explicit hint. */
+  will-change: background-position;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow-shimmer {
+    animation: none;
+    will-change: auto;
+    background-image: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: var(--eyebrow-shimmer-base);
+  }
+}
+
+/* Selection cards (chat gallery widget 1) — a subtle accent-tinted hover on
+   each option row. `--row-hover-bg` is set per-row inline (it depends on
+   the runtime theme's accent + card color), plain CSS :hover here because
+   Tailwind's hover: can't take a dynamic color. */
+.selection-row:hover {
+  background-color: var(--row-hover-bg);
+}
+
+/* Task progress (chat gallery widget 3) — once the bar fills, a slow
+   opacity pulse on the fill keeps it reading as "still working" instead of
+   looking stalled. */
+@keyframes task-progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.task-progress-fill {
+  animation: task-progress-pulse 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-progress-fill {
+    animation: none;
   }
 }
 

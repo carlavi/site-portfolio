@@ -14,6 +14,7 @@ import { ReveriToggle } from "@/components/reveri-toggle";
 import { ProjectFooterNav } from "@/components/project-footer-nav";
 import { CareCardsCarousel } from "@/components/care-cards-carousel";
 import { ScanVideoFrame } from "@/components/scan-video-frame";
+import { ChatGalleryPreview } from "@/components/chat-gallery-preview";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { getProject, getAdjacentProjects, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
 
@@ -193,16 +194,24 @@ function renderSection(section: Section, index: number) {
   }
 }
 
-function GalleryImage({ src, alt }: { src?: string; alt: string }) {
+function GalleryImage({ src, alt, caption, aspect }: { src?: string; alt: string; caption?: string; aspect?: string }) {
+  const isVideo = src?.endsWith(".webm") || src?.endsWith(".mp4");
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden aspect-[16/9]">
-      {src ? (
-        <Image src={src} alt={alt} fill className="object-cover" />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-secondary">
-          <span className="text-sm text-muted-foreground">{alt}</span>
-        </div>
-      )}
+    <div>
+      <div className="relative w-full rounded-2xl overflow-hidden" style={{ aspectRatio: aspect ?? "16/9" }}>
+        {src ? (
+          isVideo ? (
+            <video src={src} className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline />
+          ) : (
+            <Image src={src} alt={alt} fill className="object-cover" />
+          )
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+            <span className="text-sm text-muted-foreground">{alt}</span>
+          </div>
+        )}
+      </div>
+      {caption && <p className="mt-3 text-xs text-right text-muted-foreground">{caption}</p>}
     </div>
   );
 }
@@ -387,7 +396,7 @@ function DocumentPair({ bg, documents }: { bg: FrameBg; documents: [{ src?: stri
 function renderGallerySection(section: GallerySection, index: number) {
   switch (section.type) {
     case "image":
-      return <GalleryImage key={index} src={section.src} alt={section.alt} />;
+      return <GalleryImage key={index} src={section.src} alt={section.alt} caption={section.caption} aspect={section.aspect} />;
     case "image-pair":
       return (
         <div key={index} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -428,6 +437,27 @@ function renderGallerySection(section: GallerySection, index: number) {
           </div>
         </div>
       );
+    case "custom":
+      if (section.component === "chat-gallery") {
+        return (
+          <div key={index} className="flex flex-col gap-8">
+            {(section.heading || section.body) && (
+              <div className={TEXT_WIDTH}>
+                {section.heading && <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>}
+                {section.body && (
+                  <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
+                    {section.body.split("\n\n").map((p, i) => (
+                      <p key={i}>{formatInline(p)}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            <ChatGalleryPreview />
+          </div>
+        );
+      }
+      return null;
   }
 }
 
@@ -462,9 +492,11 @@ export default async function ProjectPage({
             delay={0}
             className={`relative w-full rounded-2xl overflow-hidden mb-10 aspect-[16/9] ${heroFrame && heroFrame.images.length > 1 ? "flex items-center justify-center gap-6 p-8 sm:gap-10 sm:p-12" : ""}`}
             style={
-              heroFrame && heroFrame.images.length > 1
-                ? { backgroundColor: FRAME_BG[heroFrame.bg], border: FRAME_BORDER[heroFrame.bg] }
-                : undefined
+              heroFrame?.gradient
+                ? { backgroundImage: heroFrame.gradient, border: heroFrame.noBorder ? "none" : FRAME_BORDER[heroFrame.bg] }
+                : heroFrame && heroFrame.images.length > 1
+                  ? { backgroundColor: FRAME_BG[heroFrame.bg], border: FRAME_BORDER[heroFrame.bg] }
+                  : undefined
             }
           >
             {heroLayers ? (

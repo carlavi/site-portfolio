@@ -5,6 +5,7 @@ import { ScreenSwap } from "@/components/screen-swap";
 import { ReveriToggle } from "@/components/reveri-toggle";
 import { HoverRevealTile } from "@/components/hover-reveal-tile";
 import { CareCardsCarousel } from "@/components/care-cards-carousel";
+import { ChatGalleryPreview } from "@/components/chat-gallery-preview";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
@@ -133,6 +134,13 @@ export default function Playground() {
               </div>
             </div>
           ))}
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">YaloCode — Chat Gallery</h2>
+          <div className="w-full">
+            <ChatGalleryPreview />
+          </div>
         </section>
       </main>
     </div>

@@ -36,6 +36,16 @@ export default function About() {
               ))}
             </div>
           </div>
+          <div className="flex md:justify-end">
+            <FadeUp delay={140 + paragraphs.length * 50} className="w-full md:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+              <div className="relative w-full aspect-[1066/1600] rounded-2xl overflow-hidden">
+                <Image src="/images/about/vase.jpg" alt="A vase I made in pottery class" fill className="object-cover" />
+              </div>
+              <div className="relative w-full aspect-[1066/1600] rounded-2xl overflow-hidden">
+                <Image src="/images/about/kintsugi.jpg" alt="A piece repaired with kintsugi in pottery class" fill className="object-cover" />
+              </div>
+            </FadeUp>
+          </div>
         </div>
       </main>
     </div>

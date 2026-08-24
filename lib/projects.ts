@@ -10,7 +10,11 @@ export type Section =
 // plain image containers (full-width or side-by-side pairs), and a closing
 // Conclusion. Used by projects that set `overview`/`gallery`/`conclusion`.
 export type GallerySection =
-  | { type: "image"; src?: string; alt: string }
+  // `caption` renders a small footnote below the container (e.g. crediting
+  // source footage that isn't the author's own work). `aspect` overrides the
+  // default 16/9 container ratio — e.g. to match a video's native ratio so
+  // `object-cover` doesn't crop it.
+  | { type: "image"; src?: string; alt: string; caption?: string; aspect?: `${number}/${number}` }
   | { type: "image-pair"; images: [{ src?: string; alt: string }, { src?: string; alt: string }] }
   // A single rounded container in a brand color, holding one or more inset
   // (not cropped) images side by side. Used for screenshots that need to sit
@@ -43,7 +47,13 @@ export type GallerySection =
     }
   // Two document pages staggered/interleaved (one sits higher, one lower)
   // inside one colored container, instead of two evenly centered thumbnails.
-  | { type: "document-pair"; bg: FrameBg; documents: [{ src?: string; alt: string }, { src?: string; alt: string }] };
+  | { type: "document-pair"; bg: FrameBg; documents: [{ src?: string; alt: string }, { src?: string; alt: string }] }
+  // A fully bespoke, self-contained component — no frame/bg wrapper, unlike
+  // `frame`/`frame-pair`'s `custom`, since these manage their own layout,
+  // background, and (for chat-gallery) an interactive switcher.
+  // `heading`/`body` render as a left-aligned title + paragraphs above the
+  // component, same visual weight as the page's Overview/Conclusion.
+  | { type: "custom"; component: "chat-gallery"; heading?: string; body?: string };
 
 // Background options for `frame`/`frame-pair` gallery sections and `heroFrame`.
 // `indigo`/`charcoal` are Reveri's brand shades — kept distinct from `purple`
@@ -77,7 +87,10 @@ export type Project = {
   conclusion?: { heading: string; body: string };
   // When set, replaces the default full-bleed `hero` with a colored container
   // holding one or more inset phone/screen images (e.g. a twin-phone showcase).
-  heroFrame?: { bg: FrameBg; images: { src?: string; alt: string }[] };
+  // `gradient` overrides the solid `bg` swatch with a raw CSS background-image
+  // gradient (e.g. a brand-specific two-color gradient that doesn't fit the
+  // shared FrameBg palette) — applied even for a single inset image.
+  heroFrame?: { bg: FrameBg; images: { src?: string; alt: string }[]; gradient?: string; noBorder?: boolean };
   // When set, replaces `hero` on the case study page with two stacked SVG
   // layers (a background glow/aura behind a smaller foreground mark),
   // both rendered with object-contain so neither gets cropped. `caption`
@@ -86,6 +99,10 @@ export type Project = {
   // Overrides `hero` for the Home gallery card only — for when the case
   // study's own cover shouldn't be a video, but the home thumbnail should.
   homeThumb?: string;
+  // Drops the card's default bg-secondary fill on the Home gallery — for a
+  // hero/homeThumb asset with transparent padding (e.g. a mockup PNG) that
+  // should blend into the page instead of showing a gray backdrop.
+  homeCardTransparent?: boolean;
   // Small floating UI pill/badge overlaid on the Home gallery card, gently
   // fading in and out — Home-only, doesn't appear on the case study page.
   homeBadge?: string;
@@ -94,6 +111,12 @@ export type Project = {
   // hover), the mark/wordmark sit statically over the video instead,
   // smaller and using `wordmarkMobile` for contrast against the video.
   homeHoverReveal?: { sun: string; wordmark: string; wordmarkMobile: string };
+  // When set, the Home card's static image (hero/homeThumb, shown shrunk and
+  // object-contain so it never crops) is covered on hover (desktop only) by
+  // a solid `color` fade-in with the yalocode logomark centered on top.
+  // Simpler cousin of `homeHoverReveal` for a flat mockup image instead of
+  // a looping video.
+  homeHoverColor?: { color: string };
 };
 
 export const projects: Project[] = [
@@ -154,7 +177,13 @@ export const projects: Project[] = [
     number: "01",
     name: "YaloCode",
     coverSpan: "full",
-    hero: "/images/yalocode/yalocode.jpeg",
+    hero: "/images/yalocode/yalocode-cover.png",
+    homeCardTransparent: true,
+    homeHoverColor: { color: "#141414" },
+    heroFrame: {
+      bg: "light",
+      images: [{ src: "/images/yalocode/yalocode-cover.png", alt: "YaloCode test plan widget open on a laptop" }],
+    },
     title: "YaloCode: Making everyone a builder",
     tags: ["AI", "Enterprise", "Product Design"],
     year: "2026 – Present",
@@ -167,13 +196,23 @@ export const projects: Project[] = [
     sections: [],
     overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and worked across the product system, from E2E workflows and information architecture to the behavior that shaped how YaloCode responded. I defined reusable skills, behavioral instructions, response structures, and the rules that determined when the product should respond conversationally or shift into a more structured interaction. I also designed the chat patterns and components that supported those behaviors, and contributed directly to frontend implementation.\n\nYaloCode became a shared workspace across Yalo, supporting Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, it is actively used by around 80% of the company, with a 4.5/5 CSAT, while WhatsApp agent delivery has gone from as much as six months to under two weeks.",
     gallery: [
-      { type: "image", src: "/images/yalocode/yalocode.jpeg", alt: "Who we were designing for" },
-      { type: "image", src: "/images/yalocode/chat-ui-gallery.jpeg", alt: "YaloCode chat UI gallery" },
-      { type: "image", src: "/images/yalocode/widget.jpeg", alt: "YaloCode structured in-chat widget" },
+      {
+        type: "image",
+        src: "/images/yalocode/yalocode.webm",
+        alt: "YaloCode product walkthrough",
+        caption: "Marketing footage courtesy of Yalo",
+        aspect: "3002/1654",
+      },
+      {
+        type: "custom",
+        component: "chat-gallery",
+        heading: "Chat UI Gallery",
+        body: "As YaloCode moved into real workflows, we noticed a trust gap: users would ask the agent to do something, but sometimes complete the task themselves because they weren't fully confident in what it would do.\n\nWe introduced structured widgets that made planned actions visible and reviewable, giving users a chance to understand what would happen next and decide whether to proceed.\n\nBelow is a recreated preview of selected interface patterns.",
+      },
     ],
     conclusion: {
       heading: "Designing for builders",
-      body: "Early on, we noticed that people were already building their own AI workflows: moving between tools like ChatGPT, Claude, Gemini, and Yalo platform to get their work done. The opportunity wasn't to invent a completely new way of working, but to bring those behaviors into one place and make them easier to reuse, share, and build on.\n\nThat principle shaped YaloCode from the start. Skills were designed as reusable building blocks, eventually growing into a shared marketplace, while patterns like the chat gallery made successful workflows visible and accessible to others.\n\nFor me, the project reinforced that **good systems don't require everyone to start from scratch**. By designing around behaviors people had already adopted, we could turn individual workflows into shared infrastructure, and make more people across Yalo capable of building for themselves.",
+      body: "Once users could see and review what the agent was doing, the next opportunity was making those workflows easier to reuse, share, and build on.\n\nPeople were already creating their own ways of working across tools like ChatGPT, Claude, Gemini, and Yalo's platform. Instead of asking everyone to start from scratch, we turned those behaviors into reusable building blocks. Skills could be created and shared, eventually growing into a marketplace, while the chat gallery made useful workflows easier for others to discover.\n\nWhat I liked most about this direction was that people didn't have to figure everything out on their own. They could start from something that already worked, adapt it to what they needed, and eventually create something others could use too.",
     },
   },
   {
