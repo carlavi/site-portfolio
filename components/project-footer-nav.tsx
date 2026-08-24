@@ -116,8 +116,8 @@ export function ProjectFooterNav({ prev, next }: { prev: Project; next: Project 
     <div className="mt-8 pb-8">
       <Separator />
       <div className="grid grid-cols-2 gap-4">
-        <NavLink project={prev} align="start" label="Newer" />
-        <NavLink project={next} align="end" label="Older" />
+        <NavLink project={prev} align="start" label="Previous" />
+        <NavLink project={next} align="end" label="Next" />
       </div>
     </div>
   );
