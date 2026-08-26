@@ -6,6 +6,8 @@ import { ReveriToggle } from "@/components/reveri-toggle";
 import { HoverRevealTile } from "@/components/hover-reveal-tile";
 import { CareCardsCarousel } from "@/components/care-cards-carousel";
 import { ChatGalleryPreview } from "@/components/chat-gallery-preview";
+import { PillLink } from "@/components/pill-link";
+import { NotionIcon } from "@/components/notion-icon";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
@@ -114,6 +116,13 @@ export default function Playground() {
               <CareCardsCarousel />
             </div>
           </div>
+        </section>
+
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Helia — pill link (Notion icon, green wash, neutral text)</h2>
+          <PillLink href="#" external={false} accent="#577A4D" icon={<NotionIcon />}>
+            Read the full write-up on Notion
+          </PillLink>
         </section>
 
         <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-10 px-4`}>

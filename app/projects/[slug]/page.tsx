@@ -15,6 +15,8 @@ import { ProjectFooterNav } from "@/components/project-footer-nav";
 import { CareCardsCarousel } from "@/components/care-cards-carousel";
 import { ScanVideoFrame } from "@/components/scan-video-frame";
 import { ChatGalleryPreview } from "@/components/chat-gallery-preview";
+import { PillLink } from "@/components/pill-link";
+import { NotionIcon } from "@/components/notion-icon";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { getProject, getAdjacentProjects, projects, type Section, type GallerySection, type FrameBg } from "@/lib/projects";
 
@@ -624,6 +626,13 @@ export default async function ProjectPage({
                     <p key={i}>{formatInline(p)}</p>
                   ))}
                 </div>
+                {conclusion!.link && (
+                  <div className="mt-6">
+                    <PillLink href={conclusion!.link.href} accent="#577A4D" icon={<NotionIcon />}>
+                      {conclusion!.link.label}
+                    </PillLink>
+                  </div>
+                )}
               </FadeUp>
             </>
           ) : (
