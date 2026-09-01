@@ -170,7 +170,6 @@ export const projects: Project[] = [
     conclusion: {
       heading: "Taking Helia into the real world",
       body: "One of the most useful parts of building Helia has been seeing people interact with it outside of a test or a screen. At an in-person community event, people adopted plants, added them to their garden, asked questions, and started conversations with them on the spot. Watching that happen made the product feel very different from something we were simply designing and building.\n\nI never expected to take an app all the way to production without a dedicated frontend developer. Being able to design something and then build much of it myself changed how I think about the line between design and implementation.\n\nWhat I love most about Helia is how varied the work is. One day it's product design, another it's merch or an in-person event, and then it's back to the app, changing what we built based on what we learned.",
-      link: { href: "https://app.notion.com/p/carlacherry/Growth-Case-Study-Helia-Paid-Acquisition-3c84326924e781f5ae94c3f38b8680a6?source=copy_link", label: "Growth Case Study" },
     },
   },
   {
