@@ -35,13 +35,13 @@ export function HoverRevealTile({
       <div className="absolute inset-0 bg-black/[0.08] transition-opacity duration-500 sm:group-hover:opacity-0" />
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 sm:gap-6">
         <div className="relative h-[94px] w-[94px] sm:h-[130px] sm:w-[130px] animate-spin-slow">
-          <Image src={sun} alt="" fill className="object-contain" />
+          <Image src={sun} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
         </div>
         <div className="relative h-[38px] w-[156px] sm:hidden">
-          <Image src={wordmarkMobile} alt={alt} fill className="object-contain" />
+          <Image src={wordmarkMobile} alt={alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
         </div>
         <div className="relative hidden h-[54px] w-[216px] sm:block sm:opacity-0 transition-opacity duration-500 sm:group-hover:opacity-100">
-          <Image src={wordmark} alt={alt} fill className="object-contain" />
+          <Image src={wordmark} alt={alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
         </div>
       </div>
     </div>

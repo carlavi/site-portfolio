@@ -53,7 +53,13 @@ export type GallerySection =
   // background, and (for chat-gallery) an interactive switcher.
   // `heading`/`body` render as a left-aligned title + paragraphs above the
   // component, same visual weight as the page's Overview/Conclusion.
-  | { type: "custom"; component: "chat-gallery"; heading?: string; body?: string };
+  | { type: "custom"; component: "chat-gallery"; heading?: string; body?: string }
+  // Text-only block: a heading + intro line, then a row of numbered
+  // highlights (eyebrow / title / body), e.g. "Project at a glance".
+  | { type: "highlights"; heading?: string; intro?: string; body?: string; items: { eyebrow: string; title: string; body: string }[] }
+  // Text-only block between media: small label, a title, then paragraphs
+  // (split on blank lines, `**bold**` supported).
+  | { type: "text"; heading: string; title?: string; body: string };
 
 // Background options for `frame`/`frame-pair` gallery sections and `heroFrame`.
 // `indigo`/`charcoal` are Reveri's brand shades — kept distinct from `purple`
@@ -141,13 +147,35 @@ export const projects: Project[] = [
       year: "January 2026 – Present",
     },
     sections: [],
-    overview: "Helia started with a simple question: **what if plants could talk?** We created a plant care app that combines identification, curated guidance, and conversation to make everyday care feel more personal and approachable.\n\nAs co-founder and product designer, I've shaped Helia from early concept to a live iOS and Android product working across product strategy, research, interaction design, brand, frontend implementation, pricing, and growth.\n\nWhat began as an experiment in using emerging AI tools to make plant care feel more personal has grown into a fully functioning product, with 530+ users, 600+ plant analysis, and a place in Stage 2 of 500 Global's selection process.",
+    overview: "Helia started with a simple question: **what if plants could talk?** We created a plant care app that combines identification, curated guidance, and conversation to make everyday care feel more personal and approachable.\n\nAs co-founder and product designer, I've shaped Helia from early concept to a live iOS and Android product, working across product strategy, research, interaction design, brand, frontend implementation, pricing, and growth.\n\nWhat began as an experiment using emerging AI tools to make plant care feel more personal has grown into a live product with over 1,000 users, a 71% activation rate, and a place in Stage 2 of 500 Global's selection process.",
     gallery: [
       {
         type: "frame-pair",
         frames: [
-          { bg: "gray", custom: "care-cards", alt: "Care guidance cards — water, light, fertilizer, temperature, humidity" },
+          { bg: "gray", src: "/images/helia/chat-hands.jpg", alt: "Chatting with a Monstera in the Helia app", fill: true },
           { bg: "gray", src: "/images/helia/app-store.png", alt: "Helia on the App Store", bgColor: "#FFC845" },
+        ],
+      },
+      {
+        type: "highlights",
+        heading: "Project at a glance",
+        intro: "The thinking behind the experience.",
+        items: [
+          {
+            eyebrow: "01 / Design philosophy",
+            title: "Making plant care feel more personal",
+            body: "Most plant care apps focus on tracking tasks. We wanted something more approachable, designing Helia around the relationship between people and their plants through conversation, personality, and guidance.",
+          },
+          {
+            eyebrow: "02 / Interaction design",
+            title: "Helping users know what to ask",
+            body: "Users were scanning plants but not starting conversations. We explored whether they simply didn't know what to ask. Contextual conversation starters helped increase chat initiation from 33% to 73% across measured periods.",
+          },
+          {
+            eyebrow: "03 / Research & validation",
+            title: "Challenging our assumptions",
+            body: "Observing how people used Helia challenged our product structure. We developed two hypotheses and used user interviews to explore which direction better aligned with their needs.",
+          },
         ],
       },
       {
@@ -160,16 +188,61 @@ export const projects: Project[] = [
         custom: "scan-video",
       },
       {
+        type: "text",
+        heading: "Designing the first experience",
+        title: "Making plant care feel less like a task",
+        body: "Most plant care apps focus on reminders, tracking, and schedules. We wanted to explore a more personal approach, one that helps people build a relationship with their plants rather than simply manage them.\n\nOur initial hypothesis was that combining AI-powered guidance with conversation could make plant care more approachable. We translated this into three simple interactions: identify a plant, understand its needs, and start a conversation.",
+      },
+      {
+        type: "image",
+        alt: "First experience: identify, understand, converse (placeholder)",
+      },
+      {
+        type: "text",
+        heading: "Learning & Iterating",
+        title: "Increasing chat initiation from 33% to 73%",
+        body: "As more people started using Helia, we noticed that many scanned their plants but never started a conversation. We hypothesized that users simply didn't know what to ask.\n\nTo explore this, we analyzed existing conversations and identified three recurring topics: **general care, watering, and plant placement.** These patterns helped us design contextual conversation starters based on real user needs.",
+      },
+      {
         type: "image-pair",
         images: [
           { src: "/images/helia/sun.jpg", alt: "Product screenshot" },
           { src: "/images/helia/brand.jpg", alt: "Product screenshot" },
         ],
       },
+      {
+        type: "highlights",
+        intro: "Designing the next iteration.",
+        body: "Building and launching Helia has given us a clearer understanding of both our users and the technology behind the product. These learnings are shaping our next major iteration across three areas.",
+        items: [
+          {
+            eyebrow: "01",
+            title: "From Flutter to native",
+            body: "What we've learned through implementation is helping us move toward native iOS and Android experiences, giving us more flexibility to design and build for each platform.",
+          },
+          {
+            eyebrow: "02",
+            title: "Designing for plant collections",
+            body: "We found that many users have 10+ plants, and checking each one takes time. This made us rethink how Helia could give users a better overview of their entire collection, while still making it easy to care for each plant.",
+          },
+          {
+            eyebrow: "03",
+            title: "Context matters",
+            body: "User interviews revealed a common frustration: generic plant care advice often fails to consider a plant's environment. We're introducing indoor/outdoor placement and location to make guidance more relevant to each plant's needs.",
+          },
+        ],
+      },
+      {
+        type: "image-pair",
+        images: [
+          { alt: "Next iteration (placeholder)" },
+          { alt: "Next iteration (placeholder)" },
+        ],
+      },
     ],
     conclusion: {
-      heading: "Taking Helia into the real world",
-      body: "One of the most useful parts of building Helia has been seeing people interact with it outside of a test or a screen. At an in-person community event, people adopted plants, added them to their garden, asked questions, and started conversations with them on the spot. Watching that happen made the product feel very different from something we were simply designing and building.\n\nI never expected to take an app all the way to production without a dedicated frontend developer. Being able to design something and then build much of it myself changed how I think about the line between design and implementation.\n\nWhat I love most about Helia is how varied the work is. One day it's product design, another it's merch or an in-person event, and then it's back to the app, changing what we built based on what we learned.",
+      heading: "Learning beyond the screen",
+      body: "One of the most valuable parts of building Helia has been seeing people use it in real life. From watching people interact with their plants at community events to understanding their behavior through analytics and interviews, each interaction has challenged something we thought we knew.\n\nBuilding Helia has also changed how I approach design. I've learned to balance ideas with real user needs, make decisions with limited resources, and understand that launching a product is just the beginning.\n\nWhat I enjoy most is being involved in every part of the process, from designing and building to talking with users and figuring out what comes next.",
     },
   },
   {

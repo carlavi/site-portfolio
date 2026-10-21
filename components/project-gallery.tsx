@@ -20,10 +20,10 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
         {heroLayers ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative w-[91%] aspect-[882/497] animate-breathe-soft">
-              <Image src={heroLayers.bg} alt="" fill className="object-contain" />
+              <Image src={heroLayers.bg} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-[29%] aspect-square animate-breathe">
-                  <Image src={heroLayers.fg} alt={project.name} fill className="object-contain" />
+                  <Image src={heroLayers.fg} alt={project.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
                 </div>
               </div>
             </div>
@@ -42,7 +42,7 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
           isVideo ? (
             <video src={media} className="absolute inset-0 w-full h-full object-cover sm:scale-[1.15]" autoPlay loop muted playsInline />
           ) : (
-            <Image src={media} alt={project.name} fill className="object-cover" />
+            <Image src={media} alt={project.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
           )
         ) : null}
         {homeBadge && (
@@ -51,7 +51,7 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
               className="relative w-[34%] aspect-[166/62] animate-fade-pulse"
               style={{ filter: "drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25))" }}
             >
-              <Image src={homeBadge} alt="" fill className="object-contain" />
+              <Image src={homeBadge} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
             </div>
           </div>
         )}
@@ -63,33 +63,38 @@ function Tile({ project, aspect }: { project: Project; aspect: string }) {
   );
 }
 
-function buildRows(projects: Project[]): Project[][] {
-  const rows: Project[][] = [];
-  let i = 0;
-  while (i < projects.length) {
-    const project = projects[i];
-    if (project.coverSpan === "full") {
-      rows.push([project]);
-      i += 1;
-    } else {
-      rows.push(projects.slice(i, i + 2));
-      i += 2;
-    }
-  }
-  return rows;
-}
+// Masonry: cycling aspect ratios give the columns their staggered, variable heights.
+const ASPECTS = ["aspect-[4/5]", "aspect-square", "aspect-[3/4]", "aspect-[5/4]", "aspect-[4/5]", "aspect-[1/1]"];
+
+const COLUMNS = 3;
 
 export function ProjectGallery({ projects }: { projects: Project[] }) {
-  const rows = buildRows(projects);
+  // Deal projects round-robin into columns so the order reads left → right.
+  // Below lg the columns become `contents` and `order` restores the original sequence in a plain grid.
+  const columns = Array.from({ length: COLUMNS }, (_, c) =>
+    projects.map((project, i) => ({ project, i })).filter(({ i }) => i % COLUMNS === c),
+  );
 
   return (
-    <div className="flex flex-col gap-10 sm:gap-16">
-      {rows.map((row, i) => (
-        <FadeUp key={row[0].slug} delay={i === 0 ? 0 : 60} className="flex flex-col sm:flex-row gap-8 sm:gap-16">
-          {row.map((project) => (
-            <Tile key={project.slug} project={project} aspect={row.length === 1 ? "aspect-square sm:aspect-[16/9]" : "aspect-square"} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-6 md:gap-8">
+      {columns.map((column, c) => (
+        <div key={c} className="contents lg:flex lg:flex-1 lg:flex-col lg:gap-8">
+          {column.map(({ project, i }) => (
+            <FadeUp
+              key={project.slug}
+              // First row peeks above the fold, so it plays right after the hero on load;
+              // the rest rise in on scroll, staggered by column.
+              immediate={i < COLUMNS}
+              delay={i < COLUMNS ? 200 + c * 80 : c * 80}
+              offset={i < COLUMNS ? 16 : 40}
+              duration={i < COLUMNS ? 0.5 : 0.7}
+              className="min-w-0"
+              style={{ order: i }}
+            >
+              <Tile project={project} aspect={ASPECTS[i % ASPECTS.length]} />
+            </FadeUp>
           ))}
-        </FadeUp>
+        </div>
       ))}
     </div>
   );

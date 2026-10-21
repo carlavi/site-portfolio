@@ -2,3 +2,4 @@
 export const TEXT_WIDTH = "max-w-2xl"; // prose / reading columns
 export const MEDIA_WIDTH = "max-w-5xl"; // hero, images, page container
 export const CASE_STUDY_WIDTH = "max-w-6xl"; // wider, image-forward container for project pages
+export const HOME_WIDTH = "max-w-screen-2xl"; // home: nav, hero and 3-column masonry gallery

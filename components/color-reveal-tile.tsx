@@ -16,7 +16,7 @@ export function ColorRevealTile({
   return (
     <div className="absolute inset-0">
       <div className="absolute inset-0 scale-[0.8625]">
-        <Image src={image} alt={alt} fill className="object-contain" />
+        <Image src={image} alt={alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
       </div>
       <div
         className="absolute inset-0 opacity-0 transition-opacity duration-500 sm:group-hover:opacity-100"

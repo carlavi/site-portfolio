@@ -34,26 +34,26 @@ function ContactDialog({ triggerClassName }: { triggerClassName?: string }) {
   );
 }
 
-export function Sidebar() {
+// Horizontal top nav shared by every page.
+export function Navbar({ className = "" }: { className?: string }) {
   return (
-    <aside className="relative z-10 w-full md:w-56 md:shrink-0 flex flex-row md:flex-col items-center md:items-stretch justify-between px-4 md:px-8 py-4 md:py-10">
+    <header className={`relative z-10 w-full flex items-center justify-between py-4 md:py-6 ${className}`}>
       <FadeUp delay={0}>
-        <Link href="/" className="block">
-          <p className="text-sm font-semibold leading-snug">Carla Vivani</p>
-          <p className="text-sm mt-0.5 hidden md:block" style={{ color: "var(--muted-foreground)" }}>Product Designer</p>
+        <Link href="/" className="block text-[0.9625rem] font-semibold leading-[1.05]">
+          Carla
+          <br />
+          Vivani
         </Link>
       </FadeUp>
 
       {/* Desktop nav */}
       <FadeUp delay={40} className="hidden md:block">
-        <div className="flex flex-col gap-3">
-          <nav className="flex flex-col gap-2">
-            <Button variant="ghost" render={<Link href="/about" />} nativeButton={false} className="justify-start px-2 text-sm font-semibold">
-              About
-            </Button>
-            <ContactDialog triggerClassName="justify-start px-2 text-sm font-semibold" />
-          </nav>
-        </div>
+        <nav className="flex items-center gap-1">
+          <Button variant="ghost" render={<Link href="/about" />} nativeButton={false} className="px-3 text-sm font-semibold">
+            About
+          </Button>
+          <ContactDialog triggerClassName="px-3 text-sm font-semibold" />
+        </nav>
       </FadeUp>
 
       {/* Mobile burger menu */}
@@ -72,6 +72,6 @@ export function Sidebar() {
           </PopoverContent>
         </Popover>
       </FadeUp>
-    </aside>
+    </header>
   );
 }

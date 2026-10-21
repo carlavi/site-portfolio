@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { FadeUp } from "@/components/fade-up";
-import { Sidebar } from "@/components/sidebar";
+import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -460,6 +460,37 @@ function renderGallerySection(section: GallerySection, index: number) {
         );
       }
       return null;
+    case "text":
+      return (
+        <section key={index} className={`${TEXT_WIDTH} py-8 md:py-12`}>
+          <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>
+          {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6">{section.title}</p>}
+          <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
+            {section.body.split("\n\n").map((p, i) => (
+              <p key={i}>{formatInline(p)}</p>
+            ))}
+          </div>
+        </section>
+      );
+    case "highlights":
+      return (
+        <section key={index} className="py-8 md:py-12">
+          <div className={TEXT_WIDTH}>
+            {section.heading && <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>}
+            {section.intro && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground">{section.intro}</p>}
+            {section.body && <p className="mt-6 text-base leading-relaxed text-foreground">{formatInline(section.body)}</p>}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mt-10">
+            {section.items.map((item) => (
+              <div key={item.title} className="border-t border-border pt-5">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground/70 mb-3">{item.eyebrow}</p>
+                <h3 className="text-lg font-medium leading-snug text-foreground mb-2">{item.title}</h3>
+                <p className="text-base leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
   }
 }
 
@@ -482,12 +513,16 @@ export default async function ProjectPage({
 
   return (
     <div
-      className={`relative flex flex-col md:flex-row md:h-screen md:overflow-hidden${isDark ? " dark" : ""}`}
+      className={`relative flex-1 flex flex-col${isDark ? " dark" : ""}`}
       style={{ color: "var(--foreground)", backgroundColor: isDark ? "#141414" : undefined }}
     >
-      <Sidebar />
+      <div className="px-4 md:px-12">
+        <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
+          <Navbar />
+        </div>
+      </div>
 
-      <main className="relative z-10 flex-1 md:overflow-y-auto px-4 py-6 md:px-12 md:py-10">
+      <main className="relative z-10 flex-1 px-4 py-6 md:px-12 md:py-10">
         <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
           {/* Hero */}
           <FadeUp

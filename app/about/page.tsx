@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Sidebar } from "@/components/sidebar";
+import { Navbar } from "@/components/navbar";
 import { FadeUp } from "@/components/fade-up";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
@@ -13,11 +13,15 @@ const paragraphs = [
 
 export default function About() {
   return (
-    <div className="relative flex flex-col md:flex-row md:h-screen md:overflow-hidden" style={{ color: "var(--foreground)" }}>
-      <Sidebar />
+    <div className="relative flex-1 flex flex-col" style={{ color: "var(--foreground)" }}>
+      <div className="px-4 md:px-12">
+        <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
+          <Navbar />
+        </div>
+      </div>
 
       {/* Main content */}
-      <main className="relative z-10 flex-1 md:overflow-y-auto px-4 py-6 md:px-12 md:py-10">
+      <main className="relative z-10 flex-1 px-4 py-6 md:px-12 md:py-10">
         <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
           <FadeUp delay={0} className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] mb-10">
             <Image src="/images/about/home.png" alt="Carla Vivani" fill className="object-cover" priority />

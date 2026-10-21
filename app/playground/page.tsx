@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Sidebar } from "@/components/sidebar";
+import { Navbar } from "@/components/navbar";
 import { IOSPointer } from "@/components/ios-pointer";
 import { ScreenSwap } from "@/components/screen-swap";
 import { ReveriToggle } from "@/components/reveri-toggle";
@@ -15,10 +15,14 @@ import { CASE_STUDY_WIDTH } from "@/lib/layout";
 // before porting them into a real case study or Home.
 export default function Playground() {
   return (
-    <div className="relative flex flex-col md:flex-row md:h-screen md:overflow-hidden cursor-none [&_*]:cursor-none!" style={{ color: "var(--foreground)" }}>
+    <div className="relative flex-1 flex flex-col cursor-none [&_*]:cursor-none!" style={{ color: "var(--foreground)" }}>
       <IOSPointer />
-      <Sidebar />
-      <main className="relative z-10 flex-1 flex flex-col items-center gap-20 py-16 md:overflow-y-auto md:py-20">
+      <div className="px-4 md:px-12">
+        <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
+          <Navbar />
+        </div>
+      </div>
+      <main className="relative z-10 flex-1 flex flex-col items-center gap-20 py-16 md:py-20">
         <section className="flex flex-col items-center gap-10">
           <h1 className="text-3xl font-bold">Playground</h1>
           <div className="flex flex-wrap items-center justify-center gap-6">
