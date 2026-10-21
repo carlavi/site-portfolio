@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { FadeUp } from "@/components/fade-up";
+import { HeroTitle } from "@/components/hero-title";
 import { ProjectGallery } from "@/components/project-gallery";
 import { projects } from "@/lib/projects";
 import { HOME_WIDTH } from "@/lib/layout";
@@ -17,14 +18,16 @@ export default function Home() {
         <div className={`${HOME_WIDTH} mx-auto`}>
           {/* Hero — sized to leave the top of the gallery peeking above the fold */}
           <section className="flex flex-col items-center justify-center text-center md:min-h-[calc((100svh-88px-160px)*0.75)] pt-9 pb-9 md:pt-12 md:pb-12">
-            <FadeUp delay={0}>
-              <h1 className="font-semibold tracking-[-0.04em] leading-[1.1] text-[clamp(1.375rem,4.5vw,3.5rem)]">
-                Making complex things
-                <br />
-                feel simple.
-              </h1>
-            </FadeUp>
-            <FadeUp delay={80} className="mt-8 md:mt-10">
+            <HeroTitle
+              lines={["Making complex things", "feel simple."]}
+              className="font-semibold tracking-[-0.04em] leading-[1.1] text-[clamp(1.375rem,4.5vw,3.5rem)]"
+              stagger={70}
+              blur={8}
+              duration={800}
+              shimmerEvery={10}
+              shimmerStrength={0.35}
+            />
+            <FadeUp delay={500} className="mt-8 md:mt-10">
               <p className="max-w-xl mx-auto text-[0.9rem] md:text-base leading-relaxed" style={{ color: "var(--foreground)" }}>
                 I&rsquo;m a product designer with 10+ years of experience across fintech, SaaS, and startups. I work from early
                 product ideas to launch, turning complex problems into clear, thoughtful experiences.

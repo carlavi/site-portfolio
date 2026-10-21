@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
 import { IOSPointer } from "@/components/ios-pointer";
+import { HeroTitleDemo } from "@/components/hero-title-demo";
 import { ScreenSwap } from "@/components/screen-swap";
 import { ReveriToggle } from "@/components/reveri-toggle";
 import { HoverRevealTile } from "@/components/hover-reveal-tile";
@@ -23,6 +24,40 @@ export default function Playground() {
         </div>
       </div>
       <main className="relative z-10 flex-1 flex flex-col items-center gap-20 py-16 md:py-20">
+        <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-6 px-4`}>
+          <h2 className="text-sm text-muted-foreground/70">Home hero title — blur-in on load + periodic shimmer</h2>
+          <HeroTitleDemo
+            label="A · Sutil (shimmer cada 10s)"
+            lines={["Making complex things", "feel simple."]}
+            className="font-semibold tracking-[-0.04em] leading-[1.1] text-[clamp(1.375rem,4.5vw,3.5rem)] text-center"
+            stagger={70}
+            blur={8}
+            duration={800}
+            shimmerEvery={10}
+            shimmerStrength={0.35}
+          />
+          <HeroTitleDemo
+            label="B · Balanceado — recomendado (shimmer cada 8s)"
+            lines={["Making complex things", "feel simple."]}
+            className="font-semibold tracking-[-0.04em] leading-[1.1] text-[clamp(1.375rem,4.5vw,3.5rem)] text-center"
+            stagger={90}
+            blur={10}
+            duration={900}
+            shimmerEvery={8}
+            shimmerStrength={0.5}
+          />
+          <HeroTitleDemo
+            label="C · Marcado (shimmer cada 6s)"
+            lines={["Making complex things", "feel simple."]}
+            className="font-semibold tracking-[-0.04em] leading-[1.1] text-[clamp(1.375rem,4.5vw,3.5rem)] text-center"
+            stagger={120}
+            blur={14}
+            duration={1100}
+            shimmerEvery={6}
+            shimmerStrength={0.7}
+          />
+        </section>
+
         <section className="flex flex-col items-center gap-10">
           <h1 className="text-3xl font-bold">Playground</h1>
           <div className="flex flex-wrap items-center justify-center gap-6">
