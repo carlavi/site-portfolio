@@ -21,7 +21,9 @@ export type GallerySection =
   // on a colored backdrop instead of bleeding full-width.
   // `fill`: media bleeds edge to edge (no inner padding, no border) instead
   // of sitting inset with a margin — the rounded corners act as a mask.
-  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string; custom?: "scan-video" }
+  // `elevated`: the inset image gets its own rounded corners + drop shadow so
+  // it lifts off the backdrop (needs the image's `width`/`height` to size it).
+  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string; width?: number; height?: number }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string; custom?: "scan-video"; elevated?: boolean }
   // Two independent colored containers side by side, each with its own bg.
   // `fill` on a frame bleeds its media edge to edge (cropped, no inset
   // padding) instead of sitting inset with a margin — e.g. a photo that's
@@ -53,7 +55,7 @@ export type GallerySection =
   // background, and (for chat-gallery) an interactive switcher.
   // `heading`/`body` render as a left-aligned title + paragraphs above the
   // component, same visual weight as the page's Overview/Conclusion.
-  | { type: "custom"; component: "chat-gallery"; heading?: string; body?: string }
+  | { type: "custom"; component: "chat-gallery"; heading?: string; title?: string; body?: string }
   // Text-only block: a heading + intro line, then a row of numbered
   // highlights (eyebrow / title / body), e.g. "Project at a glance".
   | { type: "highlights"; heading?: string; intro?: string; body?: string; items: { eyebrow: string; title: string; body: string }[] }
@@ -277,15 +279,63 @@ export const projects: Project[] = [
         aspect: "3002/1654",
       },
       {
+        type: "highlights",
+        heading: "Project at a glance",
+        intro: "The thinking behind the experience.",
+        items: [
+          {
+            eyebrow: "01 / Interaction design",
+            title: "Making AI actions easier to understand",
+            body: "Users weren't always confident about what the agent would do next. We introduced structured interactions that made actions clearer and gave users more control over when to proceed.",
+          },
+          {
+            eyebrow: "02 / Design systems",
+            title: "Designing beyond chat",
+            body: "Not every interaction works best as a conversation. We developed reusable UI patterns that help agents communicate information, guide decisions, and support different workflows.",
+          },
+          {
+            eyebrow: "03 / Agent behavior design",
+            title: "Shaping how the agent works",
+            body: "Beyond the interface, I helped define how YaloCode responds and guides users. From writing agent skills to designing conversation flows and response structures, I worked on making its behavior more predictable, useful, and easier to understand.",
+          },
+        ],
+      },
+      {
+        type: "frame",
+        bg: "gray",
+        images: [{ src: "/images/yalocode/home-screen.png", alt: "YaloCode home: start a conversation to plan or build an agent", width: 1600, height: 949 }],
+        elevated: true,
+      },
+      {
+        type: "text",
+        heading: "Designing the experience",
+        title: "Making complex tools more accessible",
+        body: "Building conversational agents traditionally required technical knowledge and working across multiple tools. YaloCode aimed to make that process more accessible through a conversational experience.\n\nThe challenge was finding the right balance between flexibility and simplicity. We wanted people to build and manage agents without having to understand every technical detail behind them.",
+      },
+      {
+        type: "text",
+        heading: "Learning & Iterating",
+        title: "Designing for trust and control",
+        body: "As YaloCode moved into real workflows, we noticed that users sometimes preferred completing tasks themselves rather than relying on the agent. They weren't always sure what would happen after making a request.\n\nTo address this, we introduced structured widgets that made the agent's next steps visible, allowing users to review suggested actions and decide when to proceed.\n\nRather than relying on conversation alone, we gave users more clarity and control over their interactions.",
+      },
+      {
         type: "custom",
         component: "chat-gallery",
-        heading: "Chat UI Gallery",
-        body: "As YaloCode moved into real workflows, we noticed a trust gap: users would ask the agent to do something, but sometimes complete the task themselves because they weren't fully confident in what it would do.\n\nWe introduced structured widgets that made planned actions visible and reviewable, giving users a chance to understand what would happen next and decide whether to proceed.\n\nBelow is a recreated preview of selected interface patterns.",
+      },
+      {
+        type: "text",
+        heading: "Designing for builders",
+        title: "Making it easier to build on what's already working",
+        body: "As people began creating their own agents, we noticed they were already using tools like ChatGPT, Claude, and YaloCode to create and share skills.\n\nInstead of asking everyone to start from scratch, we explored a gallery where users could discover existing skills, adapt them to their needs, and share their own.\n\nThis shifted the experience from building everything yourself to learning from what others had already created.",
+      },
+      {
+        type: "image",
+        alt: "Skills gallery (placeholder)",
       },
     ],
     conclusion: {
-      heading: "Designing for builders",
-      body: "Once users could see and review what the agent was doing, the next opportunity was making those workflows easier to reuse, share, and build on.\n\nPeople were already creating their own ways of working across tools like ChatGPT, Claude, Gemini, and Yalo's platform. Instead of asking everyone to start from scratch, we turned those behaviors into reusable building blocks. Skills could be created and shared, eventually growing into a marketplace, while the chat gallery made useful workflows easier for others to discover.\n\nWhat I liked most about this direction was that people didn't have to figure everything out on their own. They could start from something that already worked, adapt it to what they needed, and eventually create something others could use too.",
+      heading: "Beyond the interface",
+      body: "What I enjoyed most about YaloCode was working beyond traditional product design, from shaping how the agent behaves to designing the interactions that make it easier to use.\n\nIt changed how I think about designing for AI: it's not just about what the agent can do, but how people understand, trust, and build on those capabilities.",
     },
   },
   {

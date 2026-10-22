@@ -232,7 +232,7 @@ function GalleryPairImage({ src, alt }: { src?: string; alt: string }) {
   );
 }
 
-function FrameInsetImage({ src, alt, bg, radius }: { src?: string; alt: string; bg: FrameBg; radius?: number }) {
+function FrameInsetImage({ src, alt, bg, radius, width, height, elevated }: { src?: string; alt: string; bg: FrameBg; radius?: number; width?: number; height?: number; elevated?: boolean }) {
   const isVideo = src?.endsWith(".webm") || src?.endsWith(".mp4");
   return (
     <div className="relative flex-1 h-full min-w-0">
@@ -250,9 +250,24 @@ function FrameInsetImage({ src, alt, bg, radius }: { src?: string; alt: string; 
           // container's width, not height — useless for evening out the
           // gap around a portrait phone screenshot inside a squarer box.
           // `inset` percentages correctly use each axis's own dimension.
-          <div className="absolute inset-[8%]">
-            <Image src={src} alt={alt} fill className="object-contain" />
-          </div>
+          elevated && width && height ? (
+            // Sized to the image's own aspect (not object-contain) so the
+            // rounded corners and shadow hug its visible edges.
+            <div className="absolute inset-[2.5%] flex items-center justify-center">
+              <Image
+                src={src}
+                alt={alt}
+                width={width}
+                height={height}
+                sizes="(min-width: 1152px) 1000px, 90vw"
+                className="h-auto w-auto max-h-full max-w-full rounded-xl shadow-[0_2px_6px_rgba(0,0,0,0.04),0_16px_48px_rgba(0,0,0,0.12)]"
+              />
+            </div>
+          ) : (
+            <div className="absolute inset-[8%]">
+              <Image src={src} alt={alt} fill className="object-contain" />
+            </div>
+          )
         )
       ) : (
         <div className="absolute inset-0 flex items-center justify-center px-6">
@@ -289,13 +304,15 @@ function Frame({
   radius,
   noBorder,
   bgColor,
+  elevated,
 }: {
   bg: FrameBg;
-  images: { src?: string; alt: string }[];
+  images: { src?: string; alt: string; width?: number; height?: number }[];
   fill?: boolean;
   radius?: number;
   noBorder?: boolean;
   bgColor?: string;
+  elevated?: boolean;
 }) {
   if (fill) {
     return (
@@ -312,11 +329,11 @@ function Frame({
 
   return (
     <div
-      className="relative w-full rounded-2xl overflow-hidden aspect-[16/9] flex items-stretch gap-2"
+      className={`relative w-full rounded-2xl overflow-hidden ${elevated ? "aspect-[16/10]" : "aspect-[16/9]"} flex items-stretch gap-2`}
       style={{ backgroundColor: bgColor ?? FRAME_BG[bg], border: noBorder ? "none" : FRAME_BORDER[bg], borderRadius: radius }}
     >
       {images.map((img, i) => (
-        <FrameInsetImage key={i} src={img.src} alt={img.alt} bg={bg} radius={radius} />
+        <FrameInsetImage key={i} src={img.src} alt={img.alt} bg={bg} radius={radius} width={img.width} height={img.height} elevated={elevated} />
       ))}
     </div>
   );
@@ -411,7 +428,7 @@ function renderGallerySection(section: GallerySection, index: number) {
       if (section.custom === "scan-video") {
         return <ScanVideoFrame key={index} src={section.images[0].src!} alt={section.images[0].alt} radius={section.radius} />;
       }
-      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} radius={section.radius} noBorder={section.noBorder} bgColor={section.bgColor} />;
+      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} radius={section.radius} noBorder={section.noBorder} bgColor={section.bgColor} elevated={section.elevated} />;
     case "frame-pair":
       return <FramePair key={index} frames={section.frames} />;
     case "screen-swap":
@@ -443,9 +460,10 @@ function renderGallerySection(section: GallerySection, index: number) {
       if (section.component === "chat-gallery") {
         return (
           <div key={index} className="flex flex-col gap-8">
-            {(section.heading || section.body) && (
+            {(section.heading || section.title || section.body) && (
               <div className={TEXT_WIDTH}>
                 {section.heading && <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>}
+                {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6">{section.title}</p>}
                 {section.body && (
                   <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
                     {section.body.split("\n\n").map((p, i) => (
