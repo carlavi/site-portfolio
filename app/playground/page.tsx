@@ -10,7 +10,9 @@ import { ChatGalleryPreview } from "@/components/chat-gallery-preview";
 import { PillLink } from "@/components/pill-link";
 import { NotionIcon } from "@/components/notion-icon";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { CASE_STUDY_WIDTH } from "@/lib/layout";
+import { ProjectGallery } from "@/components/project-gallery";
+import { projects } from "@/lib/projects";
+import { CASE_STUDY_WIDTH, HOME_WIDTH } from "@/lib/layout";
 
 // Hidden playground — not linked from nav. Test animations/transitions here
 // before porting them into a real case study or Home.
@@ -24,6 +26,14 @@ export default function Playground() {
         </div>
       </div>
       <main className="relative z-10 flex-1 flex flex-col items-center gap-20 py-16 md:py-20">
+        <section className="w-full overflow-x-clip px-4 md:px-12">
+          <div className={`${HOME_WIDTH} mx-auto flex flex-col gap-6`}>
+            <h2 className="text-sm text-muted-foreground/70 text-center">
+              Home grid — cards &ldquo;aterrizan&rdquo; al hacer scroll + hover con sombra (estilo shopify.design)
+            </h2>
+            <ProjectGallery projects={projects} motion="land" />
+          </div>
+        </section>
         <section className={`w-full ${CASE_STUDY_WIDTH} mx-auto flex flex-col items-center gap-6 px-4`}>
           <h2 className="text-sm text-muted-foreground/70">Home hero title — blur-in on load + periodic shimmer</h2>
           <HeroTitleDemo

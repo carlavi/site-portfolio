@@ -248,6 +248,76 @@ export const projects: Project[] = [
     },
   },
   {
+    // Helia's brand & design system work (the main `helia` entry covers product design).
+    // Placeholder — hero, copy and gallery still pending.
+    slug: "helia-brand",
+    number: "08",
+    name: "Helia: Brand & Design System",
+    coverSpan: "full",
+    title: "Helia: Brand & Design System",
+    tags: ["Brand", "Design Systems"],
+    year: "TBD",
+    description: "",
+    meta: {
+      client: "Helia",
+      role: "TBD",
+      year: "TBD",
+    },
+    sections: [],
+    overview: "Overview coming soon.",
+    gallery: [{ type: "image", alt: "Helia brand & design system placeholder" }],
+    conclusion: {
+      heading: "Coming soon",
+      body: "Conclusion coming soon.",
+    },
+  },
+  {
+    // Placeholder — real hero, copy and gallery still pending.
+    slug: "casita",
+    number: "06",
+    name: "Casita",
+    coverSpan: "full",
+    title: "Casita",
+    tags: [],
+    year: "TBD",
+    description: "",
+    meta: {
+      client: "Casita",
+      role: "TBD",
+      year: "TBD",
+    },
+    sections: [],
+    overview: "Overview coming soon.",
+    gallery: [{ type: "image", alt: "Casita placeholder" }],
+    conclusion: {
+      heading: "Coming soon",
+      body: "Conclusion coming soon.",
+    },
+  },
+  {
+    // Placeholder — real hero, copy and gallery still pending.
+    slug: "yalo-sdk",
+    number: "07",
+    name: "Yalo SDK",
+    coverSpan: "full",
+    title: "Yalo SDK",
+    tags: [],
+    year: "TBD",
+    description: "",
+    meta: {
+      client: "Yalo",
+      role: "TBD",
+      year: "TBD",
+    },
+    sections: [],
+    overview: "Overview coming soon.",
+    gallery: [{ type: "image", alt: "Yalo SDK placeholder" }],
+    conclusion: {
+      heading: "Coming soon",
+      body: "Conclusion coming soon.",
+    },
+  },
+  {
     slug: "yalocode",
     number: "01",
     name: "YaloCode",
