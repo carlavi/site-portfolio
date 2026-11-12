@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Component, MessageSquare, Split } from "lucide-react";
 import { notFound } from "next/navigation";
 import { FadeUp } from "@/components/fade-up";
 import { Navbar } from "@/components/navbar";
@@ -14,6 +14,9 @@ import { ReveriToggle } from "@/components/reveri-toggle";
 import { ProjectFooterNav } from "@/components/project-footer-nav";
 import { CareCardsCarousel } from "@/components/care-cards-carousel";
 import { ScanVideoFrame } from "@/components/scan-video-frame";
+import { geistMono } from "@/lib/fonts";
+import { DemoTimeChart } from "@/components/demo-time-chart";
+import { AgentBuilderDiagram } from "@/components/agent-builder-diagram";
 import { ChatGalleryPreview } from "@/components/chat-gallery-preview";
 import { PillLink } from "@/components/pill-link";
 import { NotionIcon } from "@/components/notion-icon";
@@ -305,6 +308,7 @@ function Frame({
   noBorder,
   bgColor,
   elevated,
+  bare,
 }: {
   bg: FrameBg;
   images: { src?: string; alt: string; width?: number; height?: number }[];
@@ -313,7 +317,28 @@ function Frame({
   noBorder?: boolean;
   bgColor?: string;
   elevated?: boolean;
+  bare?: boolean;
 }) {
+  if (bare) {
+    // No wrapper (and no overflow-hidden), so the shadow isn't clipped.
+    return (
+      <div className="flex flex-col gap-4">
+        {images.map((img, i) =>
+          img.src ? (
+            <Image
+              key={i}
+              src={img.src}
+              alt={img.alt}
+              width={img.width ?? 1920}
+              height={img.height ?? 1080}
+              sizes="(min-width: 1152px) 1152px, 100vw"
+              className={`h-auto w-full rounded-xl ${elevated ? "shadow-[0_2px_6px_rgba(0,0,0,0.04),0_16px_48px_rgba(0,0,0,0.12)]" : ""}`}
+            />
+          ) : null,
+        )}
+      </div>
+    );
+  }
   if (fill) {
     return (
       <div
@@ -343,8 +368,8 @@ function FramePair({
   frames,
 }: {
   frames: [
-    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
-    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
+    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards" | "demo-time-chart"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
+    { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards" | "demo-time-chart"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
   ];
 }) {
   return (
@@ -365,6 +390,8 @@ function FramePair({
               <ReveriToggle />
             ) : frame.custom === "care-cards" ? (
               <CareCardsCarousel />
+            ) : frame.custom === "demo-time-chart" ? (
+              <DemoTimeChart />
             ) : frame.fill ? (
               <FrameFillMedia src={frame.src} alt={frame.alt} bg={frame.bg} />
             ) : (
@@ -412,6 +439,8 @@ function DocumentPair({ bg, documents }: { bg: FrameBg; documents: [{ src?: stri
   );
 }
 
+const HIGHLIGHT_ICONS = { split: Split, component: Component, message: MessageSquare } as const;
+
 function renderGallerySection(section: GallerySection, index: number) {
   switch (section.type) {
     case "image":
@@ -428,9 +457,16 @@ function renderGallerySection(section: GallerySection, index: number) {
       if (section.custom === "scan-video") {
         return <ScanVideoFrame key={index} src={section.images[0].src!} alt={section.images[0].alt} radius={section.radius} />;
       }
-      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} radius={section.radius} noBorder={section.noBorder} bgColor={section.bgColor} elevated={section.elevated} />;
+      return <Frame key={index} bg={section.bg} images={section.images} fill={section.fill} radius={section.radius} noBorder={section.noBorder} bgColor={section.bgColor} elevated={section.elevated} bare={section.bare} />;
     case "frame-pair":
-      return <FramePair key={index} frames={section.frames} />;
+      return (
+        <div key={index}>
+          <FramePair frames={section.frames} />
+          {section.caption && (
+            <p className={`${TEXT_WIDTH} mt-4 text-sm leading-relaxed text-muted-foreground`}>{formatInline(section.caption)}</p>
+          )}
+        </div>
+      );
     case "screen-swap":
       return (
         <div key={index} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -463,7 +499,7 @@ function renderGallerySection(section: GallerySection, index: number) {
             {(section.heading || section.title || section.body) && (
               <div className={TEXT_WIDTH}>
                 {section.heading && <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>}
-                {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6">{section.title}</p>}
+                {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6 whitespace-pre-line">{section.title}</p>}
                 {section.body && (
                   <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
                     {section.body.split("\n\n").map((p, i) => (
@@ -477,12 +513,15 @@ function renderGallerySection(section: GallerySection, index: number) {
           </div>
         );
       }
+      if (section.component === "agent-builder-diagram") {
+        return <AgentBuilderDiagram key={index} />;
+      }
       return null;
     case "text":
       return (
         <section key={index} className={`${TEXT_WIDTH} py-8 md:py-12`}>
           <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>
-          {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6">{section.title}</p>}
+          {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6 whitespace-pre-line">{section.title}</p>}
           <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
             {section.body.split("\n\n").map((p, i) => (
               <p key={i}>{formatInline(p)}</p>
@@ -498,6 +537,37 @@ function renderGallerySection(section: GallerySection, index: number) {
             {section.intro && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground">{section.intro}</p>}
             {section.body && <p className="mt-6 text-base leading-relaxed text-foreground">{formatInline(section.body)}</p>}
           </div>
+          {section.cards ? (
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-3 mt-10 ${geistMono.className}`}>
+              {section.items.map((item) => {
+                const [num, ...rest] = item.eyebrow.split(" / ");
+                const label = rest.join(" / ");
+                return (
+                  <div key={item.title} className="flex flex-col rounded-2xl bg-[#F3F3F3] p-6 md:p-7">
+                    {item.icon && (() => {
+                      const Icon = HIGHLIGHT_ICONS[item.icon];
+                      return <Icon className="size-5 mb-4" strokeWidth={1.5} style={{ color: section.accent }} aria-hidden />;
+                    })()}
+                    <p className="text-[12px] text-neutral-500">
+                      {item.icon && label ? (
+                        label
+                      ) : label ? (
+                        <>
+                          <span style={{ color: section.accent }}>{num}</span>
+                          <span className="mx-1.5 text-neutral-300">/</span>
+                          {label}
+                        </>
+                      ) : (
+                        item.eyebrow
+                      )}
+                    </p>
+                    <h3 className="mt-8 font-sans text-lg font-medium leading-snug text-neutral-900">{item.title}</h3>
+                    <p className="mt-2 font-sans text-[15px] leading-relaxed text-neutral-500">{item.body}</p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mt-10">
             {section.items.map((item) => (
               <div key={item.title} className="border-t border-border pt-5">
@@ -507,6 +577,7 @@ function renderGallerySection(section: GallerySection, index: number) {
               </div>
             ))}
           </div>
+          )}
         </section>
       );
   }
@@ -524,7 +595,7 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const { title, hero, heroFrame, heroLayers, homeHoverReveal, meta, sections, pageTheme, overview, gallery, conclusion } = project;
+  const { title, hero, heroCaption, heroFrame, heroLayers, homeHoverReveal, meta, sections, pageTheme, overview, gallery, conclusion } = project;
   const isDark = pageTheme === "dark";
   const usesNewTemplate = Boolean(overview && gallery && conclusion);
   const { prev, next } = getAdjacentProjects(slug);
@@ -542,6 +613,18 @@ export default async function ProjectPage({
 
       <main className="relative z-10 flex-1 px-4 py-6 md:px-12 md:py-10">
         <div className={`${CASE_STUDY_WIDTH} mx-auto`}>
+          {/* Back */}
+          <FadeUp delay={0} className="mb-4">
+            <Link
+              href="/"
+              aria-label="Back to projects"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" />
+              Back
+            </Link>
+          </FadeUp>
+
           {/* Hero */}
           <FadeUp
             delay={0}
@@ -600,13 +683,13 @@ export default async function ProjectPage({
                 <>
                   <video
                     src={hero}
-                    className="absolute inset-0 w-full h-full object-cover sm:scale-[1.15]"
+                    className={`absolute inset-0 w-full h-full object-cover ${homeHoverReveal ? "sm:scale-[1.15]" : ""}`}
                     autoPlay
                     loop
                     muted
                     playsInline
                   />
-                  <div className="absolute inset-0 bg-black/[0.08]" />
+                  {homeHoverReveal && <div className="absolute inset-0 bg-black/[0.08]" />}
                   {homeHoverReveal && (
                     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 sm:gap-6">
                       <div className="relative h-[75px] w-[75px] sm:h-[104px] sm:w-[104px] animate-spin-slow-static">
@@ -630,17 +713,10 @@ export default async function ProjectPage({
             ) : (
               <div className="absolute inset-0 bg-secondary" />
             )}
-            <Button
-              variant="secondary"
-              size="icon-sm"
-              render={<Link href="/" />}
-              nativeButton={false}
-              aria-label="Back to projects"
-              className="absolute top-4 left-4 z-10 rounded-full bg-background/70 backdrop-blur-sm hover:bg-background/90"
-            >
-              <ArrowLeft />
-            </Button>
           </FadeUp>
+          {heroCaption && (
+            <p className="-mt-7 mb-10 text-xs text-right text-muted-foreground">{heroCaption}</p>
+          )}
 
           {usesNewTemplate ? (
             <>

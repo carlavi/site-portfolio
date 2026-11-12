@@ -8,7 +8,7 @@ import { resolveTheme, type WidgetTheme } from "@/lib/widget-themes";
 // (suggested action, selection cards, task progress, test plan) is this
 // same eyebrow/title/description/content/CTA structure, just with a
 // different `children` slot in the middle. Typography intentionally departs
-// from the rest of the site (Inter, not General Sans) to read as Yalo's own
+// from the rest of the site (Inter, not Satoshi) to read as Yalo's own
 // product rather than the portfolio. `theme` (mode + accent) swaps the
 // widget's palette — see lib/widget-themes.ts. `width` is per widget type —
 // the chat container it sits in (ChatContext) is always full width, but the

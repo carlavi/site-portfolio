@@ -23,7 +23,9 @@ export type GallerySection =
   // of sitting inset with a margin — the rounded corners act as a mask.
   // `elevated`: the inset image gets its own rounded corners + drop shadow so
   // it lifts off the backdrop (needs the image's `width`/`height` to size it).
-  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string; width?: number; height?: number }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string; custom?: "scan-video"; elevated?: boolean }
+  // `bare`: no container at all — the (elevated) image spans the full content
+  // width at its natural aspect, sitting directly on the page background.
+  | { type: "frame"; bg: FrameBg; images: { src?: string; alt: string; width?: number; height?: number }[]; fill?: boolean; radius?: number; noBorder?: boolean; bgColor?: string; custom?: "scan-video"; elevated?: boolean; bare?: boolean }
   // Two independent colored containers side by side, each with its own bg.
   // `fill` on a frame bleeds its media edge to edge (cropped, no inset
   // padding) instead of sitting inset with a margin — e.g. a photo that's
@@ -34,9 +36,11 @@ export type GallerySection =
   | {
       type: "frame-pair";
       frames: [
-        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
-        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
+        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards" | "demo-time-chart"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
+        { bg: FrameBg; src?: string; alt: string; fill?: boolean; custom?: "reveri-toggle" | "care-cards" | "demo-time-chart"; lottie?: string; caption?: { eyebrow: string; title: string; body: string }; bgColor?: string },
       ];
+      // Optional footnote under the pair (`**bold**` lead-in supported).
+      caption?: string;
     }
   // A single colored container that auto-cycles between two screens with a
   // slide transition, instead of splitting them into two static boxes. An
@@ -55,10 +59,13 @@ export type GallerySection =
   // background, and (for chat-gallery) an interactive switcher.
   // `heading`/`body` render as a left-aligned title + paragraphs above the
   // component, same visual weight as the page's Overview/Conclusion.
-  | { type: "custom"; component: "chat-gallery"; heading?: string; title?: string; body?: string }
+  | { type: "custom"; component: "chat-gallery" | "agent-builder-diagram"; heading?: string; title?: string; body?: string }
   // Text-only block: a heading + intro line, then a row of numbered
   // highlights (eyebrow / title / body), e.g. "Project at a glance".
-  | { type: "highlights"; heading?: string; intro?: string; body?: string; items: { eyebrow: string; title: string; body: string }[] }
+  // `cards`: each highlight sits in its own soft gray card with a mono
+  // eyebrow. An item `icon` (tinted with `accent`) replaces the eyebrow's
+  // "01 /" number; without one, the number takes `accent`.
+  | { type: "highlights"; heading?: string; intro?: string; body?: string; items: { eyebrow: string; title: string; body: string; icon?: "split" | "component" | "message" }[]; cards?: boolean; accent?: string }
   // Text-only block between media: small label, a title, then paragraphs
   // (split on blank lines, `**bold**` supported).
   | { type: "text"; heading: string; title?: string; body: string };
@@ -107,6 +114,8 @@ export type Project = {
   // Overrides `hero` for the Home gallery card only — for when the case
   // study's own cover shouldn't be a video, but the home thumbnail should.
   homeThumb?: string;
+  // Small credit line rendered under the case study hero (e.g. footage source).
+  heroCaption?: string;
   // Drops the card's default bg-secondary fill on the Home gallery — for a
   // hero/homeThumb asset with transparent padding (e.g. a mockup PNG) that
   // should blend into the page instead of showing a gray backdrop.
@@ -322,13 +331,10 @@ export const projects: Project[] = [
     number: "01",
     name: "YaloCode",
     coverSpan: "full",
-    hero: "/images/yalocode/yalocode-cover.png",
+    hero: "/images/yalocode/yalocode.webm",
+    homeThumb: "/images/yalocode/yalocode-cover.png",
     homeCardTransparent: true,
     homeHoverColor: { color: "#141414" },
-    heroFrame: {
-      bg: "light",
-      images: [{ src: "/images/yalocode/yalocode-cover.png", alt: "YaloCode test plan widget open on a laptop" }],
-    },
     title: "YaloCode: Making everyone a builder",
     tags: ["AI", "Enterprise", "Product Design"],
     year: "2026 – Present",
@@ -339,73 +345,88 @@ export const projects: Project[] = [
       year: "February 2026 – July 2026",
     },
     sections: [],
-    overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and worked across the product system, from E2E workflows and information architecture to the behavior that shaped how YaloCode responded. I defined reusable skills, behavioral instructions, response structures, and the rules that determined when the product should respond conversationally or shift into a more structured interaction. I also designed the chat patterns and components that supported those behaviors, and contributed directly to frontend implementation.\n\nYaloCode became a shared workspace across Yalo, supporting Customer Success, Sales, Conversational Design, Engineering, and external implementation partners. Today, it is actively used by around 80% of the company, with a 4.5/5 CSAT, while WhatsApp agent delivery has gone from as much as six months to under two weeks.",
+    overview: "YaloCode started as an internal hackathon experiment with an ambitious goal: make Yalo's platform accessible to the teams responsible for building and delivering conversational agents, without requiring deep technical expertise.\n\nI joined after the initial prototype and worked across the product experience, from end-to-end workflows and information architecture to interaction patterns and agent behavior. I also translated production best practices into reusable skills and contributed directly to frontend implementation.\n\nBy July 2026, YaloCode had become a shared workspace for Sales, Customer Success, Conversational Design, Engineering, and external implementation partners. It was used by around 80% of the company, with a 4.5/5 CSAT, while WhatsApp agent delivery had gone from as much as six months to under two weeks.",
     gallery: [
       {
-        type: "image",
-        src: "/images/yalocode/yalocode.webm",
-        alt: "YaloCode product walkthrough",
-        caption: "Marketing footage courtesy of Yalo",
-        aspect: "3002/1654",
+        type: "frame",
+        bg: "gray",
+        images: [{ src: "/images/yalocode/yalocode_3x.png", alt: "YaloCode home: start a conversation to plan or build an agent", width: 2149, height: 1275 }],
+        elevated: true,
+        bare: true,
       },
       {
         type: "highlights",
         heading: "Project at a glance",
         intro: "The thinking behind the experience.",
+        cards: true,
+        accent: "#C78888",
         items: [
           {
             eyebrow: "01 / Interaction design",
-            title: "Making AI actions easier to understand",
-            body: "Users weren't always confident about what the agent would do next. We introduced structured interactions that made actions clearer and gave users more control over when to proceed.",
+            icon: "split",
+            title: "Choosing the right interaction model",
+            body: "Not every task was best handled through conversation. We combined open-ended prompting with guided workflows to make repetitive tasks faster and easier to complete.",
           },
           {
             eyebrow: "02 / Design systems",
-            title: "Designing beyond chat",
-            body: "Not every interaction works best as a conversation. We developed reusable UI patterns that help agents communicate information, guide decisions, and support different workflows.",
+            icon: "component",
+            title: "Making complex actions visible",
+            body: "We designed reusable UI patterns that helped users understand what the agent was about to do, review important details, and stay in control before execution.",
           },
           {
             eyebrow: "03 / Agent behavior design",
+            icon: "message",
             title: "Shaping how the agent works",
-            body: "Beyond the interface, I helped define how YaloCode responds and guides users. From writing agent skills to designing conversation flows and response structures, I worked on making its behavior more predictable, useful, and easier to understand.",
+            body: "Beyond the interface, I defined reusable skills, behavioral instructions, and response structures that made agent creation more consistent and reduced the need for manual configuration.",
           },
         ],
       },
       {
-        type: "frame",
-        bg: "gray",
-        images: [{ src: "/images/yalocode/home-screen.png", alt: "YaloCode home: start a conversation to plan or build an agent", width: 1600, height: 949 }],
-        elevated: true,
+        type: "text",
+        heading: "Agent behavior",
+        title: "Turning production knowledge\ninto reusable skills",
+        body: "YaloCode could identify relevant skills based on a user's request and use them to create agents directly in Yalo's existing platform, without requiring users to navigate the legacy configuration tools.\n\nTo support this, I consolidated best practices from production agents into a reusable Agent Builder skill. It defined agent behavior, guardrails, interaction guidelines, and when to ask questions versus make assumptions, supported by channel-specific formatting rules and industry references.",
+      },
+      {
+        type: "custom",
+        component: "agent-builder-diagram",
       },
       {
         type: "text",
         heading: "Designing the experience",
-        title: "Making complex tools more accessible",
-        body: "Building conversational agents traditionally required technical knowledge and working across multiple tools. YaloCode aimed to make that process more accessible through a conversational experience.\n\nThe challenge was finding the right balance between flexibility and simplicity. We wanted people to build and manage agents without having to understand every technical detail behind them.",
+        title: "From open-ended prompting\nto a guided demo flow",
+        body: "Sales reps were already creating demo agents before client meetings by copying and pasting prompts to simulate business scenarios.\n\nWe realized that **a fully conversational experience wasn't always the fastest approach**, especially for repetitive, well-defined tasks. Instead, we designed a guided flow where users selected an industry, objective, and relevant use case.\n\nBehind the scenes, YaloCode used this context to invoke the Agent Builder skill, applying preconfigured templates to create the agent directly in Yalo's platform. This reduced demo creation time to under 10 minutes, compared to at least a couple of hours using the legacy platform.",
+      },
+      {
+        type: "frame-pair",
+        frames: [
+          { bg: "gray", src: "/images/yalocode/yalocode_mobile.png", alt: "YaloCode on mobile: industry selection widget in the guided demo flow" },
+          { bg: "gray", bgColor: "#EEF4EE", custom: "demo-time-chart", alt: "Demo agent creation time: 2+ hours on the legacy platform vs. under 10 minutes in YaloCode" },
+        ],
       },
       {
         type: "text",
-        heading: "Learning & Iterating",
+        heading: "Learning & iterating",
         title: "Designing for trust and control",
-        body: "As YaloCode moved into real workflows, we noticed that users sometimes preferred completing tasks themselves rather than relying on the agent. They weren't always sure what would happen after making a request.\n\nTo address this, we introduced structured widgets that made the agent's next steps visible, allowing users to review suggested actions and decide when to proceed.\n\nRather than relying on conversation alone, we gave users more clarity and control over their interactions.",
+        body: "Before launching agents for customers, implementation teams needed to validate their behavior. Sometimes a quick flow check was enough; other times, they needed more thorough testing before going live.\n\nWe realized that **a conversational request alone didn't provide enough visibility** into which scenarios would be tested, how many conversations would run, or how much time and money the process would require.\n\nWe designed a structured testing widget that made **user-defined objectives, test scenarios, conversation volume, and estimated time and cost** visible before execution, helping teams choose the right level of validation for their needs.",
+      },
+      {
+        type: "frame",
+        bg: "light",
+        images: [{ src: "/images/yalocode/yalocode-cover.png", alt: "YaloCode test plan widget open on a laptop", width: 6400, height: 4278 }],
+        bare: true,
       },
       {
         type: "custom",
         component: "chat-gallery",
-      },
-      {
-        type: "text",
-        heading: "Designing for builders",
-        title: "Making it easier to build on what's already working",
-        body: "As people began creating their own agents, we noticed they were already using tools like ChatGPT, Claude, and YaloCode to create and share skills.\n\nInstead of asking everyone to start from scratch, we explored a gallery where users could discover existing skills, adapt them to their needs, and share their own.\n\nThis shifted the experience from building everything yourself to learning from what others had already created.",
-      },
-      {
-        type: "image",
-        alt: "Skills gallery (placeholder)",
+        heading: "Design systems",
+        title: "Library of widgets",
+        body: "The testing widget became part of a broader set of reusable UI patterns that helped the agent show what it was about to do, guide decisions, and keep users in control. Explore them below.",
       },
     ],
     conclusion: {
       heading: "Beyond the interface",
-      body: "What I enjoyed most about YaloCode was working beyond traditional product design, from shaping how the agent behaves to designing the interactions that make it easier to use.\n\nIt changed how I think about designing for AI: it's not just about what the agent can do, but how people understand, trust, and build on those capabilities.",
+      body: "What I enjoyed most about YaloCode was working beyond traditional product design, from shaping how agents behave to defining the interactions that make their capabilities easier to use.\n\nIt changed how I think about designing for AI: **the challenge isn't just what the agent can do, but deciding what to automate, what to make visible, and when to give users more control.**",
     },
   },
   {

@@ -4,25 +4,11 @@ import { ViewTransition } from "react";
 import { DisableRightClick } from "@/components/disable-right-click";
 import "./globals.css";
 
-const generalSans = localFont({
-  variable: "--font-general-sans",
-  src: [
-    {
-      path: "./fonts/GeneralSans-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "./fonts/GeneralSans-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/GeneralSans-Semibold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-  ],
+const satoshi = localFont({
+  variable: "--font-satoshi",
+  src: "./fonts/Satoshi-Variable.ttf",
+  weight: "300 900",
+  style: "normal",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${generalSans.variable} h-full antialiased`}>
+    <html lang="es" className={`${satoshi.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <DisableRightClick />
         <ViewTransition>{children}</ViewTransition>
