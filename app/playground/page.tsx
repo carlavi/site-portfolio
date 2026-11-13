@@ -13,7 +13,7 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { GlassExploration } from "@/components/glass-exploration";
 import { AgentBuilderDiagram } from "@/components/agent-builder-diagram";
 import { ProjectGallery } from "@/components/project-gallery";
-import { projects } from "@/lib/projects";
+import { visibleProjects as projects } from "@/lib/projects";
 import { CASE_STUDY_WIDTH, HOME_WIDTH } from "@/lib/layout";
 
 // Hidden playground — not linked from nav. Test animations/transitions here

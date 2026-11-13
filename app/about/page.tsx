@@ -4,7 +4,7 @@ import { FadeUp } from "@/components/fade-up";
 import { CASE_STUDY_WIDTH } from "@/lib/layout";
 
 const paragraphs = [
-  "For the past 10+ years, I've been designing digital products across fintech, SaaS, and, more recently, AI.",
+  "For the past 8+ years, I've been designing digital products across fintech, SaaS, and, more recently, AI.",
   "I've worked with startups and companies including PayPal, Nubank, Konfio, and Yalo, taking products from early discovery through launch. My work spans product strategy, UX, interaction design, and implementation, often in spaces where the product is still being defined and the path forward isn't obvious.",
   "More recently, I've focused on AI products and the new interaction patterns they introduce. At Yalo, I worked on tools that enabled non-technical teams to build and manage conversational agents, shaping everything from product workflows and interface patterns to the behavior behind the experience. I'm also co-building Helia, a plant care app that combines practical guidance with personality, storytelling, and conversation.",
   "I'm drawn to products with a clear purpose and to problems that require turning complexity into something thoughtful, intuitive, and useful.",

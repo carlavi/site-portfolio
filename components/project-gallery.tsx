@@ -2,12 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { FadeUp } from "@/components/fade-up";
 import { LandIn } from "@/components/land-in";
-import { HoverRevealTile } from "@/components/hover-reveal-tile";
-import { ColorRevealTile } from "@/components/color-reveal-tile";
+import { ReveriToggle } from "@/components/reveri-toggle";
 import { type Project } from "@/lib/projects";
 
 function Tile({ project, aspect, lift = false }: { project: Project; aspect: string; lift?: boolean }) {
-  const { hero, heroLayers, homeThumb, homeBadge, homeHoverReveal, homeHoverColor, pageTheme, homeCardTransparent } = project;
+  const { hero, heroLayers, homeThumb, homeBadge, homeCustom, homeVideoScale, homeCardBg, pageTheme, homeCardTransparent } = project;
   const media = homeThumb ?? hero;
   const isVideo = media?.endsWith(".webm") || media?.endsWith(".mp4");
   const isDark = pageTheme === "dark";
@@ -16,9 +15,13 @@ function Tile({ project, aspect, lift = false }: { project: Project; aspect: str
     <Link href={`/projects/${project.slug}`} className="group block flex-1">
       <div
         className={`relative ${aspect} ${isDark || homeCardTransparent ? "" : "bg-secondary"} rounded-2xl overflow-hidden ${lift ? "card-lift" : ""}`}
-        style={isDark ? { backgroundColor: "#141414" } : undefined}
+        style={isDark ? { backgroundColor: "#141414" } : homeCardBg ? { backgroundColor: homeCardBg } : undefined}
       >
-        {heroLayers ? (
+        {homeCustom ? (
+          <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: homeCustom.bg }}>
+            <ReveriToggle />
+          </div>
+        ) : heroLayers && !homeThumb ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative w-[91%] aspect-[882/497] animate-breathe-soft">
               <Image src={heroLayers.bg} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
@@ -29,19 +32,24 @@ function Tile({ project, aspect, lift = false }: { project: Project; aspect: str
               </div>
             </div>
           </div>
-        ) : media && isVideo && homeHoverReveal ? (
-          <HoverRevealTile
-            video={media}
-            alt={project.name}
-            sun={homeHoverReveal.sun}
-            wordmark={homeHoverReveal.wordmark}
-            wordmarkMobile={homeHoverReveal.wordmarkMobile}
-          />
-        ) : media && !isVideo && homeHoverColor ? (
-          <ColorRevealTile image={media} alt={project.name} color={homeHoverColor.color} />
         ) : media ? (
+          // No hover effects on Home cards — media just plays/sits as is.
           isVideo ? (
-            <video src={media} className="absolute inset-0 w-full h-full object-cover sm:scale-[1.15]" autoPlay loop muted playsInline />
+            <video
+              src={media}
+              className={`absolute inset-0 w-full h-full object-cover ${homeVideoScale ? "" : "sm:scale-[1.15]"}`}
+              style={homeVideoScale ? { transform: `scale(${homeVideoScale})` } : undefined}
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : homeCardTransparent ? (
+            // Transparent mockup (e.g. a phone/laptop PNG): shrunk and
+            // contained so it's never cropped.
+            <div className="absolute inset-0 scale-[0.8625]">
+              <Image src={media} alt={project.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
+            </div>
           ) : (
             <Image src={media} alt={project.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
           )
@@ -57,7 +65,7 @@ function Tile({ project, aspect, lift = false }: { project: Project; aspect: str
           </div>
         )}
       </div>
-      <div className="mt-3 opacity-100 sm:opacity-0 transition-opacity sm:group-hover:opacity-100">
+      <div className="mt-3">
         <p className="text-lg font-medium text-foreground">{project.title}</p>
       </div>
     </Link>

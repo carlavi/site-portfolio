@@ -29,7 +29,7 @@ function ThumbMedia({ project }: { project: Project }) {
       className={`absolute inset-0 ${isDark ? "" : "bg-secondary"}`}
       style={isDark ? { backgroundColor: "#141414" } : undefined}
     >
-      {heroLayers ? (
+      {heroLayers && !homeThumb ? (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-[91%] aspect-[882/497]">
             <Image src={heroLayers.bg} alt="" fill className="object-contain" />

@@ -64,10 +64,13 @@ export type GallerySection =
   // highlights (eyebrow / title / body), e.g. "Project at a glance".
   // `cards`: each highlight sits in its own soft gray card with a mono
   // eyebrow. An item `icon` (tinted with `accent`) replaces the eyebrow's
-  // "01 /" number; without one, the number takes `accent`.
-  | { type: "highlights"; heading?: string; intro?: string; body?: string; items: { eyebrow: string; title: string; body: string; icon?: "split" | "component" | "message" }[]; cards?: boolean; accent?: string }
+  // "01 /" number; without one, the number takes `accent`. `cardTheme:
+  // "dark"` flips the cards to near-black for accents that need contrast
+  // (e.g. Helia's yellow).
+  | { type: "highlights"; heading?: string; intro?: string; body?: string; items: { eyebrow: string; title: string; body: string; icon?: "split" | "component" | "message" | "scan" | "message-circle" | "chart" }[]; cards?: boolean; accent?: string; cardTheme?: "light" | "dark" }
   // Text-only block between media: small label, a title, then paragraphs
-  // (split on blank lines, `**bold**` supported).
+  // (split on blank lines, `**bold**` supported; a paragraph starting with
+  // "### " renders as a subheading).
   | { type: "text"; heading: string; title?: string; body: string };
 
 // Background options for `frame`/`frame-pair` gallery sections and `heroFrame`.
@@ -78,6 +81,9 @@ export type FrameBg = "light" | "purple" | "dark" | "gray" | "indigo" | "charcoa
 
 export type Project = {
   slug: string;
+  // Draft/alternate version: reachable at /projects/<slug> but left out of
+  // the Home grid and the case-study prev/next nav.
+  hidden?: boolean;
   number: string;
   name: string;
   title: string;
@@ -134,6 +140,13 @@ export type Project = {
   // Simpler cousin of `homeHoverReveal` for a flat mockup image instead of
   // a looping video.
   homeHoverColor?: { color: string };
+  // Replaces the Home card's media with a live component (centered on `bg`)
+  // reused from the case study — e.g. Reveri's animated Talk/Listen toggle.
+  homeCustom?: { component: "reveri-toggle"; bg: string };
+  // Home card video zoom (default 1.15 on sm+, 1 below) and the card fill
+  // shown around it when scaled under 1 — match it to the video's own bg.
+  homeVideoScale?: number;
+  homeCardBg?: string;
 };
 
 export const projects: Project[] = [
@@ -143,6 +156,7 @@ export const projects: Project[] = [
     name: "Helia",
     coverSpan: "full",
     hero: "/images/helia/cover.webm",
+    homeThumb: "/images/helia/chat-hands.jpg",
     homeHoverReveal: {
       sun: "/images/helia/helia-sun.svg",
       wordmark: "/images/helia/helia-black.svg",
@@ -257,9 +271,110 @@ export const projects: Project[] = [
     },
   },
   {
+    // Alternate version of the Helia case study with the reworked
+    // activation → retention narrative, kept hidden for side-by-side
+    // comparison with /projects/helia. Media reused from the original.
+    slug: "helia-v2",
+    hidden: true,
+    number: "02",
+    name: "Helia",
+    coverSpan: "full",
+    hero: "/images/helia/cover.webm",
+    homeHoverReveal: {
+      sun: "/images/helia/helia-sun.svg",
+      wordmark: "/images/helia/helia-black.svg",
+      wordmarkMobile: "/images/helia/helia-white.svg",
+    },
+    title: "Helia: Give your plants a voice",
+    tags: ["Mobile", "Product Strategy", "Founder"],
+    year: "2026 – Present",
+    description: "I co-founded Helia and led the product from an early hypothesis to a live plant care experience used to identify, understand, and build a more personal relationship with plants.",
+    meta: {
+      client: "Co-Founder",
+      role: "Co-founder, Product & Design",
+      year: "January 2026 – Present",
+    },
+    sections: [],
+    overview: "Helia started with a simple idea: what if plants could talk? My husband & I built an AI-powered plant care app that helps people identify plants, understand their health, and get personalized guidance through conversation.\n\nAs co-founder, I've worked across the product lifecycle, from strategy and research to UX, visual design, frontend development, and growth. Building Helia has meant making decisions not just about how the product works, but what to prioritize and how to make it sustainable.\n\nWith over 1,000 registered users and a 70% activation rate across iOS and Android, we've learned that helping people discover value is only the first challenge. Giving them a reason to return is the next.",
+    gallery: [
+      {
+        type: "frame-pair",
+        frames: [
+          { bg: "gray", src: "/images/helia/chat-hands.jpg", alt: "Chatting with a Monstera in the Helia app", fill: true },
+          { bg: "gray", src: "/images/helia/app-store.png", alt: "Helia on the App Store", bgColor: "#FFC845" },
+        ],
+      },
+      {
+        type: "highlights",
+        heading: "Project at a glance",
+        intro: "The thinking behind the experience.",
+        cards: true,
+        accent: "#488A49",
+        items: [
+          {
+            eyebrow: "01 / Product design",
+            icon: "scan",
+            title: "Designing for the first moment of value",
+            body: "We made plant identification the entry point to Helia, creating a simple path from taking a photo to receiving useful, personalized guidance.",
+          },
+          {
+            eyebrow: "02 / Conversational UX",
+            icon: "message-circle",
+            title: "Making AI easier to engage with",
+            body: "We introduced contextual conversation starters to help users explore plant care without having to figure out what to ask.",
+          },
+          {
+            eyebrow: "03 / Product strategy",
+            icon: "chart",
+            title: "Learning what brings people back",
+            body: "We used activation, engagement, and retention data to understand user behavior and prioritize where the product needed to evolve.",
+          },
+        ],
+      },
+      {
+        type: "frame",
+        bg: "light",
+        images: [{ src: "/images/helia/scan.webm", alt: "Scanning a plant to identify it and get care guidance" }],
+        radius: 32,
+        noBorder: true,
+        bgColor: "var(--background)",
+        custom: "scan-video",
+      },
+      {
+        type: "text",
+        heading: "Part 01 / Activation",
+        title: "From plant identification to meaningful conversations",
+        body: "We designed Helia's first-use experience around a simple action: taking a photo to identify a plant, understand its needs, and start a contextual conversation. **But users didn't always know what to ask next,** so we introduced contextual conversation starters to reduce that friction, **increasing suggested-prompt usage from 33.3% to 73.1%.**\n\nWith a **70% activation rate** and **23.6% of registered users engaging with chat**, we saw encouraging signs of early value. But getting users to come back remained our next challenge.",
+      },
+      {
+        type: "image",
+        src: "/images/helia/new-flow-helia.png",
+        alt: "Helia's new Health flow: scan a plant, get a diagnosis in chat, follow a multi-day care plan, and complete each step",
+      },
+      {
+        type: "text",
+        heading: "Part 02 / Retention",
+        title: "Giving users a reason to return",
+        body: "While activation was encouraging, retention revealed a bigger challenge: 25% of users returned in week two, dropping to just 5% in week three. We realized that solving an immediate problem wasn't necessarily giving users a reason to come back.\n\nThrough user research and a survey, we found that helping sick plants recover was one of the most valued needs among plant owners. This gave us a clearer direction for improving retention.\n\nWe're designing a new Health experience that turns diagnoses into actionable, multi-day care plans, helping users follow clear steps and track their plant's recovery over time.",
+      },
+      {
+        type: "image-pair",
+        images: [
+          { src: "/images/helia/sun.jpg", alt: "Product screenshot" },
+          { src: "/images/helia/brand.jpg", alt: "Product screenshot" },
+        ],
+      },
+    ],
+    conclusion: {
+      heading: "Beyond product design",
+      body: "Building Helia has pushed me beyond traditional product design. As a co-founder, I've worked across product strategy, prioritization, research, design, development, analytics, monetization, and growth.\n\nIt's taught me to think beyond individual features and consider the entire product lifecycle: **how people discover value, what makes them come back, and how those experiences can become a sustainable business.**",
+    },
+  },
+  {
     // Helia's brand & design system work (the main `helia` entry covers product design).
     // Placeholder — hero, copy and gallery still pending.
     slug: "helia-brand",
+    hidden: true,
     number: "08",
     name: "Helia: Brand & Design System",
     coverSpan: "full",
@@ -283,6 +398,7 @@ export const projects: Project[] = [
   {
     // Placeholder — real hero, copy and gallery still pending.
     slug: "casita",
+    hidden: true,
     number: "06",
     name: "Casita",
     coverSpan: "full",
@@ -306,6 +422,7 @@ export const projects: Project[] = [
   {
     // Placeholder — real hero, copy and gallery still pending.
     slug: "yalo-sdk",
+    hidden: true,
     number: "07",
     name: "Yalo SDK",
     coverSpan: "full",
@@ -332,7 +449,7 @@ export const projects: Project[] = [
     name: "YaloCode",
     coverSpan: "full",
     hero: "/images/yalocode/yalocode.webm",
-    homeThumb: "/images/yalocode/yalocode-cover.png",
+    homeThumb: "/images/yalocode/yalocode_mobile.png",
     homeCardTransparent: true,
     homeHoverColor: { color: "#141414" },
     title: "YaloCode: Making everyone a builder",
@@ -436,6 +553,7 @@ export const projects: Project[] = [
     coverSpan: "half",
     pageTheme: "dark",
     hero: "/images/reveri-ai-sessions/beacon-container.svg",
+    homeCustom: { component: "reveri-toggle", bg: "#1B1430" },
     heroLayers: {
       bg: "/images/reveri-ai-sessions/beacon-bg.svg",
       fg: "/images/reveri-ai-sessions/Beacon.svg",
@@ -573,8 +691,8 @@ export const projects: Project[] = [
     name: "Reveri: Onboarding",
     coverSpan: "half",
     hero: "/images/reveri/onb-cover.png",
-    homeThumb: "/images/reveri/session.webm",
-    homeBadge: "/images/reveri/Pain.png",
+    homeThumb: "/images/reveri/concept-2.png",
+    homeCardTransparent: true,
     heroFrame: {
       bg: "charcoal",
       images: [
@@ -630,6 +748,9 @@ export const projects: Project[] = [
     name: "Nubank",
     coverSpan: "full",
     hero: "/images/nubank/hero-nubank.png",
+    homeThumb: "/images/nubank/transferflow.webm",
+    homeVideoScale: 0.98,
+    homeCardBg: "#EFEFEF",
     heroFrame: {
       bg: "light",
       images: [
@@ -692,9 +813,14 @@ export function getProject(slug: string) {
 
 // Adjacent projects for the case study footer nav, wrapping around the ends
 // of the list so every project has both a previous and a next.
+export const visibleProjects = projects.filter((project) => !project.hidden);
+
 export function getAdjacentProjects(slug: string) {
-  const index = projects.findIndex((project) => project.slug === slug);
-  const prev = projects[(index - 1 + projects.length) % projects.length];
-  const next = projects[(index + 1) % projects.length];
+  // A hidden draft borrows its original's neighbors (e.g. helia-v2 → helia).
+  const base = slug.replace(/-v\d+$/, "");
+  const list = visibleProjects;
+  const index = list.findIndex((project) => project.slug === base);
+  const prev = list[(index - 1 + list.length) % list.length];
+  const next = list[(index + 1) % list.length];
   return { prev, next };
 }

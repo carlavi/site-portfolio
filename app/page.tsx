@@ -2,7 +2,7 @@ import { Navbar } from "@/components/navbar";
 import { FadeUp } from "@/components/fade-up";
 import { HeroTitle } from "@/components/hero-title";
 import { ProjectGallery } from "@/components/project-gallery";
-import { projects } from "@/lib/projects";
+import { visibleProjects as projects } from "@/lib/projects";
 import { HOME_WIDTH } from "@/lib/layout";
 
 export default function Home() {
@@ -29,7 +29,7 @@ export default function Home() {
             />
             <FadeUp delay={500} className="mt-8 md:mt-10">
               <p className="max-w-xl mx-auto text-[0.9rem] md:text-base leading-relaxed" style={{ color: "var(--foreground)" }}>
-                I&rsquo;m a product designer with 10+ years of experience across fintech, SaaS, and startups. I work from early
+                I&rsquo;m a product designer with 8+ years of experience across fintech, SaaS, and startups. I work from early
                 product ideas to launch, turning complex problems into clear, thoughtful experiences.
               </p>
             </FadeUp>

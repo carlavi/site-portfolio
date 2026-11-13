@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Component, MessageSquare, Split } from "lucide-react";
+import { ArrowLeft, ChartLine, Component, MessageCircle, MessageSquare, ScanLine, Split } from "lucide-react";
 import { notFound } from "next/navigation";
 import { FadeUp } from "@/components/fade-up";
 import { Navbar } from "@/components/navbar";
@@ -439,7 +439,7 @@ function DocumentPair({ bg, documents }: { bg: FrameBg; documents: [{ src?: stri
   );
 }
 
-const HIGHLIGHT_ICONS = { split: Split, component: Component, message: MessageSquare } as const;
+const HIGHLIGHT_ICONS = { split: Split, component: Component, message: MessageSquare, scan: ScanLine, "message-circle": MessageCircle, chart: ChartLine } as const;
 
 function renderGallerySection(section: GallerySection, index: number) {
   switch (section.type) {
@@ -523,9 +523,13 @@ function renderGallerySection(section: GallerySection, index: number) {
           <h2 className="text-sm text-muted-foreground/70 mb-3">{section.heading}</h2>
           {section.title && <p className="text-2xl md:text-3xl font-semibold leading-snug tracking-tight text-foreground mb-6 whitespace-pre-line">{section.title}</p>}
           <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground">
-            {section.body.split("\n\n").map((p, i) => (
-              <p key={i}>{formatInline(p)}</p>
-            ))}
+            {section.body.split("\n\n").map((p, i) =>
+              p.startsWith("### ") ? (
+                <h3 key={i} className="mt-6 text-lg font-semibold tracking-tight text-foreground first:mt-0">{p.slice(4)}</h3>
+              ) : (
+                <p key={i}>{formatInline(p)}</p>
+              ),
+            )}
           </div>
         </section>
       );
@@ -542,13 +546,14 @@ function renderGallerySection(section: GallerySection, index: number) {
               {section.items.map((item) => {
                 const [num, ...rest] = item.eyebrow.split(" / ");
                 const label = rest.join(" / ");
+                const dark = section.cardTheme === "dark";
                 return (
-                  <div key={item.title} className="flex flex-col rounded-2xl bg-[#F3F3F3] p-6 md:p-7">
+                  <div key={item.title} className={`flex flex-col rounded-2xl p-6 md:p-7 ${dark ? "bg-[#161616]" : "bg-[#F3F3F3]"}`}>
                     {item.icon && (() => {
                       const Icon = HIGHLIGHT_ICONS[item.icon];
                       return <Icon className="size-5 mb-4" strokeWidth={1.5} style={{ color: section.accent }} aria-hidden />;
                     })()}
-                    <p className="text-[12px] text-neutral-500">
+                    <p className={`text-[12px] ${dark ? "text-neutral-400" : "text-neutral-500"}`}>
                       {item.icon && label ? (
                         label
                       ) : label ? (
@@ -561,8 +566,8 @@ function renderGallerySection(section: GallerySection, index: number) {
                         item.eyebrow
                       )}
                     </p>
-                    <h3 className="mt-8 font-sans text-lg font-medium leading-snug text-neutral-900">{item.title}</h3>
-                    <p className="mt-2 font-sans text-[15px] leading-relaxed text-neutral-500">{item.body}</p>
+                    <h3 className={`mt-8 font-sans text-lg font-medium leading-snug ${dark ? "text-white" : "text-neutral-900"}`}>{item.title}</h3>
+                    <p className={`mt-2 font-sans text-[15px] leading-relaxed ${dark ? "text-neutral-400" : "text-neutral-500"}`}>{item.body}</p>
                   </div>
                 );
               })}
