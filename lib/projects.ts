@@ -151,7 +151,11 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "helia",
+    // DEPRECATED — previous Helia case study, replaced by the activation →
+    // retention version below (now at /projects/helia). Kept hidden for
+    // reference at /projects/helia-v1.
+    slug: "helia-v1",
+    hidden: true,
     number: "02",
     name: "Helia",
     coverSpan: "full",
@@ -271,15 +275,14 @@ export const projects: Project[] = [
     },
   },
   {
-    // Alternate version of the Helia case study with the reworked
-    // activation → retention narrative, kept hidden for side-by-side
-    // comparison with /projects/helia. Media reused from the original.
-    slug: "helia-v2",
-    hidden: true,
+    // Live Helia case study (activation → retention narrative). Replaced
+    // the earlier version, which is kept hidden as `helia-v1`.
+    slug: "helia",
     number: "02",
     name: "Helia",
     coverSpan: "full",
     hero: "/images/helia/cover.webm",
+    homeThumb: "/images/helia/chat-hands.jpg",
     homeHoverReveal: {
       sun: "/images/helia/helia-sun.svg",
       wordmark: "/images/helia/helia-black.svg",
@@ -816,7 +819,7 @@ export function getProject(slug: string) {
 export const visibleProjects = projects.filter((project) => !project.hidden);
 
 export function getAdjacentProjects(slug: string) {
-  // A hidden draft borrows its original's neighbors (e.g. helia-v2 → helia).
+  // A hidden version borrows its live counterpart's neighbors (helia-v1 → helia).
   const base = slug.replace(/-v\d+$/, "");
   const list = visibleProjects;
   const index = list.findIndex((project) => project.slug === base);
